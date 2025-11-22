@@ -1,0 +1,1559 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="theme-color" content="#2a181c">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ma collection de blu-ray — Local</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Interface locale type Netflix pour cataloguer vos films sans lecture vidéo.">
+  <style>
+    /* Dégradé d'arrière-plan discret */
+   html, body {
+      margin: 0;
+      padding: 0;
+      /* C'est cette ligne qui colore l'espace vide lors du rebond */
+      background-color: rgb(42, 24, 28); 
+      /* On garde ton dégradé pour le contenu */
+      background-image: linear-gradient(to right, rgb(42, 24, 28), rgb(42, 24, 28));
+      min-height: 100%;
+    }
+    .poster { object-fit: cover; }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); }
+
+   .carousel {
+     display: flex;
+     overflow-x: auto;
+     gap: 1rem;
+     scroll-snap-type: x mandatory;
+     scroll-behavior: smooth;
+     -ms-overflow-style: none; /* IE/Edge */
+     scrollbar-width: none;    /* Firefox */
+     padding-left: 1rem;       /* espacement à gauche */
+     padding-bottom: 0.5rem;
+     justify-content: flex-start;
+   }
+
+   .carousel::-webkit-scrollbar {
+     display: none; /* Chrome/Safari */
+   }
+
+   .carousel-arrow {
+     position: absolute;
+     top: 50%;
+     right: 0.5rem;
+     transform: translateY(-50%);
+     background: rgba(0,0,0,0.6);
+     border-radius: 9999px; /* rond */
+     width: 2rem;
+     height: 2rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     z-index: 30;
+     transition: background 0.2s;
+   }
+   .carousel-arrow:hover {
+     background: rgba(0,0,0,0.8);
+   }
+
+    .carousel-item {
+     flex: 0 0 auto;
+     width: 220px;            
+     scroll-snap-align: start;
+   }
+
+   #netflixBanner {
+     width: 100%;
+     overflow: hidden;           /* masque les affiches hors écran */
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     position: relative;
+     padding: 20px 0;            /* espace au-dessus / dessous */
+   }
+
+   #bannerSection {
+     width: 100%;
+     height: 420px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     overflow: hidden;
+     position: relative;
+   }
+
+   #bannerCarousel {
+     display: flex;
+     align-items: center;
+     gap: 1.5rem;
+     transition: transform 0.8s ease; /* animation du translateX */
+     will-change: transform;
+     width: max-content;         /* s'adapte au contenu */
+   }
+
+   #bannerCarousel img {
+     width: 900px;
+     height: 520px;
+     object-fit: cover;
+     border-radius: 24px;
+     flex-shrink: 0;
+     opacity: 0.6;
+     transform: scale(0.95);
+     transition: transform 0.6s ease, opacity 0.6s ease;
+     cursor: pointer;
+   }
+
+   #bannerCarousel img.active {
+     transform: scale(1.03);
+     opacity: 1;
+     z-index: 2;
+   }
+
+   .actor-link {
+     color: #f87171; /* rouge clair */
+     cursor: pointer;
+   }
+   .actor-link:hover {
+  text-decoration: underline;
+   }
+
+   .stats-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+     gap: 1rem;
+     margin-top: 1rem;
+   }
+
+   .stat-card {
+     background: rgba(255,255,255,0.03);
+     border: 1px solid rgba(255,255,255,0.05);
+     padding: 1rem;
+     border-radius: 12px;
+     min-height: 110px;
+   }
+
+   .stat-title { font-size: 0.9rem; color: #cbd5e1; margin-bottom: .5rem; }
+   .stat-value { font-size: 1.4rem; font-weight: 700; color: #fff; }
+
+   /* Bar chart simple */
+   .genre-bar {
+     display: flex;
+     gap: .75rem;
+     align-items: center;
+     margin-bottom: .5rem;
+   }
+   .genre-label { width: 120px; font-size: .85rem; color: #e6eef8; }
+   .bar {
+     height: 14px;
+     width: 100%;
+     background: rgba(255,255,255,0.06);
+     border-radius: 999px;
+     overflow: hidden;
+   }
+   .bar-fill {
+     height: 100%;
+     width: 0%;
+     border-radius: 999px;
+     background: linear-gradient(90deg,#f97316,#ef4444); /* orange→red */
+     transition: width 600ms ease;
+   }
+
+   /* Donut simple (conic-gradient) */
+   .donut {
+     width: 120px;
+     height: 120px;
+     border-radius: 50%;
+     display:flex;
+     align-items:center;
+     justify-content:center;
+     position: relative;
+     margin: 0 auto;
+     box-shadow: inset 0 0 0 12px rgba(0,0,0,0.35);
+   }
+   .donut-center {
+     width: 68px;
+     height: 68px;
+     border-radius: 50%;
+     background: rgba(0,0,0,0.6);
+     display:flex;
+     align-items:center;
+     justify-content:center;
+     color: #fff;
+     font-weight:700;
+     font-size: .9rem;
+   }
+
+   /* Legends & lists */
+   .stats-legend { display:flex; gap: .75rem; align-items:center; justify-content:center; margin-top:.75rem; color:#cbd5e1; font-size: .85rem; }
+   .legend-dot { width:12px; height:12px; border-radius:50%; display:inline-block; margin-right:.35rem; }
+</style>
+</head>
+<body class="min-h-screen text-slate-100">
+  <header class="sticky top-0 z-30 border-b border-white/10 bg-black/40 backdrop-blur">
+     <div class="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3">
+    
+       <!-- Titre -->
+       <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-red-600 via-red-600 to-red-600 bg-clip-text text-transparent drop-shadow-lg">
+         🎬 Ma collection de blu-ray
+       </h1>
+
+       <!-- Ligne boutons vues + import/export -->
+       <div class="flex items-center justify-between">
+      
+         <!-- Boutons Vue Netflix / Liste complète -->
+         <div class="flex gap-4">
+           <button id="tabMain" class="px-3 py-1 rounded bg-red-600">Vue Netflix</button>
+           <button id="tabGrid" class="px-3 py-1 rounded bg-white/10">Liste complète</button>
+           <button id="tabUpcoming" class="px-3 py-1 rounded bg-white/10">Prochainement</button>
+           <button id="tabWishlist" class="px-3 py-1 rounded bg-white/10">Wishlist</button>
+           <button id="tabStats" class="px-3 py-1 rounded bg-white/10">Stats</button>
+         </div>
+
+         <!-- Import JSON -->
+         <div class="flex items-center gap-2 ml-auto">
+           <label class="hidden sm:block text-sm text-slate-300">Importer JSON</label>
+           <input id="jsonFile" type="file" accept="application/json" 
+                  class="block text-sm file:mr-3 file:px-3 file:py-2 file:rounded-xl file:border-0 
+                         file:bg-white/10 file:text-slate-100 hover:file:bg-white/20" />
+         </div>
+       </div>
+     </div>
+  </header>
+
+  <div id="globalFade" 
+       class="pointer-events-none fixed top-[80px] right-0 h-[calc(100%-80px)] w-20 
+              bg-gradient-to-r from-transparent to-black/80 z-20 hidden"></div>
+
+  <!-- Controls -->
+  <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6">
+    <div class="grid gap-3 md:grid-cols-12 items-end">
+      <div class="md:col-span-5">
+        <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Recherche</label>
+        <input id="searchInput" type="search" placeholder="Titre, acteur, réalisateur, mot-clé…" class="w-full px-4 py-3 rounded-2xl bg-white/10 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500" />
+      </div>
+      <div class="md:col-span-3">
+        <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Genre</label>
+        <select id="genreSelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="">Tous</option>
+        </select>
+      </div>
+      <div class="md:col-span-3">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Période</label>
+       <select id="periodSelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+         <option value="">Toutes</option>
+         <option value="1960-1969">années 60</option>
+         <option value="1970-1979">années 70</option>
+         <option value="1980-1989">années 80</option>
+         <option value="1990-1999">années 90</option>
+         <option value="2000-2009">années 2000</option>
+         <option value="2010-2019">années 2010</option>
+         <option value="2020-2029">années 2020</option>
+       </select>
+      </div>
+      <div class="md:col-span-3">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Pays</label>
+       <select id="countrySelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+         <option value="">Tous</option>
+       </select>
+      </div>
+      <div class="md:col-span-2">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Durée</label>
+       <select id="runtimeSelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+         <option value="">Toutes</option>
+         <option value="short">Moins de 2h</option>
+         <option value="medium">2h à 2h30</option>
+         <option value="long">Plus de 2h30</option>
+       </select>
+      </div>
+      <div class="md:col-span-2">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Année exacte</label>
+       <input id="yearExact" type="number" placeholder="1950" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500" />
+      </div>
+      <div class="md:col-span-2">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Trier</label>
+       <div class="flex gap-2">
+         <select id="sortSelect" class="flex-1 px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+           <option value="title">Titre (A→Z)</option>
+           <option value="year">Année (↓)</option>
+           <option value="rating">Note (↓)</option>
+           <option value="runtime">Durée (↓)</option>
+           <option value="added">Ajouté récemment</option>
+         </select>
+         <button id="sortDirBtn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20">⬆︎</button>
+       </div>
+      </div>
+    <div class="md:col-span-12 mt-4 flex gap-3">
+     <button id="resetBtn" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20">Réinitialiser</button>
+     <button id="randomBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700">Film aléatoire</button>
+    </div>
+  </section>
+
+  <div id="netflixBanner" class="hidden flex flex-col items-center justify-center overflow-hidden relative">
+     <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out"></div>
+   </div>
+
+  <!-- Grid -->
+  <main id="mainView" class="mx-auto max-w-7xl px-4 pb-24 mt-6"></main>
+
+  <!-- Grille classique -->
+  <main id="gridView" class="mx-auto max-w-7xl px-4 pb-24 hidden mt-6">
+   <div id="resultCount" class="mb-4 text-sm opacity-80"></div>
+   <div id="grid" class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6"></div>
+  </main>
+
+  <main id="upcomingView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+  <main id="wishlistView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+  <main id="statsView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+
+  <!-- Modal détail -->
+  <div id="modal" class="hidden fixed inset-0 z-50">
+   <div id="modalBackdrop" class="absolute inset-0 bg-black/70"></div>
+
+   <div id="modalContent"
+        class="relative mx-auto mt-16 w-[92vw] max-w-4xl rounded-3xl glass p-4 md:p-6 shadow-2xl border border-white/10
+              transition-all duration-200 transform scale-95 opacity-0">
+     <button id="modalClose" class="absolute top-3 right-3 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+     <div class="grid md:grid-cols-3 gap-4">
+       <div class="relative">
+         <img id="modalPoster" class="w-full h-72 md:h-full rounded-2xl object-cover border border-white/10" alt="Poster" />
+         <!-- bouton flèche injecté ici -->
+       </div>
+       <div class="md:col-span-2 space-y-3">
+         <h3 id="modalTitle" class="text-2xl font-semibold"></h3>
+         <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
+         <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
+         <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
+         <p id="modalOverview" class="text-slate-200"></p>
+         <div id="modalTags" class="flex flex-wrap gap-2"></div>
+       </div>
+     </div>
+   </div>
+  </div>
+
+  <script>
+    // --- Données d'exemple (utilisées si data/movies.json est introuvable) ---
+    const SAMPLE_DATA = {
+      movies: []
+    };
+
+    let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: ""};
+    const els = {
+      grid: document.getElementById('grid'),
+      search: document.getElementById('searchInput'),
+      genre: document.getElementById('genreSelect'),
+      yearExact: document.getElementById('yearExact'),
+      runtime: document.getElementById('runtimeSelect'),
+      sort: document.getElementById('sortSelect'),
+      reset: document.getElementById('resetBtn'),
+      count: document.getElementById('resultCount'),
+      jsonFile: document.getElementById('jsonFile'),
+      period: document.getElementById('periodSelect'),
+      exportBtn: document.getElementById('exportBtn'),
+      modal: document.getElementById('modal'),
+      modalClose: document.getElementById('modalClose'),
+      modalPoster: document.getElementById('modalPoster'),
+      modalTitle: document.getElementById('modalTitle'),
+      country: document.getElementById('countrySelect'),
+      modalMeta: document.getElementById('modalMeta'),
+      modalOverview: document.getElementById('modalOverview'),
+      modalTags: document.getElementById('modalTags'),
+      modalActors: document.getElementById('modalActors'),
+      modalCountry: document.getElementById('modalCountry'),
+      randomBtn: document.getElementById('randomBtn'),
+      modalBackdrop: document.getElementById('modalBackdrop'),
+      sortDirBtn: document.getElementById('sortDirBtn')
+    };
+
+    const controlsSection = document.getElementById('controlsSection');
+
+    let currentView = 'netflix';
+
+    const tabMainBtn = document.getElementById("tabMain");
+    const tabGridBtn = document.getElementById("tabGrid");
+
+    const tabStatsBtn = document.getElementById("tabStats");
+    const statsView = document.getElementById("statsView");
+
+    let currentBannerMovie = null;
+
+    let bannerScrollAnim = null;
+
+    let bannerIndex = 0;
+    let bannerMovies = [];
+    let bannerInterval = null;
+
+    function setActiveTab(view) {
+     const tabs = {
+       netflix: tabMainBtn,
+       grid: tabGridBtn,
+       upcoming: document.getElementById('tabUpcoming'),
+       wishlist: document.getElementById('tabWishlist'),
+       stats: tabStatsBtn
+     };
+
+     for (const key in tabs) {
+       if (key === view) {
+         tabs[key].classList.add("bg-red-600","text-white");
+         tabs[key].classList.remove("bg-white/10","text-slate-200");
+       } else {
+         tabs[key].classList.add("bg-white/10","text-slate-200");
+         tabs[key].classList.remove("bg-red-600","text-white");
+       }
+       if (currentView === "grid" && view !== "grid") {
+         resetFilters();
+       }
+     }
+
+     const fade = document.getElementById("globalFade");
+     if (view === "netflix") {
+       fade.classList.remove("hidden"); // visible uniquement en vue Netflix
+     } else {
+       fade.classList.add("hidden"); // caché ailleurs
+     }
+     
+     if (typeof bannerScrollAnim === "number") {
+       cancelAnimationFrame(bannerScrollAnim);
+       bannerScrollAnim = null;
+     }
+     if (bannerInterval) {
+       clearInterval(bannerInterval);
+       bannerInterval = null;
+     }
+      
+     const banner = document.getElementById("netflixBanner");
+     if (banner) {
+       if (view === "netflix") {
+         banner.style.display = "block";   // ✅ visible
+       } else {
+         banner.style.display = "none";    // 🚫 complètement masqué sur toutes les autres vues
+         if (bannerInterval) {
+           clearInterval(bannerInterval);
+           bannerInterval = null;
+         }
+         banner.style.transform = "translateX(0)";
+       }
+     }
+   }
+
+
+    setActiveTab(currentView);
+
+    // Sécurité : aucun lecteur n'est intégré, et on ne crée que des liens vers des fichiers locaux si vous en mettez dans le JSON (non cliquables ici).
+
+    // Charger JSON local si dispo
+    async function loadInitial() {
+       try {
+         const res = await fetch('data/movies.json', { cache: 'no-store' });
+         if (!res.ok) throw new Error('no json');
+         const data = await res.json();
+         if (!data.movies) throw new Error('bad schema');
+         state.all = normalize(data.movies);  // ✅ tes films du JSON
+       } catch (e) {
+         state.all = normalize(SAMPLE_DATA.movies); // fallback si pas de fichier
+       }
+      initFilters();
+      applyFilters();
+    }
+
+    function normalize(arr){
+      return arr.map(m=>({
+        id: m.id ?? crypto.randomUUID(),
+        title: String(m.title||'Sans titre'),
+        year: Number(m.year)||null,
+        genres: Array.isArray(m.genres)?m.genres:[],
+        categories: Array.isArray(m.categories)?m.categories:[],
+        people: Array.isArray(m.people)?m.people:[],
+        directors: Array.isArray(m.directors)?m.directors:[],
+        runtime: Number(m.runtime)||null,
+        rating: Number(m.rating)||null,
+        overview: m.overview||'',
+        poster: m.poster||'',
+        netflixPoster: m.netflixPoster || '',
+        altPoster: m.altPoster || '',
+        tags: Array.isArray(m.tags)?m.tags:[],
+        country: m.country || '',
+        added: m.added||new Date().toISOString().slice(0,10)
+      }));
+    }
+
+    function initFilters(){
+      const genres = [...new Set(state.all.flatMap(m=>m.genres))].sort();
+      els.genre.innerHTML = '<option value="">Tous</option>' + genres.map(g=>`<option>${g}</option>`).join('');
+
+      const countries = [...new Set(state.all.map(m => m.country).filter(Boolean))].sort();
+      els.country.innerHTML = '<option value="">Tous</option>' + countries.map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    function resetFilters() {
+     // Réinitialise l’état
+     state.query = "";
+     state.genre = "";
+     state.yearExact = "";
+     state.runtime = "";
+     state.sort = "title";
+     state.sortDir = "asc";
+     state.country = "";
+     state.period = "";
+
+     // Vide les champs du DOM
+     els.search.value = "";
+     els.genre.value = "";
+     els.yearExact.value = "";
+     els.runtime.value = "";
+     els.sort.value = "title";
+     els.country.value = "";
+     els.period.value = "";
+
+     // 🔁 Réapplique les filtres par défaut
+     applyFilters();
+    }
+
+    function applyFilters(){
+     const q = state.query.trim().toLowerCase();
+     let today = new Date();
+
+     let list = state.all.filter(m => {
+       const matchesQ = !q || [m.title, ...(m.people||[]), ...(m.directors || []), ...(m.genres||[]), (m.overview||'')].join(' ').toLowerCase().includes(q);
+       const matchesG = !state.genre || (m.genres||[]).includes(state.genre);
+       const matchesY = !state.yearExact || (m.year||0) === Number(state.yearExact);
+       const matchesR = !state.runtime || 
+         (state.runtime === "short" && m.runtime && m.runtime < 120) ||
+         (state.runtime === "medium" && m.runtime && m.runtime >= 120 && m.runtime <= 150) ||
+         (state.runtime === "long" && m.runtime && m.runtime > 150);
+       const matchesC = !state.country || (m.country && m.country.toLowerCase().trim() === state.country.toLowerCase().trim());
+       const matchesP = !state.period || (() => {const [start, end] = state.period.split('-').map(Number);return m.year && m.year >= start && m.year <= end; })();
+
+       // Exclure les films à venir des vues Netflix et Liste complète
+       const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
+
+       // Exclure les films de la wishlist des vues normales
+       const notWishlist = currentView === 'wishlist' ? true : !(
+         (m.tags && m.tags.includes('wishlist')) ||
+         (m.categories && m.categories.includes('wishlist'))
+       );
+
+       return matchesQ && matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming;
+     });
+
+     list.sort((a,b)=>{
+         let result = 0;
+         switch(state.sort){
+           case 'year': result = (a.year||0) - (b.year||0); break;
+           case 'rating': result = (a.rating||0) - (b.rating||0); break;
+           case 'runtime': result = (a.runtime||0) - (b.runtime||0); break;
+           case 'added': result = String(a.added||'').localeCompare(String(b.added||'')); break;
+           default: result = String(a.title||'').localeCompare(String(b.title||'')); break;
+         }
+         return state.sortDir === "asc" ? result : -result;
+      });
+
+     state.filtered = list;
+
+     if(currentView === 'netflix') {
+       renderNetflixView();
+     } else if (currentView === 'stats') {
+       renderStats();
+     } else {
+       renderGrid();
+     }
+
+    }
+    
+    function renderNetflixView() {
+     const container = document.getElementById('mainView');
+     container.innerHTML = '';
+     container.className = "w-full px-4 py-6 relative";
+
+     const banner = document.getElementById('netflixBanner');
+     if (currentView === 'netflix' && state.filtered.length > 0) {
+       const withPoster = state.filtered.filter(m => m.netflixPoster);
+       const randomMovie = (withPoster.length ? withPoster : state.filtered)[Math.floor(Math.random() * state.filtered.length)];
+       banner.classList.remove('hidden'); 
+     } else {
+       banner.classList.add('hidden');
+     }
+
+     // Regrouper par catégorie
+     const categoriesMap = {};
+     state.filtered.forEach(movie => {
+       (movie.categories || []).forEach(cat => {
+         if (!categoriesMap[cat]) categoriesMap[cat] = [];
+         categoriesMap[cat].push(movie);
+       });
+     });
+
+     for (const cat in categoriesMap) {
+       const section = document.createElement('section');
+       section.className = "mb-8";
+
+       const title = document.createElement('h2');
+       title.textContent = cat;
+       title.className = "text-xl font-bold mb-2";
+       section.appendChild(title);
+
+       const wrapper = document.createElement('div');
+       wrapper.className = "relative overflow-hidden rounded-lg pl-0";
+
+       const carousel = document.createElement('div');
+       carousel.className = "carousel carousel-initial";
+
+       // 🔹 Mélanger les films une seule fois par catégorie
+       const shuffled = categoriesMap[cat];
+
+       shuffled.forEach(m => {
+         const posterSrc = m.netflixPoster || m.poster || 
+           `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+         const card = document.createElement('div');
+         card.className = 'carousel-item group relative overflow-hidden';
+         card.innerHTML = `<img src="${posterSrc}" loading="lazy" alt="${m.title}" 
+           class="w-full aspect-video object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>`;
+         card.addEventListener('click', () => openModal(m));
+         carousel.appendChild(card);
+       });
+
+       wrapper.appendChild(carousel);
+       section.appendChild(wrapper);
+       container.appendChild(section);
+
+       // Scroll fade
+       requestAnimationFrame(() => {
+         carousel.scrollLeft = 0;
+       });
+     }
+
+     bannerMovies = state.filtered.filter(m => m.netflixPoster && m.netflixPoster.length) || state.filtered;
+     bannerIndex = 0;
+     startBannerAutoScroll();
+
+     function startBannerAutoScroll() {
+       const viewport = document.getElementById('netflixBanner'); // conteneur visible
+       const carousel = document.getElementById('bannerCarousel');
+       if (!carousel || !viewport) return;
+       carousel.innerHTML = '';
+
+       const movies = bannerMovies.filter(m => m.netflixPoster || m.poster);
+       if (!movies.length) return;
+
+       movies.forEach(m => {
+         const img = document.createElement('img');
+         img.src = m.netflixPoster || m.poster;
+         img.alt = m.title;
+         img.addEventListener('click', () => openModal(m));
+         carousel.appendChild(img);
+       });
+
+       const imgs = Array.from(carousel.querySelectorAll('img'));
+       if (!imgs.length) return;
+
+       let index = 0;
+
+       function updateCarousel() {
+         imgs.forEach(img => img.classList.remove('active'));
+         const current = imgs[index];
+         current.classList.add('active');
+
+         const imgOffsetLeft = current.offsetLeft;           // position dans la piste
+         const imgWidth = current.clientWidth;
+         const viewportWidth = viewport.clientWidth;
+
+         const offset = imgOffsetLeft - (viewportWidth - imgWidth) / 2;
+
+         const maxOffset = Math.max(0, carousel.scrollWidth - viewportWidth);
+         const clamped = Math.min(Math.max(0, offset), maxOffset);
+
+         carousel.style.transform = `translateX(-${clamped}px)`;
+       }
+
+       updateCarousel();
+
+       if (bannerInterval) clearInterval(bannerInterval);
+
+       bannerInterval = setInterval(() => {
+         index = (index + 1) % imgs.length;
+         updateCarousel();
+       }, 6000);
+
+       imgs.forEach((img, i) => {
+         img.addEventListener('click', () => {
+           index = i;
+           updateCarousel();
+         });
+       });
+
+       window.addEventListener('resize', updateCarousel);
+     }
+   }
+
+   function renderStats() {
+     if (!statsView) return;
+     statsView.innerHTML = '<h2 class="text-2xl font-semibold mb-4">Stats</h2>';
+
+     const today = new Date();
+     // On filtre les films (hors wishlist / hors futur)
+     const movies = (state.all || []).filter(m => 
+       !((m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'))) &&
+       !(m.added && new Date(m.added) > today)
+     );
+
+     const total = movies.length;
+     const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
+     const unseenCount = total - seenCount;
+
+     // --- CALCULS DES DONNÉES ---
+
+     // Genres
+     const genreCounts = {};
+     movies.forEach(m => (m.genres||[]).forEach(g => { genreCounts[g] = (genreCounts[g]||0) + 1; }));
+     const genresArr = Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]);
+
+     // Réalisateurs
+     const dirCounts = {};
+     movies.forEach(m => (m.directors||[]).forEach(d => { dirCounts[d] = (dirCounts[d]||0) + 1; }));
+     const dirArr = Object.entries(dirCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+     // Acteurs
+     const actorCounts = {};
+     movies.forEach(m => (m.people || []).forEach(a => { actorCounts[a] = (actorCounts[a] || 0) + 1; }));
+     const actorArr = Object.entries(actorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+     // Pays
+     const countryCounts = {};
+     movies.forEach(m => { if (m.country) countryCounts[m.country] = (countryCounts[m.country]||0) + 1; });
+     const countryArr = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+     // Durée
+     const durations = movies.map(m => m.runtime || 0).filter(v => v>0);
+     const totalMinutes = durations.reduce((s,x)=>s+x,0);
+     const avgMinutes = durations.length ? Math.round(totalMinutes/durations.length) : 0;
+
+     // Années / Décennies
+     const yearCounts = {};
+     const decadesCount = {};
+     movies.forEach(m => { 
+        if (m.year) {
+            yearCounts[m.year] = (yearCounts[m.year]||0) + 1; 
+            const decade = Math.floor(m.year / 10) * 10;
+            decadesCount[decade] = (decadesCount[decade] || 0) + 1;
+        }
+     });
+     const topYear = Object.entries(yearCounts).sort((a,b)=>b[1]-a[1])[0];
+     const decadesArr = Object.entries(decadesCount).sort((a, b) => a[0] - b[0]);
+
+     // Notes
+     const ratingCounts = {};
+     for(let i=1; i<=10; i++) ratingCounts[i] = 0;
+     movies.forEach(m => {
+         if (m.rating) {
+             const r = Math.round(m.rating);
+             if(ratingCounts[r] !== undefined) ratingCounts[r]++;
+         }
+     });
+     const maxRatingCount = Math.max(...Object.values(ratingCounts)) || 1;
+
+     // Format (Durée)
+     let shortM = 0, mediumM = 0, longM = 0;
+     movies.forEach(m => {
+         if(!m.runtime) return;
+         if(m.runtime < 90) shortM++;
+         else if(m.runtime <= 140) mediumM++;
+         else longM++;
+     });
+
+
+     // --- RENDU AFFICHAGE ---
+
+     // 1. GRILLE DU HAUT (KPIs principaux)
+     const headerCards = document.createElement('div');
+     headerCards.className = 'stats-grid mb-6'; // Ajout de marge en bas
+     headerCards.innerHTML = `
+       <div class="stat-card">
+         <div class="stat-title">Total films</div>
+         <div class="stat-value">${total}</div>
+         <div class="mt-2 text-sm text-slate-400">
+            ${topYear ? `Meilleure année : <span class="text-white">${topYear[0]}</span> (${topYear[1]})` : ''}
+         </div>
+       </div>
+       <div class="stat-card">
+         <div class="stat-title">Films vus / non vus</div>
+         <div class="donut" id="seenDonut"></div>
+         <div class="donut-center" id="seenCenter">${seenCount}</div>
+         <div class="stats-legend" style="justify-content:center">
+           <span><span class="legend-dot" style="background:#f97316"></span>Vu</span>
+           <span><span class="legend-dot" style="background:#334155"></span>Non vu</span>
+         </div>
+       </div>
+       <div class="stat-card">
+         <div class="stat-title">Temps de visionnage</div>
+         <div class="stat-value">${Math.floor(totalMinutes/60)}h ${String(totalMinutes%60).padStart(2,'0')}m</div>
+         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Moyenne par film</div>
+         <div class="stat-value" style="font-size:1rem">${Math.floor(avgMinutes/60)}h ${String(avgMinutes%60).padStart(2,'0')}m</div>
+       </div>
+     `;
+     statsView.appendChild(headerCards);
+
+     
+     // 2. GRILLE SECONDAIRE (Toutes les listes : Acteurs, Genres, etc.)
+     // On utilise la même classe 'stats-grid' pour avoir l'effet "carré" responsive
+     const detailsGrid = document.createElement('div');
+     detailsGrid.className = 'stats-grid'; 
+
+     // -- Carte Genres --
+     const genreCard = document.createElement('div');
+     genreCard.className = 'stat-card';
+     genreCard.innerHTML = `<div class="stat-title">Répartition par genre</div><div id="genreList" class="mt-3"></div>`;
+     const genreList = genreCard.querySelector('#genreList');
+     
+     if (genresArr.length === 0) {
+       genreList.innerHTML = '<div class="text-xs opacity-70">Aucun genre trouvé.</div>';
+     } else {
+       const max = Math.max(...genresArr.map(([g,c])=>c));
+       genresArr.slice(0,8).forEach(([g,c])=>{
+         const row = document.createElement('div');
+         // On utilise flex pour l'alignement horizontal
+         row.style.display = "flex";
+         row.style.alignItems = "center";
+         row.style.marginBottom = "6px"; // Espacement vertical entre les lignes
+         
+         row.innerHTML = `
+           <div style="width:110px; min-width:110px; font-size:0.85rem; color:#e6eef8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g}">
+             ${g}
+           </div>
+           
+           <div style="flex:1; margin: 0 8px; height:10px; background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden;">
+              <div style="height:100%; width:${Math.round((c/max)*100)}%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius:99px;"></div>
+           </div>
+           
+           <div style="min-width:25px; text-align:right; font-size:0.85rem; color:#cbd5e1; font-weight:bold;">
+             ${c}
+           </div>
+         `;
+         genreList.appendChild(row);
+       });
+     }
+     detailsGrid.appendChild(genreCard);
+
+
+     // -- Carte Notes (Stars) --
+     const ratingCard = document.createElement('div');
+     ratingCard.className = 'stat-card';
+     ratingCard.innerHTML = `<div class="stat-title">Notes (Étoiles)</div><div id="ratingList" class="mt-3"></div>`;
+     const ratingList = ratingCard.querySelector('#ratingList');
+     for(let r=10; r>=1; r--) {
+         const count = ratingCounts[r];
+         if (count > 0) {
+             ratingList.innerHTML += `
+               <div class="genre-bar">
+                 <div class="genre-label" style="width:30px; text-align:center;">★ ${r}</div>
+                 <div class="bar">
+                    <div class="bar-fill" style="width:${Math.round((count / maxRatingCount) * 100)}%; background: linear-gradient(90deg, #3b82f6, #8b5cf6);"></div>
+                 </div>
+                 <div style="min-width:30px;text-align:right;font-size:.85rem;color:#cbd5e1">${count}</div>
+               </div>
+             `;
+         }
+     }
+     detailsGrid.appendChild(ratingCard);
+
+
+     // -- Carte Réalisateurs --
+     const dirCard = document.createElement('div');
+     dirCard.className = 'stat-card';
+     dirCard.innerHTML = `<div class="stat-title">Réalisateurs fréquents</div>`;
+     const dirList = document.createElement('div');
+     dirList.style.marginTop = '.5rem';
+     if (dirArr.length===0) dirList.innerHTML = '<div class="text-xs opacity-70">Aucun réalisateur.</div>';
+     else dirArr.forEach(([d,c])=> dirList.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${d} — <span style="color:#cbd5e1">${c}</span></div>`);
+     dirCard.appendChild(dirList);
+     detailsGrid.appendChild(dirCard);
+
+
+     // -- Carte Acteurs --
+     const actorCard = document.createElement('div');
+     actorCard.className = 'stat-card';
+     actorCard.innerHTML = `<div class="stat-title">Acteurs fréquents</div>`;
+     const actorList = document.createElement('div');
+     actorList.style.marginTop = '.5rem';
+     if (actorArr.length === 0) {
+        actorList.innerHTML = '<div class="text-xs opacity-70">Aucun acteur renseigné.</div>';
+     } else {
+        actorArr.forEach(([actor, count]) => {
+            actorList.innerHTML += `
+            <div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">
+                ${actor} — <span style="color:#cbd5e1">${count}</span>
+            </div>`;
+        });
+     }
+     actorCard.appendChild(actorList);
+     detailsGrid.appendChild(actorCard);
+
+
+     // -- Carte Pays --
+     const countryCard = document.createElement('div');
+     countryCard.className = 'stat-card';
+     countryCard.innerHTML = `<div class="stat-title">Pays d'origine</div>`;
+     const countryListEl = document.createElement('div');
+     countryListEl.style.marginTop = '.5rem';
+     if (countryArr.length===0) countryListEl.innerHTML = '<div class="text-xs opacity-70">Aucun pays renseigné.</div>';
+     else countryArr.forEach(([c,cnt]) => countryListEl.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${c} — <span style="color:#cbd5e1">${cnt}</span></div>`);
+     countryCard.appendChild(countryListEl);
+     detailsGrid.appendChild(countryCard);
+
+
+     // -- Carte Décennies --
+     const decadeCard = document.createElement('div');
+     decadeCard.className = 'stat-card';
+     decadeCard.innerHTML = `<div class="stat-title">Par décennie</div><div class="flex flex-wrap gap-2 mt-3"></div>`;
+     const decadeContainer = decadeCard.querySelector('div:last-child');
+     decadesArr.forEach(([dec, count]) => {
+         decadeContainer.innerHTML += `
+            <div class="flex flex-col items-center justify-center bg-white/5 p-2 rounded-lg border border-white/5 min-w-[60px]">
+                <span class="text-red-400 font-bold text-xs tracking-wider">${dec}s</span>
+                <span class="text-white font-bold">${count}</span>
+            </div>
+         `;
+     });
+     detailsGrid.appendChild(decadeCard);
+
+
+     // -- Carte Formats --
+     const runtimeDistCard = document.createElement('div');
+     runtimeDistCard.className = 'stat-card';
+     runtimeDistCard.innerHTML = `
+        <div class="stat-title">Format (Durée)</div>
+        <div class="mt-4 space-y-3">
+            <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                <span class="text-slate-400">Court (< 1h30)</span> 
+                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${shortM}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                <span class="text-slate-400">Standard</span> 
+                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${mediumM}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400">Long (> 2h20)</span> 
+                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${longM}</span>
+            </div>
+        </div>
+     `;
+     detailsGrid.appendChild(runtimeDistCard);
+
+     // --- STAT FORMATS & PACKAGING (4K, Steelbook...) ---
+     let count4k = 0;
+     let countBluray = 0;
+     let countSteelbook = 0;
+     let countAmaray = 0;
+
+     movies.forEach(m => {
+         const tags = (m.tags || []).map(t => t.toLowerCase()); // On met tout en minuscule pour éviter les erreurs
+         
+         // On cherche si le tag contient le mot clé (ex: "4k ultra hd" comptera pour "4k")
+         if (tags.some(t => t.includes('4k'))) count4k++;
+         if (tags.some(t => t.includes('blu-ray') || t.includes('bluray'))) countBluray++;
+         if (tags.some(t => t.includes('steelbook'))) countSteelbook++;
+         if (tags.some(t => t.includes('amaray'))) countAmaray++;
+     });
+
+     const formatCard = document.createElement('div');
+     formatCard.className = 'stat-card';
+     formatCard.innerHTML = `
+        <div class="stat-title">Formats & Éditions</div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+            <div class="flex flex-col items-center justify-center bg-black/40 border border-yellow-500/30 p-2 rounded-lg">
+                <span class="text-yellow-500 font-bold text-xs uppercase tracking-wider">4K UHD</span>
+                <span class="text-white text-xl font-bold">${count4k}</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center bg-blue-900/20 border border-blue-500/30 p-2 rounded-lg">
+                <span class="text-blue-400 font-bold text-xs uppercase tracking-wider">Blu-ray</span>
+                <span class="text-white text-xl font-bold">${countBluray}</span>
+            </div>
+
+            <div class="col-span-2 flex justify-center py-1">
+                <div class="h-px bg-white/10 w-3/4 rounded-full"></div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center bg-slate-700/40 border border-slate-500/50 p-2 rounded-lg">
+                <span class="text-slate-300 font-bold text-xs uppercase tracking-wider">Steelbook</span>
+                <span class="text-white text-xl font-bold">${countSteelbook}</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center bg-white/5 border border-white/10 p-2 rounded-lg">
+                <span class="text-slate-400 font-bold text-xs uppercase tracking-wider">Amaray</span>
+                <span class="text-white text-xl font-bold">${countAmaray}</span>
+            </div>
+        </div>
+     `;
+     detailsGrid.appendChild(formatCard);
+
+     // On ajoute la grille de détails à la vue principale
+     statsView.appendChild(detailsGrid);
+
+
+     // 3. RENDU DU DONUT (Canvas/CSS)
+     // On le fait après l'insertion dans le DOM pour que le CSS s'applique bien
+     const donut = statsView.querySelector('#seenDonut');
+     const seenCenterEl = statsView.querySelector('#seenCenter');
+     if (donut) {
+       const pct = total ? Math.round((seenCount/total)*100) : 0;
+       donut.style.background = `conic-gradient(#f97316 0 ${pct}%, #334155 ${pct}% 100%)`;
+       if (seenCenterEl) seenCenterEl.textContent = `${pct}%`;
+     }
+
+     const currentYear = new Date().getFullYear();
+     let addedThisYear = 0;
+     let addedLast30Days = 0;
+     const thirtyDaysAgo = new Date();
+     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+     movies.forEach(m => {
+         if (m.added) {
+             const dateAdded = new Date(m.added);
+             if (dateAdded.getFullYear() === currentYear) addedThisYear++;
+             if (dateAdded >= thirtyDaysAgo) addedLast30Days++;
+         }
+     });
+
+     const growthCard = document.createElement('div');
+     growthCard.className = 'stat-card';
+     growthCard.innerHTML = `
+        <div class="stat-title">Croissance</div>
+        <div class="grid grid-cols-2 gap-4 mt-4 text-center">
+            <div class="bg-white/5 rounded-lg p-2 border border-white/5">
+                <div class="text-2xl font-bold text-green-400">+${addedLast30Days}</div>
+                <div class="text-xs text-slate-400 mt-1">30 jours</div>
+            </div>
+            <div class="bg-white/5 rounded-lg p-2 border border-white/5">
+                <div class="text-2xl font-bold text-blue-400">+${addedThisYear}</div>
+                <div class="text-xs text-slate-400 mt-1">En ${currentYear}</div>
+            </div>
+        </div>
+        <div class="mt-4 text-xs text-center text-slate-500">
+            Dernier ajout : <span class="text-slate-300">${movies.length ? movies.sort((a,b)=> new Date(b.added)-new Date(a.added))[0].title : 'Aucun'}</span>
+        </div>
+     `;
+     detailsGrid.appendChild(growthCard);
+
+     // --- STAT 21 : SAISONNALITÉ (MOIS D'AJOUT) ---
+     const monthCounts = Array(12).fill(0);
+     const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+     
+     movies.forEach(m => {
+         if (m.added) {
+             const d = new Date(m.added);
+             monthCounts[d.getMonth()]++;
+         }
+     });
+     
+     const maxMonth = Math.max(...monthCounts) || 1;
+
+     const seasonCard = document.createElement('div');
+     seasonCard.className = 'stat-card';
+     seasonCard.innerHTML = `<div class="stat-title">Périodes d'ajout</div>`;
+     
+     const seasonChart = document.createElement('div');
+     seasonChart.className = "mt-3 grid grid-cols-6 gap-2"; // 6 colonnes x 2 lignes = 12 mois
+     
+     monthNames.forEach((name, index) => {
+         const count = monthCounts[index];
+         // Opacité basée sur le volume
+         const opacity = 0.2 + (count / maxMonth) * 0.8; 
+         
+         seasonChart.innerHTML += `
+            <div class="flex flex-col items-center bg-white/5 rounded p-1 border border-white/5">
+                <div class="text-[10px] text-slate-400 uppercase">${name}</div>
+                <div class="text-sm font-bold text-green-400" style="opacity:${opacity}">${count}</div>
+            </div>
+         `;
+     });
+     
+     seasonCard.appendChild(seasonChart);
+     detailsGrid.appendChild(seasonCard);
+   }
+
+
+    function renderGrid() {
+     els.grid.innerHTML = '';
+     let countText = `${state.filtered.length} film${state.filtered.length > 1 ? 's' : ''}`;
+     els.count.textContent = countText;
+
+     for (const m of state.filtered) {
+       const posterSrc = m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+
+       const card = document.createElement('article');
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.innerHTML = `
+         <div class="aspect-[2/3] bg-black/40">
+           <img src="${posterSrc}" loading="lazy" alt="${m.title}" class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+         </div>
+         <div class="p-3 space-y-1">
+           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
+           <div class="text-xs opacity-80 flex items-center gap-2">
+             ${m.year ? `<span>${m.year}</span>` : ''}
+             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
+             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
+           </div>
+           <div class="flex flex-wrap gap-1 pt-1">
+             ${(m.genres||[]).slice(0,3).map(g => `<span class='text-[10px] px-1.5 py-0.5 rounded-full bg-white/10'>${escapeHtml(g)}</span>`).join('')}
+           </div>
+          </div>
+        `;
+       card.addEventListener('click', () => openModal(m));
+       els.grid.appendChild(card);
+      }
+    }
+
+    function renderUpcomingView() {
+     const container = document.getElementById('upcomingView');
+     container.innerHTML = '';
+
+     const today = new Date();
+     const upcomingMovies = state.all
+       .filter(m => {
+         const isFuture = m.added && new Date(m.added) > today;
+         const isWishlist = (m.categories && m.categories.includes('wishlist')) || 
+                            (m.tags && m.tags.includes('wishlist'));
+         return isFuture && !isWishlist; // 🔹 exclut les films wishlist
+       })
+       .sort((a, b) => new Date(a.added) - new Date(b.added));
+
+     if (upcomingMovies.length === 0) {
+       container.innerHTML = '<p class="text-slate-200">Aucun film à venir pour le moment.</p>';
+       return;
+     }
+
+     const grid = document.createElement('div');
+     grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+
+     upcomingMovies.forEach(m => {
+       const posterSrc = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+    
+       const card = document.createElement('article');
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.innerHTML = `
+         <div class="aspect-[2/3] bg-black/40">
+           <img src="${posterSrc}" alt="${m.title}" 
+                class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+         </div>
+         <div class="p-3 space-y-1">
+           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
+           <div class="text-xs opacity-80 flex items-center gap-2">
+             ${m.year ? `<span>${m.year}</span>` : ''}
+             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
+             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
+           </div>
+         </div>
+        `;
+       card.addEventListener('click', () => openModal(m));
+        grid.appendChild(card);
+     });
+
+     container.appendChild(grid);
+   }
+    
+    function renderWishlistView() {
+     const container = document.getElementById('wishlistView');
+     container.innerHTML = '';
+
+     // Films marqués comme wishlist (tags, catégorie ou autre)
+     const wishlistMovies = state.all.filter(m => 
+       (m.tags && m.tags.includes('wishlist')) || 
+       (m.categories && m.categories.includes('wishlist'))
+     );
+
+     if (wishlistMovies.length === 0) {
+       container.innerHTML = '<p class="text-slate-200">Aucun film dans la wishlist.</p>';
+       return;
+     }
+
+     const grid = document.createElement('div');
+     grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+
+     wishlistMovies.forEach(m => {
+       const posterSrc = m.poster || m.netflixPoster || 
+         `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+
+       const card = document.createElement('article');
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.innerHTML = `
+         <div class="aspect-[2/3] bg-black/40">
+           <img src="${posterSrc}" alt="${m.title}" 
+                class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+         </div>
+         <div class="p-3 space-y-1">
+           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
+           <div class="text-xs opacity-80 flex items-center gap-2">
+             ${m.year ? `<span>${m.year}</span>` : ''}
+             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
+             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
+           </div>
+         </div>
+       `;
+       card.addEventListener('click', () => openModal(m));
+       grid.appendChild(card);
+     });
+
+     container.appendChild(grid);
+   }
+
+    function renderNetflixViewNetflixPoster() {
+     const container = document.getElementById('mainView');
+     container.innerHTML = '';
+
+     // Regrouper par genre
+     const categories = {};
+     state.filtered.forEach(movie => {
+       // Regrouper par genre
+       movie.genres.forEach(genre => {
+         if (!categories[genre]) categories[genre] = [];
+         categories[genre].push(movie);
+       });
+
+       // Regrouper par catégories personnalisées
+       (movie.categories || []).forEach(cat => {
+         if (!categories[cat]) categories[cat] = [];
+         categories[cat].push(movie);
+       });
+     });
+
+     for (const cat in categories) {
+       const section = document.createElement('section');
+       section.className = "mb-8";
+
+       const title = document.createElement('h2');
+       title.textContent = cat;
+       title.className = "text-xl font-bold mb-2";
+       section.appendChild(title);
+
+       const carousel = document.createElement('div');
+       carousel.className = "carousel";
+
+       const shuffled = categories[cat].slice().sort(() => Math.random() - 0.5);
+
+       shuffled.forEach(m => {
+         const card = document.createElement('div');
+         card.className = 'carousel-item group relative rounded-lg overflow-hidden border border-white/10';
+         const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+         card.innerHTML = `
+           <img src="${posterSrc}" 
+             alt="${m.title}" 
+             class="h-60 w-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+           <p class="text-xs mt-1 line-clamp-1">${m.title}</p>
+         `;
+         card.addEventListener('click', () => openModal(m));
+         carousel.appendChild(card);
+        });
+
+        section.appendChild(carousel);
+        container.appendChild(section);
+      }
+    }
+
+    function formatRuntime(minutes) {
+     if (!minutes) return "Durée inconnue";
+     const h = Math.floor(minutes / 60);
+     const m = minutes % 60;
+     return `${h}h${m.toString().padStart(2,"0")}`;
+    }
+
+    function placeholderSVG(text){
+      const bg = '#0f172a';
+      const fg = '#94a3b8';
+      return `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='600'>
+        <rect width='100%' height='100%' fill='${bg}'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='${fg}' font-family='system-ui,Segoe UI,Arial' font-size='22'>${(text||'Poster')}</text>
+      </svg>`;
+    }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+    function openModal(m) {
+     const content = document.getElementById('modalContent');
+     if (!content) return;
+
+     let showingAlt = false;
+     const mainPoster = m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+     const altPoster = m.altPoster || null;
+
+     els.modalPoster.src = mainPoster;
+     els.modalTitle.textContent = m.title;
+     els.modalOverview.textContent = m.overview || '';
+     els.modalMeta.innerHTML = [
+       m.year ? `<span>${m.year}</span>` : '',
+       m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
+       m.rating ? `<span>• ★ ${m.rating}</span>` : ''
+     ].join(' ');
+
+     let userRating = localStorage.getItem("myrating_" + m.id) || "";
+
+     const oldRatingBlock = document.getElementById("userRatingBlock");
+     if (oldRatingBlock) oldRatingBlock.remove();
+
+     let ratingHTML = `
+       <div id="userRatingBlock" class="mt-1 flex items-center gap-2 text-sm">
+         <span class="opacity-80">Ma note :</span>
+         <select id="userRatingSelect" class="px-2 py-1 rounded bg-white/10">
+           <option value="">–</option>
+           ${[...Array(10)].map((_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}
+         </select>
+       </div>
+     `;
+
+     els.modalMeta.insertAdjacentHTML("afterend", ratingHTML);
+
+     // Récupérer le select et appliquer la note sauvegardée
+     const selectRating = document.getElementById("userRatingSelect");
+     selectRating.value = userRating;
+
+     // Sauvegarder quand on change de note
+     selectRating.addEventListener("change", () => {
+       if (selectRating.value === "") {
+         localStorage.removeItem("myrating_" + m.id);
+       } else {
+         localStorage.setItem("myrating_" + m.id, selectRating.value);
+       }
+     });
+
+     const directorsText = (m.directors && m.directors.length) 
+       ? `Réalisateur(s) : ${m.directors.join(', ')}` 
+       : '';
+
+     const actorsText = (m.people && m.people.length) 
+       ? `Acteurs : ${m.people.join(', ')}` 
+       : '';
+
+     const oldSeenBtn = document.getElementById('toggleSeenBtn');
+     if (oldSeenBtn) oldSeenBtn.remove();
+
+     // 2. Création du nouveau bouton
+     const seenBtn = document.createElement('button');
+     seenBtn.id = 'toggleSeenBtn'; // IMPORTANT : on lui donne un ID pour pouvoir le supprimer la prochaine fois
+     
+     const isSeen = localStorage.getItem('seen_' + m.id);
+
+     seenBtn.className = "px-4 py-2 rounded bg-white/10 hover:bg-white/20 ml-2 transition-colors";
+     // On ajoute une couleur verte si vu, pour que ce soit plus visuel
+     if (isSeen) seenBtn.classList.add('text-green-400', 'bg-green-900/30'); 
+
+     seenBtn.innerHTML = isSeen ? "👁️ Visionné" : "⭕ Non visionné";
+
+     seenBtn.onclick = () => {
+       if (localStorage.getItem('seen_' + m.id)) {
+         localStorage.removeItem('seen_' + m.id);
+         seenBtn.innerHTML = "⭕ Non visionné";
+         seenBtn.classList.remove('text-green-400', 'bg-green-900/30');
+       } else {
+         localStorage.setItem('seen_' + m.id, 'true');
+         seenBtn.innerHTML = "👁️ Visionné";
+         seenBtn.classList.add('text-green-400', 'bg-green-900/30');
+       }
+       // Rafraîchir la grille en arrière-plan
+       applyFilters();
+     };
+     
+     // Insertion du bouton juste après les métadonnées (Année, Durée...)
+     els.modalMeta.parentNode.insertBefore(seenBtn, els.modalMeta.nextSibling);
+
+     if (m.people && m.people.length) {
+       els.modalActors.innerHTML = m.people
+         .map(actor => `<span class="actor-link text-red-400 hover:underline cursor-pointer">${actor}</span>`)
+         .join(', ');
+       els.modalActors.querySelectorAll('.actor-link').forEach(el => {
+         el.addEventListener('click', (e) => {
+           e.stopPropagation();
+           state.query = el.textContent.trim();
+           els.search.value = state.query;
+           
+           currentView = 'grid';
+           setActiveTab('grid');
+           document.getElementById('mainView').classList.add('hidden');
+           document.getElementById('gridView').classList.remove('hidden');
+
+           applyFilters();
+           els.modal.classList.add('hidden');
+         });
+       });
+     } else {
+       els.modalActors.textContent = '';
+     }
+
+     els.modalCountry.innerHTML = m.country ? `Pays d'origine : ${escapeHtml(m.country)}` : '';
+     els.modalTags.innerHTML = (m.tags || []).map(t => 
+       `<span class='text-xs px-2 py-1 rounded-full bg-white/10'>${escapeHtml(t)}</span>`
+     ).join('');
+
+     const posterWrapper = els.modalPoster.parentElement;
+
+     const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
+     if (oldBtn) oldBtn.remove();
+
+     if (altPoster) {
+       const switchBtn = document.createElement('button');
+       switchBtn.className = "switchPosterBtn absolute top-1/2 right-2 -translate-y-1/2 bg-black/60 text-white p-2 rounded-full";
+       switchBtn.innerHTML = "➡️";
+       posterWrapper.appendChild(switchBtn);
+
+       switchBtn.addEventListener('click', () => {
+         if (showingAlt) {
+           els.modalPoster.src = mainPoster;
+           switchBtn.innerHTML = "➡️";
+           switchBtn.classList.remove("left-2");
+           switchBtn.classList.add("right-2");
+         } else {
+           els.modalPoster.src = altPoster;
+           switchBtn.innerHTML = "⬅️";
+           switchBtn.classList.remove("right-2");
+           switchBtn.classList.add("left-2");
+         }
+         showingAlt = !showingAlt;
+       });
+     }
+
+     els.modal.classList.remove('hidden');
+     content.classList.remove('scale-100','opacity-100');
+     content.classList.add('scale-95','opacity-0');
+
+     requestAnimationFrame(() => {
+       content.classList.remove('scale-95','opacity-0');
+       content.classList.add('scale-100','opacity-100');
+     });
+   }
+
+    function closeModal() {
+     const content = document.getElementById('modalContent');
+     content.classList.remove('scale-100', 'opacity-100');
+     content.classList.add('scale-95', 'opacity-0');
+
+     setTimeout(() => {
+       els.modal.classList.add('hidden');
+     }, 200);
+    }
+
+   function hideAllViews() {
+     document.getElementById('mainView').classList.add('hidden');    // Netflix
+     document.getElementById('gridView').classList.add('hidden');    // Grille classique
+     document.getElementById('upcomingView').classList.add('hidden'); // Prochainement
+     document.getElementById('wishlistView').classList.add('hidden'); // Wishlist
+     document.getElementById('statsView').classList.add('hidden');
+   }
+
+   document.getElementById('tabUpcoming').addEventListener('click', () => {
+     currentView = 'upcoming';
+     setActiveTab('upcoming');
+     hideAllViews();
+     document.getElementById('upcomingView').classList.remove('hidden');
+     controlsSection.classList.add('hidden');
+     renderUpcomingView();
+   });
+
+   document.getElementById('tabWishlist').addEventListener('click', () => {
+     currentView = 'wishlist';
+     setActiveTab('wishlist');
+     hideAllViews();
+     document.getElementById('wishlistView').classList.remove('hidden');
+     controlsSection.classList.add('hidden');
+     renderWishlistView();
+   });
+
+   tabStatsBtn.addEventListener('click', () => {
+     currentView = 'stats';
+     setActiveTab('stats');
+     hideAllViews();
+     statsView.classList.remove('hidden');
+     controlsSection.classList.add('hidden');
+     renderStats();
+   });
+
+    // Écouteurs
+    els.search.addEventListener('input', e=>{ state.query = e.target.value; applyFilters(); });
+    els.genre.addEventListener('change', e=>{ state.genre = e.target.value; applyFilters(); });
+    els.yearExact.addEventListener('input', e=>{ state.yearExact = e.target.value; applyFilters(); });
+    els.runtime.addEventListener('change', e =>{ state.runtime = e.target.value; applyFilters(); });
+    els.sort.addEventListener('change', e=>{ state.sort = e.target.value; applyFilters(); });
+    els.country.addEventListener('change', e => {state.country = e.target.value; applyFilters(); });
+    els.period.addEventListener('change', e => {state.period = e.target.value; applyFilters(); });
+    els.reset.addEventListener('click', ()=>{state.query='';state.genre='';state.yearExact='';state.runtime='';state.sort='title';state.country = '';state.period = '';els.search.value='';els.genre.value='';els.yearExact.value='';els.runtime.value='';els.sort.value='title';els.country.value = '';els.period.value = '';applyFilters(); });    
+    els.randomBtn.addEventListener('click', () => {
+     if (state.filtered.length === 0) {
+       alert("Aucun film trouvé dans la sélection !");
+       return;
+     }
+
+     let steps = 15; // nombre de films affichés avant de s'arrêter
+     let delay = 100; // vitesse de départ (ms)
+     let i = 0;
+
+     const spin = () => {
+       const randomIndex = Math.floor(Math.random() * state.filtered.length);
+       const randomMovie = state.filtered[randomIndex];
+
+     els.count.textContent = `🎲 ${randomMovie.title}`;
+
+     if (i < steps) {
+      i++;
+      delay += 40; // ralentir progressivement
+      setTimeout(spin, delay);
+     } else {
+      // Une fois terminé → ouvrir le modal
+      openModal(randomMovie);
+     }
+    };
+
+    spin();
+   });
+
+    els.modalClose.addEventListener('click', closeModal);
+    els.modalBackdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+     if (e.key === 'Escape' && !els.modal.classList.contains('hidden')) {
+      closeModal();
+     }
+    });
+
+    els.sortDirBtn.addEventListener('click', ()=>{ 
+     state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+     els.sortDirBtn.textContent = state.sortDir === "asc" ? "⬆︎" : "⬇︎";
+     applyFilters();
+    });
+
+    // Import JSON
+    els.jsonFile.addEventListener('change', async (e)=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      try{
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if(!parsed.movies || !Array.isArray(parsed.movies)) throw new Error('Schéma invalide');
+        state.all = normalize(parsed.movies);
+        initFilters();
+        resetFilters();
+      }catch(err){
+        alert('Impossible de lire ce JSON. Vérifiez le schéma (voir Aide).');
+      }
+    });
+
+    document.getElementById('tabMain').addEventListener('click', () => {
+     currentView = 'netflix';
+     setActiveTab('netflix');
+     hideAllViews();
+     document.getElementById('mainView').classList.remove('hidden');
+     controlsSection.classList.add('hidden'); 
+     renderNetflixView();
+   });
+
+   document.getElementById('tabGrid').addEventListener('click', () => {
+     currentView = 'grid';
+     setActiveTab('grid');
+     hideAllViews();
+     document.getElementById('gridView').classList.remove('hidden');
+     controlsSection.classList.remove('hidden'); 
+     renderGrid();
+   });
+
+    loadInitial();
+    controlsSection.classList.add('hidden'); // 🚫 cacher filtres dès le chargement
+  </script>
+</body>
+</html>
