@@ -5,7 +5,6 @@
   <meta name="theme-color" content="#2a181c">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ma collection de blu-ray — Local</title>
-  <!-- TailwindCSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="description" content="Interface locale type Netflix pour cataloguer vos films sans lecture vidéo.">
   <style>
@@ -195,15 +194,12 @@
   <header class="sticky top-0 z-30 border-b border-white/10 bg-black/40 backdrop-blur">
      <div class="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3">
     
-       <!-- Titre -->
        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-red-600 via-red-600 to-red-600 bg-clip-text text-transparent drop-shadow-lg">
          🎬 Ma collection de blu-ray
        </h1>
 
-       <!-- Ligne boutons vues + import/export -->
        <div class="flex items-center justify-between">
       
-         <!-- Boutons Vue Netflix / Liste complète -->
          <div class="flex gap-4">
            <button id="tabMain" class="px-3 py-1 rounded bg-red-600">Vue Netflix</button>
            <button id="tabGrid" class="px-3 py-1 rounded bg-white/10">Liste complète</button>
@@ -212,7 +208,6 @@
            <button id="tabStats" class="px-3 py-1 rounded bg-white/10">Stats</button>
          </div>
 
-         <!-- Import JSON -->
          <div class="flex items-center gap-2 ml-auto">
            <label class="hidden sm:block text-sm text-slate-300">Importer JSON</label>
            <input id="jsonFile" type="file" accept="application/json" 
@@ -227,7 +222,6 @@
        class="pointer-events-none fixed top-[80px] right-0 h-[calc(100%-80px)] w-20 
               bg-gradient-to-r from-transparent to-black/80 z-20 hidden"></div>
 
-  <!-- Controls -->
   <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6">
     <div class="grid gap-3 md:grid-cols-12 items-end">
       <div class="md:col-span-5">
@@ -295,10 +289,8 @@
      <div id="bannerCarousel" class="flex transition-transform duration-700 ease-in-out"></div>
    </div>
 
-  <!-- Grid -->
   <main id="mainView" class="mx-auto max-w-7xl px-4 pb-24 mt-6"></main>
 
-  <!-- Grille classique -->
   <main id="gridView" class="mx-auto max-w-7xl px-4 pb-24 hidden mt-6">
    <div id="resultCount" class="mb-4 text-sm opacity-80"></div>
    <div id="grid" class="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6"></div>
@@ -308,7 +300,6 @@
   <main id="wishlistView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="statsView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
 
-  <!-- Modal détail -->
   <div id="modal" class="hidden fixed inset-0 z-50">
    <div id="modalBackdrop" class="absolute inset-0 bg-black/70"></div>
 
@@ -319,8 +310,7 @@
      <div class="grid md:grid-cols-3 gap-4">
        <div class="relative">
          <img id="modalPoster" class="w-full h-72 md:h-full rounded-2xl object-cover border border-white/10" alt="Poster" />
-         <!-- bouton flèche injecté ici -->
-       </div>
+         </div>
        <div class="md:col-span-2 space-y-3">
          <h3 id="modalTitle" class="text-2xl font-semibold"></h3>
          <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
@@ -823,7 +813,7 @@
            </div>
            
            <div style="flex:1; margin: 0 8px; height:10px; background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden;">
-              <div style="height:100%; width:${Math.round((c/max)*100)}%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius:99px;"></div>
+              <div class="bar-fill" style="width:${Math.round((c/max)*100)}%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius:99px;"></div>
            </div>
            
            <div style="min-width:25px; text-align:right; font-size:0.85rem; color:#cbd5e1; font-weight:bold;">
@@ -1258,6 +1248,18 @@
      return `${h}h${m.toString().padStart(2,"0")}`;
     }
 
+    // 🌟 NOUVELLE FONCTION AJOUTÉE POUR FORMATER LA DATE
+    function formatAddedDate(dateString) {
+     if (!dateString) return '';
+     try {
+       // Convertit "YYYY-MM-DD" en "22 novembre 2025" (selon les paramètres locaux français)
+       const date = new Date(dateString);
+       return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+     } catch (e) {
+       return dateString; // Fallback si la date est invalide
+     }
+    }
+
     function placeholderSVG(text){
       const bg = '#0f172a';
       const fg = '#94a3b8';
@@ -1280,11 +1282,21 @@
      els.modalPoster.src = mainPoster;
      els.modalTitle.textContent = m.title;
      els.modalOverview.textContent = m.overview || '';
-     els.modalMeta.innerHTML = [
+     
+     // 🚀 MODIFICATION : Assemblage des métadonnées avec la date d'ajout
+     const metaHtml = [
        m.year ? `<span>${m.year}</span>` : '',
        m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
        m.rating ? `<span>• ★ ${m.rating}</span>` : ''
-     ].join(' ');
+     ];
+
+     if (m.added) {
+       // Ajout de la date formatée à la liste des métadonnées
+       metaHtml.push(`<span>• Ajouté le ${formatAddedDate(m.added)}</span>`);
+     }
+
+     els.modalMeta.innerHTML = metaHtml.join(' ');
+     // ------------------------------------------------------------------
 
      let userRating = localStorage.getItem("myrating_" + m.id) || "";
 
