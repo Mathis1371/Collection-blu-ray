@@ -317,6 +317,7 @@
          <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
          <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
          <p id="modalOverview" class="text-slate-200"></p>
+         <div id="modalPrice" class="font-bold text-slate-200 text-lg my-2 hidden"></div>
          <div id="modalTags" class="flex flex-wrap gap-2"></div>
        </div>
      </div>
@@ -352,6 +353,7 @@
       modalTags: document.getElementById('modalTags'),
       modalActors: document.getElementById('modalActors'),
       modalCountry: document.getElementById('modalCountry'),
+      modalPrice: document.getElementById('modalPrice'),
       randomBtn: document.getElementById('randomBtn'),
       modalBackdrop: document.getElementById('modalBackdrop'),
       sortDirBtn: document.getElementById('sortDirBtn')
@@ -459,6 +461,7 @@
         directors: Array.isArray(m.directors)?m.directors:[],
         runtime: Number(m.runtime)||null,
         rating: Number(m.rating)||null,
+        price: Number(m.price)||0,
         overview: m.overview||'',
         poster: m.poster||'',
         netflixPoster: m.netflixPoster || '',
@@ -689,6 +692,7 @@
      );
 
      const total = movies.length;
+     const totalPrice = movies.reduce((acc, m) => acc + (m.price || 0), 0);
      const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
      const unseenCount = total - seenCount;
 
@@ -757,29 +761,35 @@
 
      // 1. GRILLE DU HAUT (KPIs principaux)
      const headerCards = document.createElement('div');
-     headerCards.className = 'stats-grid mb-6'; // Ajout de marge en bas
+     headerCards.className = 'stats-grid mb-6'; 
      headerCards.innerHTML = `
        <div class="stat-card">
          <div class="stat-title">Total films</div>
          <div class="stat-value">${total}</div>
          <div class="mt-2 text-sm text-slate-400">
-            ${topYear ? `Meilleure année : <span class="text-white">${topYear[0]}</span> (${topYear[1]})` : ''}
+            ${topYear ? `Meilleure année : <span class="text-white">${topYear[0]}</span>` : ''}
          </div>
+       </div>
+
+       <div class="stat-card border-green-900/30 bg-green-900/10">
+         <div class="stat-title text-green-200">Valeur collection</div>
+         <div class="stat-value text-green-400">${totalPrice.toFixed(2)} €</div>
+         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Prix moyen</div>
+         <div class="stat-value" style="font-size:1rem">${total > 0 ? (totalPrice / total).toFixed(2) : 0} €</div>
        </div>
        <div class="stat-card">
          <div class="stat-title">Films vus / non vus</div>
          <div class="donut" id="seenDonut"></div>
          <div class="donut-center" id="seenCenter">${seenCount}</div>
-         <div class="stats-legend" style="justify-content:center">
-           <span><span class="legend-dot" style="background:#f97316"></span>Vu</span>
-           <span><span class="legend-dot" style="background:#334155"></span>Non vu</span>
          </div>
-       </div>
        <div class="stat-card">
          <div class="stat-title">Temps de visionnage</div>
-         <div class="stat-value">${Math.floor(totalMinutes/60)}h ${String(totalMinutes%60).padStart(2,'0')}m</div>
-         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Moyenne par film</div>
-         <div class="stat-value" style="font-size:1rem">${Math.floor(avgMinutes/60)}h ${String(avgMinutes%60).padStart(2,'0')}m</div>
+         <div class="stat-value text-blue-400">
+            ${Math.floor(totalMinutes / 60)}h ${(totalMinutes % 60).toString().padStart(2, '0')}
+         </div>
+         
+         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Moyenne / film</div>
+         <div class="stat-value" style="font-size:1rem">${avgMinutes} min</div>
        </div>
      `;
      statsView.appendChild(headerCards);
@@ -1296,7 +1306,16 @@
      }
 
      els.modalMeta.innerHTML = metaHtml.join(' ');
-     // ------------------------------------------------------------------
+     
+     els.modalOverview.textContent = m.overview || '';
+
+     if (m.price > 0) {
+        els.modalPrice.textContent = `Prix d'achat : ${m.price.toFixed(2)} €`;
+        els.modalPrice.classList.remove('hidden');
+     } else {
+        els.modalPrice.textContent = '';
+        els.modalPrice.classList.add('hidden');
+     }
 
      let userRating = localStorage.getItem("myrating_" + m.id) || "";
 
