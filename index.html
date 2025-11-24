@@ -222,7 +222,7 @@
        class="pointer-events-none fixed top-[80px] right-0 h-[calc(100%-80px)] w-20 
               bg-gradient-to-r from-transparent to-black/80 z-20 hidden"></div>
 
-  <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6">
+  <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6 hidden">
     <div class="grid gap-3 md:grid-cols-12 items-end">
       <div class="md:col-span-5">
         <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Recherche</label>
@@ -359,6 +359,21 @@
       sortDirBtn: document.getElementById('sortDirBtn')
     };
 
+    const filterInputsContainer = document.getElementById('filterInputsContainer');
+    const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+    
+    // Ajout de l'écouteur d'événement
+    if (toggleFiltersBtn && filterInputsContainer) {
+        toggleFiltersBtn.addEventListener('click', () => {
+            const isHidden = filterInputsContainer.classList.toggle('hidden');
+            filterInputsContainer.classList.toggle('sm:grid');
+            
+            toggleFiltersBtn.textContent = isHidden 
+                ? "Afficher les filtres & tri" 
+                : "Masquer les filtres & tri";
+        });
+    }
+
     const controlsSection = document.getElementById('controlsSection');
 
     let currentView = 'netflix';
@@ -428,6 +443,16 @@
          banner.style.transform = "translateX(0)";
        }
      }
+     
+     // 🚀 LOGIQUE DE CONTRÔLE : Afficher les contrôles uniquement pour la vue 'grid'
+     // La variable controlsSection est définie globalement, pas besoin de la redéclarer.
+     if (controlsSection) {
+        if (view === 'grid') {
+            controlsSection.classList.remove('hidden');
+        } else {
+            controlsSection.classList.add('hidden');
+        }
+     }
    }
 
 
@@ -462,6 +487,7 @@
         runtime: Number(m.runtime)||null,
         rating: Number(m.rating)||null,
         price: Number(m.price)||0,
+        marketValue: Number(m.marketValue)||0,
         overview: m.overview||'',
         poster: m.poster||'',
         netflixPoster: m.netflixPoster || '',
@@ -690,14 +716,18 @@
      statsView.innerHTML = '<h2 class="text-2xl font-semibold mb-4">Stats</h2>';
 
      const today = new Date();
-     // On filtre les films (hors wishlist / hors futur)
      const movies = (state.all || []).filter(m => 
        !((m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'))) &&
        !(m.added && new Date(m.added) > today)
      );
 
      const total = movies.length;
+     
+     // --- CALCULS DES PRIX ---
      const totalPrice = movies.reduce((acc, m) => acc + (m.price || 0), 0);
+     // Nouveau calcul pour la valeur marché
+     const totalMarket = movies.reduce((acc, m) => acc + (m.marketValue || 0), 0);
+
      const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
      const unseenCount = total - seenCount;
 
@@ -756,7 +786,7 @@
      let shortM = 0, mediumM = 0, longM = 0;
      movies.forEach(m => {
          if(!m.runtime) return;
-         if(m.runtime < 90) shortM++;
+         if(m.runtime < 100) shortM++;
          else if(m.runtime <= 140) mediumM++;
          else longM++;
      });
@@ -776,12 +806,29 @@
          </div>
        </div>
 
-       <div class="stat-card">
-         <div class="stat-title">Valeur collection</div>
-         <div class="stat-value text-green-400">${totalPrice.toFixed(2)} €</div>
-         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Prix moyen</div>
-         <div class="stat-value" style="font-size:1rem">${total > 0 ? (totalPrice / total).toFixed(2) : 0} €</div>
+       <div class="stat-card flex flex-col justify-between">
+         <div>
+            <div class="flex justify-between items-baseline">
+                <div class="stat-title">Valeur Achat</div>
+                <div class="text-xs text-green-400 bg-green-400/10 px-2 rounded">Payé</div>
+            </div>
+            <div class="stat-value text-green-400">${totalPrice.toFixed(2)} €</div>
+         </div>
+
+         <div class="mt-3 pt-3 border-t border-white/10">
+            <div class="flex justify-between items-baseline">
+                <div class="stat-title">Valeur Marché</div>
+                <div class="text-xs text-purple-400 bg-purple-400/10 px-2 rounded">Estimé</div>
+            </div>
+            <div class="stat-value text-purple-400">${totalMarket.toFixed(2)} €</div>
+         </div>
+         
+         <div class="mt-2 text-xs text-slate-400 flex justify-between">
+            <span>Moyenne (achat):</span>
+            <span class="text-slate-200">${total > 0 ? (totalPrice / total).toFixed(2) : 0} €</span>
+         </div>
        </div>
+
        <div class="stat-card">
          <div class="stat-title">Films vus / non vus</div>
          <div class="donut" id="seenDonut"></div>
@@ -930,7 +977,7 @@
         <div class="stat-title">Format (Durée)</div>
         <div class="mt-4 space-y-3">
             <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                <span class="text-slate-400">Court (< 1h30)</span> 
+                <span class="text-slate-400">Court (< 1h40)</span> 
                 <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${shortM}</span>
             </div>
             <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
@@ -1418,8 +1465,28 @@
 
      els.modalCountry.innerHTML = m.country ? `Pays d'origine : ${escapeHtml(m.country)}` : '';
      els.modalTags.innerHTML = (m.tags || []).map(t => 
-       `<span class='text-xs px-2 py-1 rounded-full bg-white/10'>${escapeHtml(t)}</span>`
+       `<span class='tag-link text-xs px-2 py-1 rounded-full bg-white/10 hover:bg-red-600 transition cursor-pointer'>${escapeHtml(t)}</span>`
      ).join('');
+
+     els.modalTags.querySelectorAll('.tag-link').forEach(el => {
+         el.addEventListener('click', (e) => {
+           e.stopPropagation();
+           
+           // Définir la recherche avec le tag
+           state.query = el.textContent.trim();
+           els.search.value = state.query;
+           
+           // Basculer vers la vue grille pour voir les résultats
+           currentView = 'grid';
+           setActiveTab('grid');
+           hideAllViews();
+           document.getElementById('gridView').classList.remove('hidden');
+           // controlsSection.classList.remove('hidden'); // Géré par setActiveTab
+           
+           applyFilters();
+           closeModal(); // Fermer la modale
+         });
+       });
 
      const posterWrapper = els.modalPoster.parentElement;
 
@@ -1481,8 +1548,8 @@
      setActiveTab('upcoming');
      hideAllViews();
      document.getElementById('upcomingView').classList.remove('hidden');
-     controlsSection.classList.add('hidden');
-     renderUpcomingView();
+     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
+     applyFilters(); // Recalcule la liste pour "Prochainement"
    });
 
    document.getElementById('tabWishlist').addEventListener('click', () => {
@@ -1490,8 +1557,8 @@
      setActiveTab('wishlist');
      hideAllViews();
      document.getElementById('wishlistView').classList.remove('hidden');
-     controlsSection.classList.add('hidden');
-     renderWishlistView();
+     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
+     applyFilters(); // Recalcule la liste pour "Wishlist"
    });
 
    tabStatsBtn.addEventListener('click', () => {
@@ -1499,7 +1566,7 @@
      setActiveTab('stats');
      hideAllViews();
      statsView.classList.remove('hidden');
-     controlsSection.classList.add('hidden');
+     // controlsSection.classList.add('hidden'); // Géré par setActiveTab
      renderStats();
    });
 
@@ -1571,45 +1638,31 @@
       }
     });
 
-    document.getElementById('tabUpcoming').addEventListener('click', () => {
-     currentView = 'upcoming';
-     setActiveTab('upcoming');
-     hideAllViews();
-     document.getElementById('upcomingView').classList.remove('hidden');
-     controlsSection.classList.add('hidden');
-     applyFilters(); // Recalcule la liste pour "Prochainement"
-   });
-
-   document.getElementById('tabWishlist').addEventListener('click', () => {
-     currentView = 'wishlist';
-     setActiveTab('wishlist');
-     hideAllViews();
-     document.getElementById('wishlistView').classList.remove('hidden');
-     controlsSection.classList.add('hidden');
-     applyFilters(); // Recalcule la liste pour "Wishlist"
-   });
-
    document.getElementById('tabMain').addEventListener('click', () => {
      currentView = 'netflix';
      setActiveTab('netflix');
      hideAllViews();
      document.getElementById('mainView').classList.remove('hidden');
-     controlsSection.classList.add('hidden'); 
+     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
      applyFilters(); // <-- IMPORTANT : Recalcule pour enlever les filtres Wishlist
    });
 
    document.getElementById('tabGrid').addEventListener('click', () => {
-     currentView = 'grid';
-     setActiveTab('grid');
-     hideAllViews();
-     document.getElementById('gridView').classList.remove('hidden');
-     controlsSection.classList.remove('hidden'); 
-     applyFilters(); // <-- IMPORTANT : C'est ici que se situait votre bug
-   });
+      currentView = 'grid';
+      setActiveTab('grid'); // ✅ Affiche controlsSection
+      hideAllViews();
+      document.getElementById('gridView').classList.remove('hidden');
+      // On s'assure que le conteneur des INPUTS est caché sur mobile, mais visible sur grand écran
+      if (filterInputsContainer) {
+          filterInputsContainer.classList.add('hidden'); // Caché par défaut
+          filterInputsContainer.classList.add('sm:grid'); // Affiché sur sm:
+          if (toggleFiltersBtn) toggleFiltersBtn.textContent = "Afficher les filtres & tri";
+      }
+      applyFilters();
+    });
 
    // Le reste du code de fin reste inchangé
    loadInitial();
-   controlsSection.classList.add('hidden'); // 🚫 cacher filtres dès le chargement
   </script>
 </body>
 </html>
