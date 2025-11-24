@@ -1096,7 +1096,7 @@
       "altPoster": "https://www.film-game.eu/i/?i=0941157.jpg",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-10"
+      "added": "2025-12-17"
     },
     {
       "id": "tt30144839",
@@ -2090,6 +2090,25 @@
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2026-11-11"
+    },
+    {
+      "id": "tt12361974",
+      "title": "Zack Snyder's Justice League",
+      "year": 2021,
+      "price": 14.99,
+      "genres": ["Fantastique", "Action", "Aventure", "Super héros"],
+      "people": ["Erza Miller", "Henry Cavill", "Jared Leto", "Gal Gadot", "Ben Affleck", "Jason Momoa", "Jesse Einsenberg", "Amy Adams", "Willem Dafoe", "Ray Fisher", "Amber Heard", "Ray Porter", "Billy Crudup", "Ciarán Hinds", "Russell Crowe", "Jeremy Irons", "Diane Lane", "J.K. Simmons"],
+      "directors": ["Zack Snyder"],
+      "runtime": 242,
+      "rating": 7.9,
+      "overview": "Déterminé à faire en sorte que le sacrifice ultime de Superman ne fut pas en vain, Bruce Wayne s'associe à Diana Prince pour recruter une équipe de métahumains pour protéger le monde d'une menace imminente aux proportions catastrophiques.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/xx7YR2kmu6Xji31au9VvGdCp4T1.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mKTccI6mwC4TumkzgzXoI8b2Qul.jpg",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/3a/04/cc/13370426/1507-1/tsp20210323152148/Zack-Snyder-s-Justice-League-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
+      "categories": ["Films d'action", "Blockbusters", "Univers DC Comics"],
+      "tags": ["4K", "Steelbook"],
+      "country": "États-Unis",
+      "added": "2025-11-28"
     }
   ]
 }
