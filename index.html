@@ -528,7 +528,7 @@
          (m.categories && m.categories.includes('wishlist'))
        );
 
-       return matchesQ && matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming;
+       return matchesQ && matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming && notWishlist;
      });
 
      list.sort((a,b)=>{
@@ -545,11 +545,16 @@
 
      state.filtered = list;
 
-     if(currentView === 'netflix') {
+     if (currentView === 'netflix') {
        renderNetflixView();
      } else if (currentView === 'stats') {
        renderStats();
+     } else if (currentView === 'wishlist') {
+       renderWishlistView();
+     } else if (currentView === 'upcoming') {
+       renderUpcomingView();
      } else {
+       // Par défaut (currentView === 'grid')
        renderGrid();
      }
 
@@ -1282,6 +1287,7 @@
     function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 
     function openModal(m) {
+     const viewAtOpen = currentView;
      const content = document.getElementById('modalContent');
      if (!content) return;
 
@@ -1565,13 +1571,31 @@
       }
     });
 
-    document.getElementById('tabMain').addEventListener('click', () => {
+    document.getElementById('tabUpcoming').addEventListener('click', () => {
+     currentView = 'upcoming';
+     setActiveTab('upcoming');
+     hideAllViews();
+     document.getElementById('upcomingView').classList.remove('hidden');
+     controlsSection.classList.add('hidden');
+     applyFilters(); // Recalcule la liste pour "Prochainement"
+   });
+
+   document.getElementById('tabWishlist').addEventListener('click', () => {
+     currentView = 'wishlist';
+     setActiveTab('wishlist');
+     hideAllViews();
+     document.getElementById('wishlistView').classList.remove('hidden');
+     controlsSection.classList.add('hidden');
+     applyFilters(); // Recalcule la liste pour "Wishlist"
+   });
+
+   document.getElementById('tabMain').addEventListener('click', () => {
      currentView = 'netflix';
      setActiveTab('netflix');
      hideAllViews();
      document.getElementById('mainView').classList.remove('hidden');
      controlsSection.classList.add('hidden'); 
-     renderNetflixView();
+     applyFilters(); // <-- IMPORTANT : Recalcule pour enlever les filtres Wishlist
    });
 
    document.getElementById('tabGrid').addEventListener('click', () => {
@@ -1580,11 +1604,12 @@
      hideAllViews();
      document.getElementById('gridView').classList.remove('hidden');
      controlsSection.classList.remove('hidden'); 
-     renderGrid();
+     applyFilters(); // <-- IMPORTANT : C'est ici que se situait votre bug
    });
 
-    loadInitial();
-    controlsSection.classList.add('hidden'); // 🚫 cacher filtres dès le chargement
+   // Le reste du code de fin reste inchangé
+   loadInitial();
+   controlsSection.classList.add('hidden'); // 🚫 cacher filtres dès le chargement
   </script>
 </body>
 </html>
