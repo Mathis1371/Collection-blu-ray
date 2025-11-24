@@ -12,9 +12,7 @@
    html, body {
       margin: 0;
       padding: 0;
-      /* C'est cette ligne qui colore l'espace vide lors du rebond */
       background-color: rgb(42, 24, 28); 
-      /* On garde ton dégradé pour le contenu */
       background-image: linear-gradient(to right, rgb(42, 24, 28), rgb(42, 24, 28));
       min-height: 100%;
     }
@@ -185,7 +183,6 @@
      font-size: .9rem;
    }
 
-   /* Legends & lists */
    .stats-legend { display:flex; gap: .75rem; align-items:center; justify-content:center; margin-top:.75rem; color:#cbd5e1; font-size: .85rem; }
    .legend-dot { width:12px; height:12px; border-radius:50%; display:inline-block; margin-right:.35rem; }
 </style>
@@ -198,20 +195,19 @@
          🎬 Ma collection de blu-ray
        </h1>
 
-       <div class="flex items-center justify-between">
-      
-         <div class="flex gap-4">
-           <button id="tabMain" class="px-3 py-1 rounded bg-red-600">Vue Netflix</button>
-           <button id="tabGrid" class="px-3 py-1 rounded bg-white/10">Liste complète</button>
-           <button id="tabUpcoming" class="px-3 py-1 rounded bg-white/10">Prochainement</button>
-           <button id="tabWishlist" class="px-3 py-1 rounded bg-white/10">Wishlist</button>
-           <button id="tabStats" class="px-3 py-1 rounded bg-white/10">Stats</button>
+       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+         <div class="flex flex-wrap gap-2 sm:gap-4">
+           <button id="tabMain" class="px-3 py-1 rounded bg-red-600 text-sm sm:text-base">Vue Netflix</button>
+           <button id="tabGrid" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Liste complète</button>
+           <button id="tabUpcoming" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Prochainement</button>
+           <button id="tabWishlist" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Wishlist</button>
+           <button id="tabStats" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Stats</button>
          </div>
 
-         <div class="flex items-center gap-2 ml-auto">
+         <div class="flex items-center gap-2 ml-auto w-full sm:w-auto">
            <label class="hidden sm:block text-sm text-slate-300">Importer JSON</label>
            <input id="jsonFile" type="file" accept="application/json" 
-                  class="block text-sm file:mr-3 file:px-3 file:py-2 file:rounded-xl file:border-0 
+                  class="block w-full sm:w-auto text-sm file:mr-3 file:px-3 file:py-2 file:rounded-xl file:border-0 
                          file:bg-white/10 file:text-slate-100 hover:file:bg-white/20" />
          </div>
        </div>
@@ -223,7 +219,14 @@
               bg-gradient-to-r from-transparent to-black/80 z-20 hidden"></div>
 
   <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6 hidden">
-    <div class="grid gap-3 md:grid-cols-12 items-end">
+    
+    <div class="sm:hidden mb-4">
+        <button id="toggleFiltersBtn" class="w-full py-2 bg-white/10 rounded-xl text-sm font-bold uppercase tracking-wide hover:bg-white/20 transition">
+            Afficher les filtres & tri
+        </button>
+    </div>
+
+    <div id="filterInputsContainer" class="hidden sm:grid gap-3 md:grid-cols-12 items-end">
       <div class="md:col-span-5">
         <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Recherche</label>
         <input id="searchInput" type="search" placeholder="Titre, acteur, réalisateur, mot-clé…" class="w-full px-4 py-3 rounded-2xl bg-white/10 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500" />
@@ -279,9 +282,10 @@
          <button id="sortDirBtn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20">⬆︎</button>
        </div>
       </div>
-    <div class="md:col-span-12 mt-4 flex gap-3">
-     <button id="resetBtn" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20">Réinitialiser</button>
-     <button id="randomBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700">Film aléatoire</button>
+      <div class="md:col-span-12 mt-4 flex gap-3">
+        <button id="resetBtn" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20">Réinitialiser</button>
+        <button id="randomBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700">Film aléatoire</button>
+      </div>
     </div>
   </section>
 
@@ -305,18 +309,18 @@
 
    <div id="modalContent"
         class="relative mx-auto mt-16 w-[92vw] max-w-4xl rounded-3xl glass p-4 md:p-6 shadow-2xl border border-white/10
-              transition-all duration-200 transform scale-95 opacity-0">
-     <button id="modalClose" class="absolute top-3 right-3 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+              transition-all duration-200 transform scale-95 opacity-0 overflow-y-auto max-h-[85vh]">
+     <button id="modalClose" class="absolute top-3 right-3 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 z-10">Fermer</button>
      <div class="grid md:grid-cols-3 gap-4">
        <div class="relative">
          <img id="modalPoster" class="w-full h-72 md:h-full rounded-2xl object-cover border border-white/10" alt="Poster" />
          </div>
        <div class="md:col-span-2 space-y-3">
-         <h3 id="modalTitle" class="text-2xl font-semibold"></h3>
+         <h3 id="modalTitle" class="text-2xl font-semibold pr-16"></h3>
          <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
          <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
          <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
-         <p id="modalOverview" class="text-slate-200"></p>
+         <p id="modalOverview" class="text-slate-200 text-sm leading-relaxed"></p>
          <div id="modalPrice" class="font-bold text-slate-200 text-lg my-2 hidden"></div>
          <div id="modalTags" class="flex flex-wrap gap-2"></div>
        </div>
@@ -325,9 +329,53 @@
   </div>
 
   <script>
-    // --- Données d'exemple (utilisées si data/movies.json est introuvable) ---
+    // FIX: Ajout de fausses données pour ne pas avoir un écran vide au démarrage
     const SAMPLE_DATA = {
-      movies: []
+      movies: [
+        {
+            "id": "sample1",
+            "title": "Exemple: Inception",
+            "year": 2010,
+            "genres": ["Science Fiction", "Action"],
+            "categories": ["Coup de coeur"],
+            "people": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
+            "directors": ["Christopher Nolan"],
+            "runtime": 148,
+            "rating": 9,
+            "overview": "Ceci est un exemple de fiche film pour vous montrer l'interface. Importez votre propre JSON pour remplacer ces données.",
+            "country": "USA",
+            "tags": ["4k", "steelbook"],
+            "added": new Date().toISOString()
+        },
+        {
+            "id": "sample2",
+            "title": "Exemple: Le Parrain",
+            "year": 1972,
+            "genres": ["Crime", "Drama"],
+            "categories": ["Classiques"],
+            "people": ["Marlon Brando", "Al Pacino"],
+            "directors": ["Francis Ford Coppola"],
+            "runtime": 175,
+            "rating": 10,
+            "country": "USA",
+            "tags": ["bluray"],
+            "added": new Date().toISOString()
+        },
+        {
+            "id": "sample3",
+            "title": "Exemple: Parasite",
+            "year": 2019,
+            "genres": ["Thriller", "Drama"],
+            "categories": ["Coup de coeur"],
+            "people": ["Song Kang-ho"],
+            "directors": ["Bong Joon-ho"],
+            "runtime": 132,
+            "rating": 9,
+            "country": "Coree du Sud",
+            "tags": ["4k"],
+            "added": new Date().toISOString()
+        }
+      ]
     };
 
     let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: ""};
@@ -342,7 +390,6 @@
       count: document.getElementById('resultCount'),
       jsonFile: document.getElementById('jsonFile'),
       period: document.getElementById('periodSelect'),
-      exportBtn: document.getElementById('exportBtn'),
       modal: document.getElementById('modal'),
       modalClose: document.getElementById('modalClose'),
       modalPoster: document.getElementById('modalPoster'),
@@ -362,32 +409,31 @@
     const filterInputsContainer = document.getElementById('filterInputsContainer');
     const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
     
-    // Ajout de l'écouteur d'événement
+    // FIX: Le bouton toggle marche maintenant car les ID existent dans le HTML
     if (toggleFiltersBtn && filterInputsContainer) {
         toggleFiltersBtn.addEventListener('click', () => {
-            const isHidden = filterInputsContainer.classList.toggle('hidden');
-            filterInputsContainer.classList.toggle('sm:grid');
-            
-            toggleFiltersBtn.textContent = isHidden 
-                ? "Afficher les filtres & tri" 
-                : "Masquer les filtres & tri";
+            const isHidden = filterInputsContainer.classList.contains('hidden');
+            if (isHidden) {
+                filterInputsContainer.classList.remove('hidden');
+                // filterInputsContainer.classList.add('grid'); // Déjà géré par sm:grid mais on force l'affichage
+                toggleFiltersBtn.textContent = "Masquer les filtres & tri";
+            } else {
+                filterInputsContainer.classList.add('hidden');
+                toggleFiltersBtn.textContent = "Afficher les filtres & tri";
+            }
         });
     }
 
     const controlsSection = document.getElementById('controlsSection');
-
     let currentView = 'netflix';
 
     const tabMainBtn = document.getElementById("tabMain");
     const tabGridBtn = document.getElementById("tabGrid");
-
     const tabStatsBtn = document.getElementById("tabStats");
     const statsView = document.getElementById("statsView");
 
     let currentBannerMovie = null;
-
     let bannerScrollAnim = null;
-
     let bannerIndex = 0;
     let bannerMovies = [];
     let bannerInterval = null;
@@ -416,11 +462,12 @@
 
      const fade = document.getElementById("globalFade");
      if (view === "netflix") {
-       fade.classList.remove("hidden"); // visible uniquement en vue Netflix
+       fade.classList.remove("hidden");
      } else {
-       fade.classList.add("hidden"); // caché ailleurs
+       fade.classList.add("hidden");
      }
      
+     // Nettoyage animation
      if (typeof bannerScrollAnim === "number") {
        cancelAnimationFrame(bannerScrollAnim);
        bannerScrollAnim = null;
@@ -433,9 +480,9 @@
      const banner = document.getElementById("netflixBanner");
      if (banner) {
        if (view === "netflix") {
-         banner.style.display = "block";   // ✅ visible
+         banner.style.display = "block"; // REVERSION : block comme dans l'original
        } else {
-         banner.style.display = "none";    // 🚫 complètement masqué sur toutes les autres vues
+         banner.style.display = "none";
          if (bannerInterval) {
            clearInterval(bannerInterval);
            bannerInterval = null;
@@ -444,8 +491,6 @@
        }
      }
      
-     // 🚀 LOGIQUE DE CONTRÔLE : Afficher les contrôles uniquement pour la vue 'grid'
-     // La variable controlsSection est définie globalement, pas besoin de la redéclarer.
      if (controlsSection) {
         if (view === 'grid') {
             controlsSection.classList.remove('hidden');
@@ -455,10 +500,7 @@
      }
    }
 
-
-    setActiveTab(currentView);
-
-    // Sécurité : aucun lecteur n'est intégré, et on ne crée que des liens vers des fichiers locaux si vous en mettez dans le JSON (non cliquables ici).
+   setActiveTab(currentView);
 
     // Charger JSON local si dispo
     async function loadInitial() {
@@ -467,9 +509,10 @@
          if (!res.ok) throw new Error('no json');
          const data = await res.json();
          if (!data.movies) throw new Error('bad schema');
-         state.all = normalize(data.movies);  // ✅ tes films du JSON
+         state.all = normalize(data.movies);
        } catch (e) {
-         state.all = normalize(SAMPLE_DATA.movies); // fallback si pas de fichier
+         console.warn("Fichier data/movies.json introuvable ou invalide, chargement des données d'exemple.");
+         state.all = normalize(SAMPLE_DATA.movies); 
        }
       initFilters();
       applyFilters();
@@ -507,7 +550,6 @@
     }
 
     function resetFilters() {
-     // Réinitialise l’état
      state.query = "";
      state.genre = "";
      state.yearExact = "";
@@ -517,7 +559,6 @@
      state.country = "";
      state.period = "";
 
-     // Vide les champs du DOM
      els.search.value = "";
      els.genre.value = "";
      els.yearExact.value = "";
@@ -526,7 +567,6 @@
      els.country.value = "";
      els.period.value = "";
 
-     // 🔁 Réapplique les filtres par défaut
      applyFilters();
     }
 
@@ -545,10 +585,8 @@
        const matchesC = !state.country || (m.country && m.country.toLowerCase().trim() === state.country.toLowerCase().trim());
        const matchesP = !state.period || (() => {const [start, end] = state.period.split('-').map(Number);return m.year && m.year >= start && m.year <= end; })();
 
-       // Exclure les films à venir des vues Netflix et Liste complète
        const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
 
-       // Exclure les films de la wishlist des vues normales
        const notWishlist = currentView === 'wishlist' ? true : !(
          (m.tags && m.tags.includes('wishlist')) ||
          (m.categories && m.categories.includes('wishlist'))
@@ -580,12 +618,11 @@
      } else if (currentView === 'upcoming') {
        renderUpcomingView();
      } else {
-       // Par défaut (currentView === 'grid')
        renderGrid();
      }
-
     }
     
+    // REVERSION : Code exact de la bannière d'origine
     function renderNetflixView() {
      const container = document.getElementById('mainView');
      container.innerHTML = '';
@@ -722,17 +759,10 @@
      );
 
      const total = movies.length;
-     
-     // --- CALCULS DES PRIX ---
      const totalPrice = movies.reduce((acc, m) => acc + (m.price || 0), 0);
-     // Nouveau calcul pour la valeur marché
      const totalMarket = movies.reduce((acc, m) => acc + (m.marketValue || 0), 0);
-
      const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
-     const unseenCount = total - seenCount;
-
-     // --- CALCULS DES DONNÉES ---
-
+     
      // Genres
      const genreCounts = {};
      movies.forEach(m => (m.genres||[]).forEach(g => { genreCounts[g] = (genreCounts[g]||0) + 1; }));
@@ -793,8 +823,6 @@
 
 
      // --- RENDU AFFICHAGE ---
-
-     // 1. GRILLE DU HAUT (KPIs principaux)
      const headerCards = document.createElement('div');
      headerCards.className = 'stats-grid mb-6'; 
      headerCards.innerHTML = `
@@ -846,9 +874,6 @@
      `;
      statsView.appendChild(headerCards);
 
-     
-     // 2. GRILLE SECONDAIRE (Toutes les listes : Acteurs, Genres, etc.)
-     // On utilise la même classe 'stats-grid' pour avoir l'effet "carré" responsive
      const detailsGrid = document.createElement('div');
      detailsGrid.className = 'stats-grid'; 
 
@@ -864,29 +889,23 @@
        const max = Math.max(...genresArr.map(([g,c])=>c));
        genresArr.slice(0,8).forEach(([g,c])=>{
          const row = document.createElement('div');
-         // On utilise flex pour l'alignement horizontal
          row.style.display = "flex";
          row.style.alignItems = "center";
-         row.style.marginBottom = "6px"; // Espacement vertical entre les lignes
+         row.style.marginBottom = "6px";
          
          row.innerHTML = `
            <div style="width:110px; min-width:110px; font-size:0.85rem; color:#e6eef8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g}">
              ${g}
            </div>
-           
            <div style="flex:1; margin: 0 8px; height:10px; background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden;">
               <div class="bar-fill" style="width:${Math.round((c/max)*100)}%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius:99px;"></div>
            </div>
-           
-           <div style="min-width:25px; text-align:right; font-size:0.85rem; color:#cbd5e1; font-weight:bold;">
-             ${c}
-           </div>
+           <div style="min-width:25px; text-align:right; font-size:0.85rem; color:#cbd5e1; font-weight:bold;">${c}</div>
          `;
          genreList.appendChild(row);
        });
      }
      detailsGrid.appendChild(genreCard);
-
 
      // -- Carte Notes (Stars) --
      const ratingCard = document.createElement('div');
@@ -909,7 +928,6 @@
      }
      detailsGrid.appendChild(ratingCard);
 
-
      // -- Carte Réalisateurs --
      const dirCard = document.createElement('div');
      dirCard.className = 'stat-card';
@@ -920,7 +938,6 @@
      else dirArr.forEach(([d,c])=> dirList.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${d} — <span style="color:#cbd5e1">${c}</span></div>`);
      dirCard.appendChild(dirList);
      detailsGrid.appendChild(dirCard);
-
 
      // -- Carte Acteurs --
      const actorCard = document.createElement('div');
@@ -941,7 +958,6 @@
      actorCard.appendChild(actorList);
      detailsGrid.appendChild(actorCard);
 
-
      // -- Carte Pays --
      const countryCard = document.createElement('div');
      countryCard.className = 'stat-card';
@@ -952,7 +968,6 @@
      else countryArr.forEach(([c,cnt]) => countryListEl.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${c} — <span style="color:#cbd5e1">${cnt}</span></div>`);
      countryCard.appendChild(countryListEl);
      detailsGrid.appendChild(countryCard);
-
 
      // -- Carte Décennies --
      const decadeCard = document.createElement('div');
@@ -999,9 +1014,7 @@
      let countAmaray = 0;
 
      movies.forEach(m => {
-         const tags = (m.tags || []).map(t => t.toLowerCase()); // On met tout en minuscule pour éviter les erreurs
-         
-         // On cherche si le tag contient le mot clé (ex: "4k ultra hd" comptera pour "4k")
+         const tags = (m.tags || []).map(t => t.toLowerCase()); 
          if (tags.some(t => t.includes('4k'))) count4k++;
          if (tags.some(t => t.includes('blu-ray') || t.includes('bluray'))) countBluray++;
          if (tags.some(t => t.includes('steelbook'))) countSteelbook++;
@@ -1017,21 +1030,17 @@
                 <span class="text-yellow-500 font-bold text-xs uppercase tracking-wider">4K UHD</span>
                 <span class="text-white text-xl font-bold">${count4k}</span>
             </div>
-
             <div class="flex flex-col items-center justify-center bg-blue-900/20 border border-blue-500/30 p-2 rounded-lg">
                 <span class="text-blue-400 font-bold text-xs uppercase tracking-wider">Blu-ray</span>
                 <span class="text-white text-xl font-bold">${countBluray}</span>
             </div>
-
             <div class="col-span-2 flex justify-center py-1">
                 <div class="h-px bg-white/10 w-3/4 rounded-full"></div>
             </div>
-
             <div class="flex flex-col items-center justify-center bg-slate-700/40 border border-slate-500/50 p-2 rounded-lg">
                 <span class="text-slate-300 font-bold text-xs uppercase tracking-wider">Steelbook</span>
                 <span class="text-white text-xl font-bold">${countSteelbook}</span>
             </div>
-
             <div class="flex flex-col items-center justify-center bg-white/5 border border-white/10 p-2 rounded-lg">
                 <span class="text-slate-400 font-bold text-xs uppercase tracking-wider">Amaray</span>
                 <span class="text-white text-xl font-bold">${countAmaray}</span>
@@ -1040,12 +1049,9 @@
      `;
      detailsGrid.appendChild(formatCard);
 
-     // On ajoute la grille de détails à la vue principale
      statsView.appendChild(detailsGrid);
 
-
-     // 3. RENDU DU DONUT (Canvas/CSS)
-     // On le fait après l'insertion dans le DOM pour que le CSS s'applique bien
+     // Donut
      const donut = statsView.querySelector('#seenDonut');
      const seenCenterEl = statsView.querySelector('#seenCenter');
      if (donut) {
@@ -1054,6 +1060,7 @@
        if (seenCenterEl) seenCenterEl.textContent = `${pct}%`;
      }
 
+     // Croissance
      const currentYear = new Date().getFullYear();
      let addedThisYear = 0;
      let addedLast30Days = 0;
@@ -1088,7 +1095,7 @@
      `;
      detailsGrid.appendChild(growthCard);
 
-     // --- STAT 21 : SAISONNALITÉ (MOIS D'AJOUT) ---
+     // Saisonnalité
      const monthCounts = Array(12).fill(0);
      const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
      
@@ -1106,13 +1113,11 @@
      seasonCard.innerHTML = `<div class="stat-title">Périodes d'ajout</div>`;
      
      const seasonChart = document.createElement('div');
-     seasonChart.className = "mt-3 grid grid-cols-6 gap-2"; // 6 colonnes x 2 lignes = 12 mois
+     seasonChart.className = "mt-3 grid grid-cols-6 gap-2"; 
      
      monthNames.forEach((name, index) => {
          const count = monthCounts[index];
-         // Opacité basée sur le volume
          const opacity = 0.2 + (count / maxMonth) * 0.8; 
-         
          seasonChart.innerHTML += `
             <div class="flex flex-col items-center bg-white/5 rounded p-1 border border-white/5">
                 <div class="text-[10px] text-slate-400 uppercase">${name}</div>
@@ -1125,7 +1130,6 @@
      detailsGrid.appendChild(seasonCard);
    }
 
-
     function renderGrid() {
      els.grid.innerHTML = '';
      let countText = `${state.filtered.length} film${state.filtered.length > 1 ? 's' : ''}`;
@@ -1135,7 +1139,7 @@
        const posterSrc = m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
 
        const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
          <div class="aspect-[2/3] bg-black/40">
            <img src="${posterSrc}" loading="lazy" alt="${m.title}" class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
@@ -1167,7 +1171,7 @@
          const isFuture = m.added && new Date(m.added) > today;
          const isWishlist = (m.categories && m.categories.includes('wishlist')) || 
                             (m.tags && m.tags.includes('wishlist'));
-         return isFuture && !isWishlist; // 🔹 exclut les films wishlist
+         return isFuture && !isWishlist; 
        })
        .sort((a, b) => new Date(a.added) - new Date(b.added));
 
@@ -1183,7 +1187,7 @@
        const posterSrc = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
     
        const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
          <div class="aspect-[2/3] bg-black/40">
            <img src="${posterSrc}" alt="${m.title}" 
@@ -1209,7 +1213,6 @@
      const container = document.getElementById('wishlistView');
      container.innerHTML = '';
 
-     // Films marqués comme wishlist (tags, catégorie ou autre)
      const wishlistMovies = state.all.filter(m => 
        (m.tags && m.tags.includes('wishlist')) || 
        (m.categories && m.categories.includes('wishlist'))
@@ -1228,7 +1231,7 @@
          `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
 
        const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow';
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
          <div class="aspect-[2/3] bg-black/40">
            <img src="${posterSrc}" alt="${m.title}" 
@@ -1250,59 +1253,6 @@
      container.appendChild(grid);
    }
 
-    function renderNetflixViewNetflixPoster() {
-     const container = document.getElementById('mainView');
-     container.innerHTML = '';
-
-     // Regrouper par genre
-     const categories = {};
-     state.filtered.forEach(movie => {
-       // Regrouper par genre
-       movie.genres.forEach(genre => {
-         if (!categories[genre]) categories[genre] = [];
-         categories[genre].push(movie);
-       });
-
-       // Regrouper par catégories personnalisées
-       (movie.categories || []).forEach(cat => {
-         if (!categories[cat]) categories[cat] = [];
-         categories[cat].push(movie);
-       });
-     });
-
-     for (const cat in categories) {
-       const section = document.createElement('section');
-       section.className = "mb-8";
-
-       const title = document.createElement('h2');
-       title.textContent = cat;
-       title.className = "text-xl font-bold mb-2";
-       section.appendChild(title);
-
-       const carousel = document.createElement('div');
-       carousel.className = "carousel";
-
-       const shuffled = categories[cat].slice().sort(() => Math.random() - 0.5);
-
-       shuffled.forEach(m => {
-         const card = document.createElement('div');
-         card.className = 'carousel-item group relative rounded-lg overflow-hidden border border-white/10';
-         const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
-         card.innerHTML = `
-           <img src="${posterSrc}" 
-             alt="${m.title}" 
-             class="h-60 w-auto object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
-           <p class="text-xs mt-1 line-clamp-1">${m.title}</p>
-         `;
-         card.addEventListener('click', () => openModal(m));
-         carousel.appendChild(card);
-        });
-
-        section.appendChild(carousel);
-        container.appendChild(section);
-      }
-    }
-
     function formatRuntime(minutes) {
      if (!minutes) return "Durée inconnue";
      const h = Math.floor(minutes / 60);
@@ -1310,15 +1260,13 @@
      return `${h}h${m.toString().padStart(2,"0")}`;
     }
 
-    // 🌟 NOUVELLE FONCTION AJOUTÉE POUR FORMATER LA DATE
     function formatAddedDate(dateString) {
      if (!dateString) return '';
      try {
-       // Convertit "YYYY-MM-DD" en "22 novembre 2025" (selon les paramètres locaux français)
        const date = new Date(dateString);
        return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
      } catch (e) {
-       return dateString; // Fallback si la date est invalide
+       return dateString;
      }
     }
 
@@ -1334,7 +1282,6 @@
     function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
 
     function openModal(m) {
-     const viewAtOpen = currentView;
      const content = document.getElementById('modalContent');
      if (!content) return;
 
@@ -1346,7 +1293,6 @@
      els.modalTitle.textContent = m.title;
      els.modalOverview.textContent = m.overview || '';
      
-     // 🚀 MODIFICATION : Assemblage des métadonnées avec la date d'ajout
      const metaHtml = [
        m.year ? `<span>${m.year}</span>` : '',
        m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
@@ -1354,16 +1300,15 @@
      ];
 
      if (m.added) {
-       // Ajout de la date formatée à la liste des métadonnées
        metaHtml.push(`<span>• Ajouté le ${formatAddedDate(m.added)}</span>`);
      }
 
      els.modalMeta.innerHTML = metaHtml.join(' ');
-     
      els.modalOverview.textContent = m.overview || '';
 
-     if (m.price > 0) {
-        els.modalPrice.textContent = `Prix d'achat : ${m.price.toFixed(2)} €`;
+     // FIX: Protection contre les valeurs undefined
+     if (m.price && m.price > 0) {
+        els.modalPrice.textContent = `Prix d'achat : ${Number(m.price).toFixed(2)} €`;
         els.modalPrice.classList.remove('hidden');
      } else {
         els.modalPrice.textContent = '';
@@ -1371,14 +1316,13 @@
      }
 
      let userRating = localStorage.getItem("myrating_" + m.id) || "";
-
      const oldRatingBlock = document.getElementById("userRatingBlock");
      if (oldRatingBlock) oldRatingBlock.remove();
 
      let ratingHTML = `
        <div id="userRatingBlock" class="mt-1 flex items-center gap-2 text-sm">
          <span class="opacity-80">Ma note :</span>
-         <select id="userRatingSelect" class="px-2 py-1 rounded bg-white/10">
+         <select id="userRatingSelect" class="px-2 py-1 rounded bg-white/10 text-slate-900 md:text-white">
            <option value="">–</option>
            ${[...Array(10)].map((_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}
          </select>
@@ -1387,40 +1331,22 @@
 
      els.modalMeta.insertAdjacentHTML("afterend", ratingHTML);
 
-     // Récupérer le select et appliquer la note sauvegardée
      const selectRating = document.getElementById("userRatingSelect");
      selectRating.value = userRating;
-
-     // Sauvegarder quand on change de note
      selectRating.addEventListener("change", () => {
-       if (selectRating.value === "") {
-         localStorage.removeItem("myrating_" + m.id);
-       } else {
-         localStorage.setItem("myrating_" + m.id, selectRating.value);
-       }
+       if (selectRating.value === "") localStorage.removeItem("myrating_" + m.id);
+       else localStorage.setItem("myrating_" + m.id, selectRating.value);
      });
-
-     const directorsText = (m.directors && m.directors.length) 
-       ? `Réalisateur(s) : ${m.directors.join(', ')}` 
-       : '';
-
-     const actorsText = (m.people && m.people.length) 
-       ? `Acteurs : ${m.people.join(', ')}` 
-       : '';
 
      const oldSeenBtn = document.getElementById('toggleSeenBtn');
      if (oldSeenBtn) oldSeenBtn.remove();
 
-     // 2. Création du nouveau bouton
      const seenBtn = document.createElement('button');
-     seenBtn.id = 'toggleSeenBtn'; // IMPORTANT : on lui donne un ID pour pouvoir le supprimer la prochaine fois
-     
+     seenBtn.id = 'toggleSeenBtn'; 
      const isSeen = localStorage.getItem('seen_' + m.id);
 
-     seenBtn.className = "px-4 py-2 rounded bg-white/10 hover:bg-white/20 ml-2 transition-colors";
-     // On ajoute une couleur verte si vu, pour que ce soit plus visuel
+     seenBtn.className = "px-4 py-2 rounded bg-white/10 hover:bg-white/20 ml-2 transition-colors text-xs font-semibold";
      if (isSeen) seenBtn.classList.add('text-green-400', 'bg-green-900/30'); 
-
      seenBtn.innerHTML = isSeen ? "👁️ Visionné" : "⭕ Non visionné";
 
      seenBtn.onclick = () => {
@@ -1433,11 +1359,9 @@
          seenBtn.innerHTML = "👁️ Visionné";
          seenBtn.classList.add('text-green-400', 'bg-green-900/30');
        }
-       // Rafraîchir la grille en arrière-plan
        applyFilters();
      };
      
-     // Insertion du bouton juste après les métadonnées (Année, Durée...)
      els.modalMeta.parentNode.insertBefore(seenBtn, els.modalMeta.nextSibling);
 
      if (m.people && m.people.length) {
@@ -1449,14 +1373,12 @@
            e.stopPropagation();
            state.query = el.textContent.trim();
            els.search.value = state.query;
-           
            currentView = 'grid';
            setActiveTab('grid');
            hideAllViews();
            document.getElementById('gridView').classList.remove('hidden');
-
            applyFilters();
-           els.modal.classList.add('hidden');
+           closeModal();
          });
        });
      } else {
@@ -1471,31 +1393,24 @@
      els.modalTags.querySelectorAll('.tag-link').forEach(el => {
          el.addEventListener('click', (e) => {
            e.stopPropagation();
-           
-           // Définir la recherche avec le tag
            state.query = el.textContent.trim();
            els.search.value = state.query;
-           
-           // Basculer vers la vue grille pour voir les résultats
            currentView = 'grid';
            setActiveTab('grid');
            hideAllViews();
            document.getElementById('gridView').classList.remove('hidden');
-           // controlsSection.classList.remove('hidden'); // Géré par setActiveTab
-           
            applyFilters();
-           closeModal(); // Fermer la modale
+           closeModal();
          });
        });
 
      const posterWrapper = els.modalPoster.parentElement;
-
      const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
      if (oldBtn) oldBtn.remove();
 
      if (altPoster) {
        const switchBtn = document.createElement('button');
-       switchBtn.className = "switchPosterBtn absolute top-1/2 right-2 -translate-y-1/2 bg-black/60 text-white p-2 rounded-full";
+       switchBtn.className = "switchPosterBtn absolute top-1/2 right-2 -translate-y-1/2 bg-black/60 text-white p-2 rounded-full z-10 hover:bg-black/80";
        switchBtn.innerHTML = "➡️";
        posterWrapper.appendChild(switchBtn);
 
@@ -1536,10 +1451,10 @@
     }
 
    function hideAllViews() {
-     document.getElementById('mainView').classList.add('hidden');    // Netflix
-     document.getElementById('gridView').classList.add('hidden');    // Grille classique
-     document.getElementById('upcomingView').classList.add('hidden'); // Prochainement
-     document.getElementById('wishlistView').classList.add('hidden'); // Wishlist
+     document.getElementById('mainView').classList.add('hidden');
+     document.getElementById('gridView').classList.add('hidden');
+     document.getElementById('upcomingView').classList.add('hidden');
+     document.getElementById('wishlistView').classList.add('hidden');
      document.getElementById('statsView').classList.add('hidden');
    }
 
@@ -1548,8 +1463,7 @@
      setActiveTab('upcoming');
      hideAllViews();
      document.getElementById('upcomingView').classList.remove('hidden');
-     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
-     applyFilters(); // Recalcule la liste pour "Prochainement"
+     applyFilters();
    });
 
    document.getElementById('tabWishlist').addEventListener('click', () => {
@@ -1557,8 +1471,7 @@
      setActiveTab('wishlist');
      hideAllViews();
      document.getElementById('wishlistView').classList.remove('hidden');
-     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
-     applyFilters(); // Recalcule la liste pour "Wishlist"
+     applyFilters();
    });
 
    tabStatsBtn.addEventListener('click', () => {
@@ -1566,11 +1479,9 @@
      setActiveTab('stats');
      hideAllViews();
      statsView.classList.remove('hidden');
-     // controlsSection.classList.add('hidden'); // Géré par setActiveTab
      renderStats();
    });
 
-    // Écouteurs
     els.search.addEventListener('input', e=>{ state.query = e.target.value; applyFilters(); });
     els.genre.addEventListener('change', e=>{ state.genre = e.target.value; applyFilters(); });
     els.yearExact.addEventListener('input', e=>{ state.yearExact = e.target.value; applyFilters(); });
@@ -1578,33 +1489,34 @@
     els.sort.addEventListener('change', e=>{ state.sort = e.target.value; applyFilters(); });
     els.country.addEventListener('change', e => {state.country = e.target.value; applyFilters(); });
     els.period.addEventListener('change', e => {state.period = e.target.value; applyFilters(); });
-    els.reset.addEventListener('click', ()=>{state.query='';state.genre='';state.yearExact='';state.runtime='';state.sort='title';state.country = '';state.period = '';els.search.value='';els.genre.value='';els.yearExact.value='';els.runtime.value='';els.sort.value='title';els.country.value = '';els.period.value = '';applyFilters(); });    
+    
+    els.reset.addEventListener('click', ()=>{
+        resetFilters();
+    });    
+
     els.randomBtn.addEventListener('click', () => {
      if (state.filtered.length === 0) {
        alert("Aucun film trouvé dans la sélection !");
        return;
      }
 
-     let steps = 15; // nombre de films affichés avant de s'arrêter
-     let delay = 100; // vitesse de départ (ms)
+     let steps = 15;
+     let delay = 100;
      let i = 0;
 
      const spin = () => {
        const randomIndex = Math.floor(Math.random() * state.filtered.length);
        const randomMovie = state.filtered[randomIndex];
-
-     els.count.textContent = `🎲 ${randomMovie.title}`;
+       els.count.textContent = `🎲 ${randomMovie.title}`;
 
      if (i < steps) {
       i++;
-      delay += 40; // ralentir progressivement
+      delay += 40;
       setTimeout(spin, delay);
      } else {
-      // Une fois terminé → ouvrir le modal
       openModal(randomMovie);
      }
     };
-
     spin();
    });
 
@@ -1622,7 +1534,6 @@
      applyFilters();
     });
 
-    // Import JSON
     els.jsonFile.addEventListener('change', async (e)=>{
       const file = e.target.files?.[0];
       if(!file) return;
@@ -1643,25 +1554,23 @@
      setActiveTab('netflix');
      hideAllViews();
      document.getElementById('mainView').classList.remove('hidden');
-     // controlsSection.classList.add('hidden'); // 🗑️ SUPPRIMÉ : Géré par setActiveTab
-     applyFilters(); // <-- IMPORTANT : Recalcule pour enlever les filtres Wishlist
+     applyFilters();
    });
 
    document.getElementById('tabGrid').addEventListener('click', () => {
       currentView = 'grid';
-      setActiveTab('grid'); // ✅ Affiche controlsSection
+      setActiveTab('grid');
       hideAllViews();
       document.getElementById('gridView').classList.remove('hidden');
-      // On s'assure que le conteneur des INPUTS est caché sur mobile, mais visible sur grand écran
+      
+      // FIX: Reset de l'état visuel du toggle mobile si on revient sur Grid
       if (filterInputsContainer) {
-          filterInputsContainer.classList.add('hidden'); // Caché par défaut
-          filterInputsContainer.classList.add('sm:grid'); // Affiché sur sm:
-          if (toggleFiltersBtn) toggleFiltersBtn.textContent = "Afficher les filtres & tri";
+          // On ne masque pas de force ici pour laisser le choix à l'utilisateur s'il est déjà là
+          if (toggleFiltersBtn) toggleFiltersBtn.textContent = filterInputsContainer.classList.contains('hidden') ? "Afficher les filtres & tri" : "Masquer les filtres & tri";
       }
       applyFilters();
     });
 
-   // Le reste du code de fin reste inchangé
    loadInitial();
   </script>
 </body>
