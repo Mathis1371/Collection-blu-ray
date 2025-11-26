@@ -19,47 +19,47 @@
     .poster { object-fit: cover; }
     .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); }
 
-   .carousel {
-     display: flex;
-     overflow-x: auto;
-     gap: 1rem;
-     scroll-snap-type: x mandatory;
-     scroll-behavior: smooth;
-     -ms-overflow-style: none; /* IE/Edge */
-     scrollbar-width: none;    /* Firefox */
-     padding-left: 1rem;       /* espacement à gauche */
-     padding-bottom: 0.5rem;
-     justify-content: flex-start;
+   /* --- Navigation Carrousel style Netflix --- */
+   .carousel-wrapper {
+     position: relative;
    }
 
-   .carousel::-webkit-scrollbar {
-     display: none; /* Chrome/Safari */
-   }
-
-   .carousel-arrow {
+   /* Les boutons (masqués par défaut, visibles au survol du wrapper) */
+   .nav-btn {
      position: absolute;
-     top: 50%;
-     right: 0.5rem;
-     transform: translateY(-50%);
-     background: rgba(0,0,0,0.6);
-     border-radius: 9999px; /* rond */
-     width: 2rem;
-     height: 2rem;
+     top: 0;
+     bottom: 1rem;
+     z-index: 40;
+     width: 3rem; /* Largeur de la zone cliquable */
+     background: rgba(0,0,0,0.5);
+     color: white;
      display: flex;
      align-items: center;
      justify-content: center;
      cursor: pointer;
-     z-index: 30;
-     transition: background 0.2s;
-   }
-   .carousel-arrow:hover {
-     background: rgba(0,0,0,0.8);
+     border: none;
+     opacity: 0; /* Invisible par défaut */
+     transition: opacity 0.3s ease, background 0.3s ease;
+     font-size: 2rem;
+     user-select: none;
    }
 
-    .carousel-item {
-     flex: 0 0 auto;
-     width: 220px;            
-     scroll-snap-align: start;
+   /* Afficher les flèches quand on passe la souris sur la ligne */
+   .carousel-wrapper:hover .nav-btn {
+     opacity: 1;
+   }
+
+   .nav-btn:hover {
+     background: rgba(0,0,0,0.8);
+     transform: scale(1.1); /* Petit zoom effet pop */
+   }
+
+   .nav-left { left: 0; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+   .nav-right { right: 0; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+
+   /* Ajustement du carrousel pour cacher la scrollbar proprement */
+   .carousel {
+     scroll-behavior: smooth; /* Animation fluide native */
    }
 
    #netflixBanner {
@@ -114,7 +114,7 @@
      cursor: pointer;
    }
    .actor-link:hover {
-  text-decoration: underline;
+   text-decoration: underline;
    }
 
    .stats-grid {
@@ -181,6 +181,34 @@
      color: #fff;
      font-weight:700;
      font-size: .9rem;
+   }
+
+   /* Animation de tremblement pour le gagnant */
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    .shake-effect {
+      animation: shake 0.5s;
+      animation-iteration-count: 1;
+    }
+   
+   .no-scrollbar::-webkit-scrollbar {
+     display: none;
+   }
+   
+   .no-scrollbar {
+     -ms-overflow-style: none;  /* IE and Edge */
+     scrollbar-width: none;  /* Firefox */
    }
 
    .stats-legend { display:flex; gap: .75rem; align-items:center; justify-content:center; margin-top:.75rem; color:#cbd5e1; font-size: .85rem; }
@@ -329,6 +357,17 @@
        </div>
      </div>
    </div>
+  </div>
+  
+  <div id="randomRoulette" class="hidden fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/90 backdrop-blur-xl transition-opacity duration-500">
+   <div class="relative w-64 h-96 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.4)] border border-white/10 ring-4 ring-white/5">
+     <img id="roulettePoster" src="" class="w-full h-full object-cover" />
+     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+   </div>
+   <h2 id="rouletteTitle" class="mt-8 text-3xl font-bold text-center text-white drop-shadow-lg px-4 animate-pulse">
+     Recherche...
+   </h2>
+   <div class="mt-4 text-red-500 font-mono text-sm tracking-[0.2em] uppercase">Sélection aléatoire</div>
   </div>
 
   <script>
@@ -588,145 +627,182 @@
     
     // REVERSION : Code exact de la bannière d'origine
     function renderNetflixView() {
-     const container = document.getElementById('mainView');
-     container.innerHTML = '';
-     container.className = "w-full px-4 py-6 relative";
+        const container = document.getElementById('mainView');
+        container.innerHTML = '';
+        container.className = "w-full px-4 py-6 relative";
 
-     if (state.filtered.length === 0) {
-        container.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-[60vh] text-center text-slate-400">
-                <div class="text-6xl mb-4 opacity-20">📂</div>
-                <h2 class="text-2xl font-bold text-slate-200 mb-2">Votre collection est vide</h2>
-                <p class="max-w-md mx-auto">
-                    Aucun film chargé. Cliquez sur le bouton 
-                    <strong class="text-white">"Importer JSON"</strong> 
-                    en haut à droite pour charger votre catalogue.
-                </p>
-            </div>
-        `;
-        document.getElementById('netflixBanner').classList.add('hidden');
-        return;
-     }
+        // Cas vide
+        if (state.filtered.length === 0) {
+            container.innerHTML = `
+              <div class="flex flex-col items-center justify-center h-[60vh] text-center text-slate-400">
+                  <div class="text-6xl mb-4 opacity-20">📂</div>
+                  <h2 class="text-2xl font-bold text-slate-200 mb-2">Votre collection est vide</h2>
+                  <p class="max-w-md mx-auto">
+                      Aucun film chargé. Cliquez sur "Importer JSON".
+                  </p>
+              </div>
+          `;
+            document.getElementById('netflixBanner').classList.add('hidden');
+            return;
+        }
 
-     const banner = document.getElementById('netflixBanner');
-     if (currentView === 'netflix' && state.filtered.length > 0) {
-       const withPoster = state.filtered.filter(m => m.netflixPoster);
-       const randomMovie = (withPoster.length ? withPoster : state.filtered)[Math.floor(Math.random() * state.filtered.length)];
-       banner.classList.remove('hidden'); 
-     } else {
-       banner.classList.add('hidden');
-     }
+        // Gestion de la Bannière
+        const banner = document.getElementById('netflixBanner');
+        if (currentView === 'netflix' && state.filtered.length > 0) {
+            banner.classList.remove('hidden');
+        } else {
+            banner.classList.add('hidden');
+        }
 
-     // Regrouper par catégorie
-     const categoriesMap = {};
-     state.filtered.forEach(movie => {
-       (movie.categories || []).forEach(cat => {
-         if (!categoriesMap[cat]) categoriesMap[cat] = [];
-         categoriesMap[cat].push(movie);
-       });
-     });
+        // 1. Regrouper les films par catégorie
+        const categoriesMap = {};
+        state.filtered.forEach(movie => {
+            (movie.categories || []).forEach(cat => {
+                if (!categoriesMap[cat]) categoriesMap[cat] = [];
+                categoriesMap[cat].push(movie);
+            });
+        });
 
-     for (const cat in categoriesMap) {
-       const section = document.createElement('section');
-       section.className = "mb-8";
+        // 2. Créer les sections avec flèches
+        for (const cat in categoriesMap) {
+            const section = document.createElement('section');
+            section.className = "mb-7 group"; // Marge ajustée
 
-       const title = document.createElement('h2');
-       title.textContent = cat;
-       title.className = "text-xl font-bold mb-2";
-       section.appendChild(title);
+            // Titre de la catégorie
+            const title = document.createElement('h2');
+            title.innerHTML = `${cat} <span class="text-sm font-normal text-slate-500 ml-2">(${categoriesMap[cat].length})</span>`;
+            title.className = "text-xl font-bold mb-3 px-1 flex items-baseline"; 
+            section.appendChild(title);
 
-       const wrapper = document.createElement('div');
-       wrapper.className = "relative overflow-hidden rounded-lg pl-0";
+            // Wrapper relatif pour positionner les flèches
+            const wrapper = document.createElement('div');
+            wrapper.className = "carousel-wrapper relative";
 
-       const carousel = document.createElement('div');
-       carousel.className = "carousel carousel-initial";
+            // --- Bouton Gauche ---
+            const btnLeft = document.createElement('button');
+            btnLeft.className = "nav-btn nav-left hidden";
+            btnLeft.innerHTML = "&#10094;";
+            btnLeft.ariaLabel = "Précédent";
+            
+            // --- Bouton Droite ---
+            const btnRight = document.createElement('button');
+            btnRight.className = "nav-btn nav-right";
+            btnRight.innerHTML = "&#10095;";
+            btnRight.ariaLabel = "Suivant";
 
-       // 🔹 Mélanger les films une seule fois par catégorie
-       const shuffled = categoriesMap[cat];
+            // Le Carrousel
+            const carousel = document.createElement('div');
+            carousel.className = "carousel flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-4 px-1";
 
-       shuffled.forEach(m => {
-         const posterSrc = m.netflixPoster || m.poster || 
-           `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
-         const card = document.createElement('div');
-         card.className = 'carousel-item group relative overflow-hidden';
-         card.innerHTML = `<img src="${posterSrc}" loading="lazy" alt="${m.title}" 
-           class="w-full aspect-video object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>`;
-         card.addEventListener('click', () => openModal(m));
-         carousel.appendChild(card);
-       });
+            // Remplissage des films
+            const shuffled = categoriesMap[cat];
+            shuffled.forEach(m => {
+                const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+                
+                const card = document.createElement('div');
+                
+                // --- TAILLES AJUSTÉES (INTERMÉDIAIRE - LE "JUSTE MILIEU") ---
+                // Mobile: 160px | Tablette: 195px | Desktop: 230px
+                card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
+                
+                // Format Horizontal (aspect-video = 16/9)
+                card.innerHTML = `
+                    <img src="${posterSrc}" loading="lazy" alt="${m.title}" 
+                      class="w-full h-auto aspect-video object-cover rounded-md shadow-lg" />
+                `;
+                card.addEventListener('click', () => openModal(m));
+                carousel.appendChild(card);
+            });
 
-       wrapper.appendChild(carousel);
-       section.appendChild(wrapper);
-       container.appendChild(section);
+            // --- Logique de Navigation ---
+            btnLeft.onclick = (e) => {
+                e.stopPropagation();
+                const scrollAmount = carousel.clientWidth * 0.90;
+                carousel.scrollLeft -= scrollAmount;
+            };
 
-       // Scroll fade
-       requestAnimationFrame(() => {
-         carousel.scrollLeft = 0;
-       });
-     }
+            btnRight.onclick = (e) => {
+                e.stopPropagation();
+                const scrollAmount = carousel.clientWidth * 0.90;
+                carousel.scrollLeft += scrollAmount;
+            };
 
-     bannerMovies = state.filtered.filter(m => m.netflixPoster && m.netflixPoster.length) || state.filtered;
-     bannerIndex = 0;
-     startBannerAutoScroll();
+            const updateArrows = () => {
+                if (carousel.scrollLeft > 20) {
+                    btnLeft.classList.remove('hidden');
+                    btnLeft.style.display = 'flex';
+                } else {
+                    btnLeft.style.display = 'none';
+                }
 
-     function startBannerAutoScroll() {
-       const viewport = document.getElementById('netflixBanner'); // conteneur visible
-       const carousel = document.getElementById('bannerCarousel');
-       if (!carousel || !viewport) return;
-       carousel.innerHTML = '';
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                if (carousel.scrollLeft >= maxScroll - 20) {
+                    btnRight.style.display = 'none';
+                } else {
+                    btnRight.style.display = 'flex';
+                }
+            };
 
-       const movies = bannerMovies.filter(m => m.netflixPoster || m.poster);
-       if (!movies.length) return;
+            carousel.addEventListener('scroll', updateArrows);
+            setTimeout(updateArrows, 100); 
 
-       movies.forEach(m => {
-         const img = document.createElement('img');
-         img.src = m.netflixPoster || m.poster;
-         img.alt = m.title;
-         img.addEventListener('click', () => openModal(m));
-         carousel.appendChild(img);
-       });
+            // Assemblage
+            wrapper.appendChild(btnLeft);
+            wrapper.appendChild(carousel);
+            wrapper.appendChild(btnRight);
+            section.appendChild(wrapper);
+            container.appendChild(section);
+        }
 
-       const imgs = Array.from(carousel.querySelectorAll('img'));
-       if (!imgs.length) return;
+        // Bannière
+        bannerMovies = state.filtered.filter(m => m.netflixPoster && m.netflixPoster.length) || state.filtered;
+        bannerIndex = 0;
+        startBannerAutoScroll(); 
 
-       let index = 0;
-
-       function updateCarousel() {
-         imgs.forEach(img => img.classList.remove('active'));
-         const current = imgs[index];
-         current.classList.add('active');
-
-         const imgOffsetLeft = current.offsetLeft;           // position dans la piste
-         const imgWidth = current.clientWidth;
-         const viewportWidth = viewport.clientWidth;
-
-         const offset = imgOffsetLeft - (viewportWidth - imgWidth) / 2;
-
-         const maxOffset = Math.max(0, carousel.scrollWidth - viewportWidth);
-         const clamped = Math.min(Math.max(0, offset), maxOffset);
-
-         carousel.style.transform = `translateX(-${clamped}px)`;
-       }
-
-       updateCarousel();
-
-       if (bannerInterval) clearInterval(bannerInterval);
-
-       bannerInterval = setInterval(() => {
-         index = (index + 1) % imgs.length;
-         updateCarousel();
-       }, 6000);
-
-       imgs.forEach((img, i) => {
-         img.addEventListener('click', () => {
-           index = i;
-           updateCarousel();
-         });
-       });
-
-       window.addEventListener('resize', updateCarousel);
-     }
-   }
+        function startBannerAutoScroll() {
+          const viewport = document.getElementById('netflixBanner');
+          const carousel = document.getElementById('bannerCarousel');
+          if (!carousel || !viewport) return;
+          carousel.innerHTML = '';
+          const movies = bannerMovies.filter(m => m.netflixPoster || m.poster);
+          if (!movies.length) return;
+          movies.forEach(m => {
+            const img = document.createElement('img');
+            img.src = m.netflixPoster || m.poster;
+            img.alt = m.title;
+            img.addEventListener('click', () => openModal(m));
+            carousel.appendChild(img);
+          });
+          const imgs = Array.from(carousel.querySelectorAll('img'));
+          if (!imgs.length) return;
+          let index = 0;
+          function updateCarousel() {
+            imgs.forEach(img => img.classList.remove('active'));
+            const current = imgs[index];
+            current.classList.add('active');
+            const imgOffsetLeft = current.offsetLeft;
+            const imgWidth = current.clientWidth;
+            const viewportWidth = viewport.clientWidth;
+            const offset = imgOffsetLeft - (viewportWidth - imgWidth) / 2;
+            const maxOffset = Math.max(0, carousel.scrollWidth - viewportWidth);
+            const clamped = Math.min(Math.max(0, offset), maxOffset);
+            carousel.style.transform = `translateX(-${clamped}px)`;
+          }
+          updateCarousel();
+          if (bannerInterval) clearInterval(bannerInterval);
+          bannerInterval = setInterval(() => {
+            index = (index + 1) % imgs.length;
+            updateCarousel();
+          }, 6000);
+          imgs.forEach((img, i) => {
+            img.addEventListener('click', () => {
+              index = i;
+              updateCarousel();
+            });
+          });
+          window.addEventListener('resize', updateCarousel);
+        }
+    }
 
    function renderStats() {
      if (!statsView) return;
@@ -1475,30 +1551,88 @@
     });    
 
     els.randomBtn.addEventListener('click', () => {
-     if (state.filtered.length === 0) {
-       alert("Aucun film trouvé dans la sélection !");
-       return;
-     }
+        // 1. Vérifier qu'il y a des films
+        if (state.filtered.length === 0) {
+            alert("Aucun film trouvé dans la sélection actuelle !");
+            return;
+        }
 
-     let steps = 15;
-     let delay = 100;
-     let i = 0;
+        // 2. Préparer les éléments
+        const overlay = document.getElementById('randomRoulette');
+        const rPoster = document.getElementById('roulettePoster');
+        const rTitle = document.getElementById('rouletteTitle');
+        
+        overlay.classList.remove('hidden');
+        overlay.classList.remove('opacity-0');
+        rPoster.classList.remove('shake-effect'); // Reset effet
 
-     const spin = () => {
-       const randomIndex = Math.floor(Math.random() * state.filtered.length);
-       const randomMovie = state.filtered[randomIndex];
-       els.count.textContent = `🎲 ${randomMovie.title}`;
+        let duration = 0;
+        let speed = 50; // Vitesse initiale (ms)
+        let maxDuration = 2000; // Durée totale du shuffle
+        let shuffles = 0;
+        let lastIndex = -1;
 
-     if (i < steps) {
-      i++;
-      delay += 40;
-      setTimeout(spin, delay);
-     } else {
-      openModal(randomMovie);
-     }
-    };
-    spin();
-   });
+        // 3. Fonction récursive pour l'effet de ralentissement
+        const shuffle = () => {
+            // Choisir un index différent du précédent
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * state.filtered.length);
+            } while (randomIndex === lastIndex && state.filtered.length > 1);
+            
+            lastIndex = randomIndex;
+            const movie = state.filtered[randomIndex];
+
+            // Mettre à jour l'interface
+            rPoster.src = movie.poster || movie.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(movie.title))}`;
+            rTitle.textContent = movie.title;
+            
+            // Logique de vitesse (ralentissement exponentiel)
+            duration += speed;
+            shuffles++;
+
+            if (duration < maxDuration) {
+                // On continue de tourner
+                // On ralentit légèrement à chaque tour pour l'effet de friction
+                if (duration > maxDuration * 0.7) speed += 20; 
+                setTimeout(shuffle, speed);
+            } else {
+                // 4. C'EST GAGNÉ !
+                finish(movie);
+            }
+        };
+
+        const finish = (movie) => {
+            // Effet visuel final
+            rTitle.textContent = "🎬 " + movie.title;
+            rTitle.classList.remove('animate-pulse');
+            rTitle.classList.add('text-green-400'); // Titre devient vert
+            rPoster.parentElement.classList.add('shake-effect'); // Tremblement
+            rPoster.parentElement.classList.remove('ring-white/5');
+            rPoster.parentElement.classList.add('ring-green-500'); // Bordure verte
+
+            // Attendre 1 seconde pour que l'utilisateur réalise quel film a gagné
+            setTimeout(() => {
+                // Masquer l'overlay
+                overlay.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    // Reset styles pour la prochaine fois
+                    rTitle.classList.add('animate-pulse');
+                    rTitle.classList.remove('text-green-400');
+                    rPoster.parentElement.classList.remove('ring-green-500');
+                    rPoster.parentElement.classList.add('ring-white/5');
+                    
+                    // OUVRIR LA FICHE DU FILM
+                    openModal(movie);
+                }, 500); // Temps de la transition CSS opacity
+            }, 1200);
+        };
+
+        // Lancer la roulette
+        shuffle();
+    });
 
     els.modalClose.addEventListener('click', closeModal);
     els.modalBackdrop.addEventListener('click', closeModal);
