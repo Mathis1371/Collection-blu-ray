@@ -91,22 +91,79 @@
      width: max-content;         /* s'adapte au contenu */
    }
 
-   #bannerCarousel img {
+   .banner-card {
+     position: relative;
      width: 900px;
      height: 520px;
-     object-fit: cover;
      border-radius: 24px;
+     overflow: hidden; /* Coupe tout ce qui dépasse */
      flex-shrink: 0;
      opacity: 0.6;
      transform: scale(0.95);
      transition: transform 0.6s ease, opacity 0.6s ease;
      cursor: pointer;
+     background-color: #000; /* Fond noir de sécurité */
+     
+     /* On enlève tout le reste */
+     border: none;
+     outline: none;
+     box-shadow: none;
    }
 
-   #bannerCarousel img.active {
+   .banner-card::after {
+     content: '';
+     position: absolute;
+     inset: 0; /* Prend toute la taille de la carte */
+     border-radius: 24px; /* Suit parfaitement l'arrondi */
+     
+     /* Une ombre interne de 1px qui mange les pixels blancs sur les bords */
+     box-shadow: inset 0 0 0 1px #000; 
+     
+     z-index: 20; /* Se place PAR-DESSUS l'image */
+     pointer-events: none; /* Permet de cliquer au travers */
+   }
+
+   .banner-card.active {
      transform: scale(1.03);
      opacity: 1;
      z-index: 2;
+   }
+
+   .banner-card img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     display: block;
+     border-radius: 24px;
+     transform: scale(1.01); 
+   }
+
+   .banner-gradient {
+     position: absolute;
+     bottom: 0; 
+     left: 0;
+     right: 0;
+     height: 40%; 
+     
+     /* RETOUR AU DÉGRADÉ FLUIDE (sans bordure solide) */
+     /* On force le noir pur (#000) sur les 2 premiers % pour la fusion */
+     background: linear-gradient(to top, #000 0%, #000 2%, rgba(0,0,0,0.8) 25%, transparent 100%);
+     
+     pointer-events: none;
+     z-index: 5;
+     border: none; /* On supprime la bordure moche */
+   }
+
+   .banner-info {
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     padding: 2rem 2.5rem; 
+     width: 100%;
+     z-index: 10;
+     display: flex;
+     flex-direction: column; /* <--- C'est ici qu'était l'erreur (au lieu de flex-col: column) */
+     align-items: flex-start;
    }
 
    .actor-link {
@@ -764,42 +821,93 @@
           const carousel = document.getElementById('bannerCarousel');
           if (!carousel || !viewport) return;
           carousel.innerHTML = '';
+          
           const movies = bannerMovies.filter(m => m.netflixPoster || m.poster);
           if (!movies.length) return;
+
           movies.forEach(m => {
-            const img = document.createElement('img');
-            img.src = m.netflixPoster || m.poster;
-            img.alt = m.title;
-            img.addEventListener('click', () => openModal(m));
-            carousel.appendChild(img);
+            // Création du conteneur (Card)
+            const card = document.createElement('div');
+            card.className = 'banner-card'; // Nouvelle classe CSS
+            
+            // Formatage des infos
+            const duration = m.runtime ? formatRuntime(m.runtime) : '';
+            const rating = m.rating ? `★ ${m.rating}` : '';
+            const genres = (m.genres || []).slice(0, 3).join(' • '); // Max 3 genres
+            const year = m.year || '';
+
+            // Injection du HTML (Image + Fondu + Infos)
+            card.innerHTML = `
+                <img src="${m.netflixPoster || m.poster}" alt="${m.title}" loading="lazy" />
+                
+                <div class="banner-gradient"></div>
+                
+                <div class="banner-info">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-3 drop-shadow-lg leading-tight">
+                        ${escapeHtml(m.title)}
+                    </h2>
+                    
+                    <div class="flex items-center gap-4 text-sm md:text-base font-medium text-slate-200 drop-shadow-md">
+                        ${rating ? `<span class="text-yellow-400 font-bold bg-black/30 px-2 py-0.5 rounded">${rating}</span>` : ''}
+                        ${year ? `<span>${year}</span>` : ''}
+                        ${duration ? `<span>${duration}</span>` : ''}
+                    </div>
+                    
+                    <div class="mt-2 text-slate-300 text-sm font-medium drop-shadow-md opacity-90">
+                        ${genres}
+                    </div>
+                </div>
+            `;
+            
+            // Clic sur toute la carte
+            card.addEventListener('click', () => openModal(m));
+            carousel.appendChild(card);
           });
-          const imgs = Array.from(carousel.querySelectorAll('img'));
-          if (!imgs.length) return;
+
+          // ATTENTION : On sélectionne maintenant les .banner-card au lieu des img
+          const items = Array.from(carousel.querySelectorAll('.banner-card'));
+          if (!items.length) return;
+          
           let index = 0;
+
           function updateCarousel() {
-            imgs.forEach(img => img.classList.remove('active'));
-            const current = imgs[index];
+            items.forEach(item => item.classList.remove('active'));
+            const current = items[index];
             current.classList.add('active');
-            const imgOffsetLeft = current.offsetLeft;
-            const imgWidth = current.clientWidth;
+            
+            // Calcul du centrage
+            const itemOffsetLeft = current.offsetLeft;
+            const itemWidth = current.clientWidth;
             const viewportWidth = viewport.clientWidth;
-            const offset = imgOffsetLeft - (viewportWidth - imgWidth) / 2;
+            
+            // Formule pour centrer l'élément actif
+            const offset = itemOffsetLeft - (viewportWidth - itemWidth) / 2;
+            
+            // Gestion des limites (ne pas scroller trop loin à gauche ou à droite)
             const maxOffset = Math.max(0, carousel.scrollWidth - viewportWidth);
-            const clamped = Math.min(Math.max(0, offset), maxOffset);
-            carousel.style.transform = `translateX(-${clamped}px)`;
+            // On permet un léger dépassement pour l'effet centré
+            /* const clamped = Math.min(Math.max(0, offset), maxOffset); */ 
+            
+            // Pour centrer parfaitement même le premier et le dernier, on n'utilise pas clamped ici
+            // mais on applique directement l'offset calculé
+            carousel.style.transform = `translateX(${-offset}px)`;
           }
+
           updateCarousel();
+          
           if (bannerInterval) clearInterval(bannerInterval);
           bannerInterval = setInterval(() => {
-            index = (index + 1) % imgs.length;
+            index = (index + 1) % items.length;
             updateCarousel();
           }, 6000);
-          imgs.forEach((img, i) => {
-            img.addEventListener('click', () => {
+
+          items.forEach((item, i) => {
+            item.addEventListener('click', () => {
               index = i;
               updateCarousel();
             });
           });
+          
           window.addEventListener('resize', updateCarousel);
         }
     }
