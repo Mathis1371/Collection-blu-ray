@@ -188,31 +188,34 @@
 </style>
 </head>
 <body class="min-h-screen text-slate-100">
-  <header class="sticky top-0 z-30 border-b border-white/10 bg-black/40 backdrop-blur">
-     <div class="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3">
+  <header class="sticky top-0 z-30 border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex flex-col lg:flex-row items-center justify-between gap-4 lg:gap-8">
     
-       <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-red-600 via-red-600 to-red-600 bg-clip-text text-transparent drop-shadow-lg">
-         🎬 Ma collection de blu-ray
+       <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-clip-text text-transparent drop-shadow-lg shrink-0">
+         🎬 Ma collection
        </h1>
 
-       <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-         <div class="flex flex-wrap gap-2 sm:gap-4">
-           <button id="tabMain" class="px-3 py-1 rounded bg-red-600 text-sm sm:text-base">Vue Netflix</button>
-           <button id="tabGrid" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Liste complète</button>
-           <button id="tabUpcoming" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Prochainement</button>
-           <button id="tabWishlist" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Wishlist</button>
-           <button id="tabStats" class="px-3 py-1 rounded bg-white/10 text-sm sm:text-base">Stats</button>
-         </div>
+       <nav class="overflow-x-auto no-scrollbar w-full lg:w-auto lg:flex-1 lg:ml-4">
+           <ul class="flex items-center justify-center lg:justify-start gap-6 min-w-max">
+             <li><button id="tabMain" class="nav-item text-base transition-all duration-300">Accueil</button></li>
+             <li><button id="tabGrid" class="nav-item text-base transition-all duration-300">Catalogue</button></li>
+             <li><button id="tabUpcoming" class="nav-item text-base transition-all duration-300">Prochainement</button></li>
+             <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Ma Liste</button></li>
+             <li><button id="tabStats" class="nav-item text-base transition-all duration-300">Stats</button></li>
+           </ul>
+       </nav>
 
-         <div class="flex items-center gap-2 ml-auto w-full sm:w-auto">
-           <label class="hidden sm:block text-sm text-slate-300">Importer JSON</label>
-           <input id="jsonFile" type="file" accept="application/json" 
-                  class="block w-full sm:w-auto text-sm file:mr-3 file:px-3 file:py-2 file:rounded-xl file:border-0 
-                         file:bg-white/10 file:text-slate-100 hover:file:bg-white/20" />
-         </div>
+       <div class="flex items-center gap-3 shrink-0">
+           <input id="jsonFile" type="file" accept="application/json" class="hidden" />
+           
+           <label for="jsonFile" class="cursor-pointer group flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-all duration-300">
+             <span class="text-lg group-hover:scale-110 transition-transform">📂</span>
+             <span class="text-sm font-medium text-slate-300 group-hover:text-white">Importer JSON</span>
+           </label>
        </div>
+
      </div>
-  </header>
+</header>
 
   <div id="globalFade" 
        class="pointer-events-none fixed top-[80px] right-0 h-[calc(100%-80px)] w-20 
@@ -329,54 +332,6 @@
   </div>
 
   <script>
-    // FIX: Ajout de fausses données pour ne pas avoir un écran vide au démarrage
-    const SAMPLE_DATA = {
-      movies: [
-        {
-            "id": "sample1",
-            "title": "Exemple: Inception",
-            "year": 2010,
-            "genres": ["Science Fiction", "Action"],
-            "categories": ["Coup de coeur"],
-            "people": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
-            "directors": ["Christopher Nolan"],
-            "runtime": 148,
-            "rating": 9,
-            "overview": "Ceci est un exemple de fiche film pour vous montrer l'interface. Importez votre propre JSON pour remplacer ces données.",
-            "country": "USA",
-            "tags": ["4k", "steelbook"],
-            "added": new Date().toISOString()
-        },
-        {
-            "id": "sample2",
-            "title": "Exemple: Le Parrain",
-            "year": 1972,
-            "genres": ["Crime", "Drama"],
-            "categories": ["Classiques"],
-            "people": ["Marlon Brando", "Al Pacino"],
-            "directors": ["Francis Ford Coppola"],
-            "runtime": 175,
-            "rating": 10,
-            "country": "USA",
-            "tags": ["bluray"],
-            "added": new Date().toISOString()
-        },
-        {
-            "id": "sample3",
-            "title": "Exemple: Parasite",
-            "year": 2019,
-            "genres": ["Thriller", "Drama"],
-            "categories": ["Coup de coeur"],
-            "people": ["Song Kang-ho"],
-            "directors": ["Bong Joon-ho"],
-            "runtime": 132,
-            "rating": 9,
-            "country": "Coree du Sud",
-            "tags": ["4k"],
-            "added": new Date().toISOString()
-        }
-      ]
-    };
 
     let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: ""};
     const els = {
@@ -447,17 +402,26 @@
        stats: tabStatsBtn
      };
 
+     // Classes pour l'onglet ACTIF (Blanc, Gras, Curseur par défaut)
+     const activeClasses = ["text-white", "font-bold", "cursor-default", "scale-105"];
+     // Classes pour l'onglet INACTIF (Gris, Normal, Hover effet)
+     const inactiveClasses = ["text-slate-400", "font-medium", "hover:text-slate-200", "cursor-pointer"];
+
      for (const key in tabs) {
-       if (key === view) {
-         tabs[key].classList.add("bg-red-600","text-white");
-         tabs[key].classList.remove("bg-white/10","text-slate-200");
-       } else {
-         tabs[key].classList.add("bg-white/10","text-slate-200");
-         tabs[key].classList.remove("bg-red-600","text-white");
-       }
-       if (currentView === "grid" && view !== "grid") {
-         resetFilters();
-       }
+         const btn = tabs[key];
+         // On retire toutes les classes de style pour éviter les conflits
+         btn.classList.remove(...activeClasses, ...inactiveClasses, "bg-red-600", "bg-white/10", "px-3", "py-1", "rounded"); // Nettoyage des anciennes classes
+
+         if (key === view) {
+             btn.classList.add(...activeClasses);
+         } else {
+             btn.classList.add(...inactiveClasses);
+         }
+        
+         // Si on change de vue Grid vers autre chose, on reset les filtres
+         if (currentView === "grid" && view !== "grid") {
+             resetFilters();
+         }
      }
 
      const fade = document.getElementById("globalFade");
@@ -502,7 +466,6 @@
 
    setActiveTab(currentView);
 
-    // Charger JSON local si dispo
     async function loadInitial() {
        try {
          const res = await fetch('data/movies.json', { cache: 'no-store' });
@@ -511,8 +474,9 @@
          if (!data.movies) throw new Error('bad schema');
          state.all = normalize(data.movies);
        } catch (e) {
-         console.warn("Fichier data/movies.json introuvable ou invalide, chargement des données d'exemple.");
-         state.all = normalize(SAMPLE_DATA.movies); 
+         console.log("Aucun fichier automatique trouvé. En attente d'import manuel.");
+         // On initialise avec un tableau vide au lieu des données d'exemple
+         state.all = []; 
        }
       initFilters();
       applyFilters();
@@ -520,7 +484,7 @@
 
     function normalize(arr){
       return arr.map(m=>({
-        id: m.id ?? crypto.randomUUID(),
+        id: m.id ?? (String(m.title) + String(m.year)).replace(/\s+/g, '_').toLowerCase(),
         title: String(m.title||'Sans titre'),
         year: Number(m.year)||null,
         genres: Array.isArray(m.genres)?m.genres:[],
@@ -627,6 +591,22 @@
      const container = document.getElementById('mainView');
      container.innerHTML = '';
      container.className = "w-full px-4 py-6 relative";
+
+     if (state.filtered.length === 0) {
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-[60vh] text-center text-slate-400">
+                <div class="text-6xl mb-4 opacity-20">📂</div>
+                <h2 class="text-2xl font-bold text-slate-200 mb-2">Votre collection est vide</h2>
+                <p class="max-w-md mx-auto">
+                    Aucun film chargé. Cliquez sur le bouton 
+                    <strong class="text-white">"Importer JSON"</strong> 
+                    en haut à droite pour charger votre catalogue.
+                </p>
+            </div>
+        `;
+        document.getElementById('netflixBanner').classList.add('hidden');
+        return;
+     }
 
      const banner = document.getElementById('netflixBanner');
      if (currentView === 'netflix' && state.filtered.length > 0) {
