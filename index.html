@@ -337,8 +337,14 @@
        </nav>
 
        <div class="flex items-center gap-3 shrink-0">
+           <a id="bugReportBtn" 
+              target="_blank" 
+              class="cursor-pointer group flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-all duration-300 text-decoration-none">
+             <span class="text-lg group-hover:rotate-12 transition-transform">🐛</span>
+             <span class="hidden sm:inline text-sm font-medium text-slate-300 group-hover:text-white">Signaler un bug</span>
+           </a>
+
            <input id="jsonFile" type="file" accept="application/json" class="hidden" />
-           
            <label for="jsonFile" class="cursor-pointer group flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-all duration-300">
              <span class="text-lg group-hover:scale-110 transition-transform">📂</span>
              <span class="text-sm font-medium text-slate-300 group-hover:text-white">Importer JSON</span>
@@ -683,7 +689,14 @@
      let today = new Date();
 
      let list = state.all.filter(m => {
-       const matchesQ = !q || [m.title, ...(m.people||[]), ...(m.directors || []), ...(m.genres||[]), (m.overview||'')].join(' ').toLowerCase().includes(q);
+       const matchesQ = !q || [
+           m.title, 
+           ...(m.people||[]), 
+           ...(m.directors || []), 
+           ...(m.genres||[]), 
+           ...(m.tags||[]), // <--- C'est ici que ça manquait
+           (m.overview||'')
+       ].join(' ').toLowerCase().includes(q);
        const matchesG = !state.genre || (m.genres||[]).includes(state.genre);
        const matchesY = !state.yearExact || (m.year||0) === Number(state.yearExact);
        const matchesR = !state.runtime || 
@@ -1949,13 +1962,6 @@
 
    loadInitial();
   </script>
-   
- <a id="bugReportBtn" 
-    target="_blank"
-    class="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold rounded-full shadow-lg border border-white/10 transition-all duration-300 hover:scale-105 hover:text-white cursor-pointer group">
-      <span class="text-lg group-hover:rotate-12 transition-transform">🐛</span>
-      <span>Signaler un bug</span>
-  </a>
 
   <script>
     // Configuration : Remplacez par VOS informations GitHub
