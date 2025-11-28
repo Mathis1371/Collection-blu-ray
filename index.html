@@ -331,7 +331,7 @@
              <li><button id="tabMain" class="nav-item text-base transition-all duration-300">Accueil</button></li>
              <li><button id="tabGrid" class="nav-item text-base transition-all duration-300">Catalogue</button></li>
              <li><button id="tabUpcoming" class="nav-item text-base transition-all duration-300">Prochainement</button></li>
-             <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Ma Liste</button></li>
+             <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Wishlist</button></li>
              <li><button id="tabStats" class="nav-item text-base transition-all duration-300">Stats</button></li>
            </ul>
        </nav>
@@ -813,17 +813,14 @@
             carousel.className = "carousel flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-4 px-1";
 
             // Remplissage des films
-            const shuffled = categoriesMap[cat];
+            const shuffled = [...categoriesMap[cat]].sort(() => 0.5 - Math.random());
             shuffled.forEach(m => {
                 const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
                 
                 const card = document.createElement('div');
-                
-                // --- TAILLES AJUSTÉES (INTERMÉDIAIRE - LE "JUSTE MILIEU") ---
-                // Mobile: 160px | Tablette: 195px | Desktop: 230px
+              
                 card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
                 
-                // Format Horizontal (aspect-video = 16/9)
                 card.innerHTML = `
                     <img src="${posterSrc}" loading="lazy" alt="${m.title}" 
                       class="w-full h-auto aspect-video object-cover rounded-md shadow-lg" />
@@ -832,7 +829,6 @@
                 carousel.appendChild(card);
             });
 
-            // --- Logique de Navigation ---
             btnLeft.onclick = (e) => {
                 e.stopPropagation();
                 const scrollAmount = carousel.clientWidth * 0.90;
@@ -864,7 +860,6 @@
             carousel.addEventListener('scroll', updateArrows);
             setTimeout(updateArrows, 100); 
 
-            // Assemblage
             wrapper.appendChild(btnLeft);
             wrapper.appendChild(carousel);
             wrapper.appendChild(btnRight);
@@ -872,12 +867,9 @@
             container.appendChild(section);
         }
 
-        // Bannière
         if (bannerMovies.length === 0) {
             let candidates = state.filtered.filter(m => m.netflixPoster || m.poster);
-            // On mélange le tableau (Shuffle)
             candidates.sort(() => 0.5 - Math.random());
-            // On ne garde que les 10 premiers
             bannerMovies = candidates.slice(0, 10);
         }
         
@@ -888,25 +880,22 @@
           const viewport = document.getElementById('netflixBanner');
           const carousel = document.getElementById('bannerCarousel');
           
-          // Nettoyage complet (carousel + anciens points s'ils existent)
           if (!carousel || !viewport) return;
           carousel.innerHTML = '';
           const existingDots = viewport.querySelector('.banner-indicators');
           if (existingDots) existingDots.remove();
 
-          const movies = bannerMovies; // Déjà filtrés à 10 max dans renderNetflixView
+          const movies = bannerMovies; 
           if (!movies.length) return;
 
-          // --- 1. CRÉATION DES INDICATEURS (POINTS) ---
           const indicatorsContainer = document.createElement('div');
           indicatorsContainer.className = 'banner-indicators';
           
           movies.forEach((_, index) => {
               const dot = document.createElement('div');
               dot.className = 'indicator-dot';
-              // Clic sur un point
               dot.addEventListener('click', (e) => {
-                  e.stopPropagation(); // Évite de trigger le drag
+                  e.stopPropagation(); 
                   currentIndex = index;
                   updateCarousel(true);
                   restartInterval();
@@ -916,13 +905,11 @@
           viewport.appendChild(indicatorsContainer);
           const dots = Array.from(indicatorsContainer.children);
 
-          // --- 2. CRÉATION DES CARTES ---
-          // Variables pour le Drag & la logique
           let isDragging = false;
           let startPos = 0;
           let currentTranslate = 0;
           let prevTranslate = 0;
-          if (bannerIndex >= movies.length) bannerIndex = 0; // Sécurité si la liste a changé
+          if (bannerIndex >= movies.length) bannerIndex = 0; 
           let currentIndex = bannerIndex;
           let didMove = false;
 
@@ -962,8 +949,6 @@
 
           const items = Array.from(carousel.querySelectorAll('.banner-card'));
 
-          // --- 3. FONCTIONS DE POSITIONNEMENT ---
-
           function getPositionX(event) {
             return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
           }
@@ -982,20 +967,17 @@
           }
 
           function updateCarousel(useTransition = true) {
-            // 1. Gestion des classes Cartes
             items.forEach(item => item.classList.remove('active'));
             if(items[currentIndex]) items[currentIndex].classList.add('active');
             bannerIndex = currentIndex;
 
-            // 2. Gestion des classes Points (Mise à jour visuelle)
             dots.forEach(d => d.classList.remove('active'));
             if(dots[currentIndex]) dots[currentIndex].classList.add('active');
 
-            // 3. Déplacement
             const targetTranslate = calculateCenterOffset(currentIndex);
             
             if (useTransition) {
-                carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; // Effet "ease-out" plus naturel
+                carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; 
             } else {
                 carousel.style.transition = 'none';
             }
@@ -1004,8 +986,6 @@
             prevTranslate = targetTranslate;
             setSliderPosition();
           }
-
-          // --- 4. GESTION DRAG / TOUCH ---
           
           function touchStart(index) {
             return function(event) {
@@ -1031,14 +1011,12 @@
             isDragging = false;
             const movedBy = currentTranslate - prevTranslate;
 
-            // Seuil pour changer (100px)
             if (movedBy < -100) {
                 currentIndex += 1;
             } else if (movedBy > 100) {
                 currentIndex -= 1;
             }
 
-            // Boucle infinie
             if (currentIndex < 0) currentIndex = items.length - 1;
             if (currentIndex >= items.length) currentIndex = 0;
 
@@ -1046,7 +1024,6 @@
             restartInterval();
           }
 
-          // Listeners
           carousel.addEventListener('mousedown', touchStart(currentIndex));
           carousel.addEventListener('touchstart', touchStart(currentIndex), {passive: true});
 
@@ -1057,21 +1034,18 @@
           carousel.addEventListener('mouseleave', () => { if(isDragging) touchEnd() });
           carousel.addEventListener('touchend', touchEnd);
 
-          // Initialisation
-          updateCarousel(false); // False pour position immédiate sans anim au chargement
+          updateCarousel(false); 
 
-          // Timer automatique
           function restartInterval() {
              if (bannerInterval) clearInterval(bannerInterval);
              bannerInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % items.length;
                 updateCarousel(true);
-             }, 6000); // 6 secondes
+             }, 6000); 
           }
 
           restartInterval();
           
-          // Resize
           window.addEventListener('resize', () => {
               updateCarousel(false);
           });
@@ -1093,32 +1067,26 @@
      const totalMarket = movies.reduce((acc, m) => acc + (m.marketValue || 0), 0);
      const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
      
-     // Genres
      const genreCounts = {};
      movies.forEach(m => (m.genres||[]).forEach(g => { genreCounts[g] = (genreCounts[g]||0) + 1; }));
      const genresArr = Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]);
 
-     // Réalisateurs
      const dirCounts = {};
      movies.forEach(m => (m.directors||[]).forEach(d => { dirCounts[d] = (dirCounts[d]||0) + 1; }));
      const dirArr = Object.entries(dirCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
-     // Acteurs
      const actorCounts = {};
      movies.forEach(m => (m.people || []).forEach(a => { actorCounts[a] = (actorCounts[a] || 0) + 1; }));
      const actorArr = Object.entries(actorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
-     // Pays
      const countryCounts = {};
      movies.forEach(m => { if (m.country) countryCounts[m.country] = (countryCounts[m.country]||0) + 1; });
      const countryArr = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
 
-     // Durée
      const durations = movies.map(m => m.runtime || 0).filter(v => v>0);
      const totalMinutes = durations.reduce((s,x)=>s+x,0);
      const avgMinutes = durations.length ? Math.round(totalMinutes/durations.length) : 0;
 
-     // Années / Décennies
      const yearCounts = {};
      const decadesCount = {};
      movies.forEach(m => { 
@@ -1131,7 +1099,6 @@
      const topYear = Object.entries(yearCounts).sort((a,b)=>b[1]-a[1])[0];
      const decadesArr = Object.entries(decadesCount).sort((a, b) => a[0] - b[0]);
 
-     // Notes
      const ratingCounts = {};
      for(let i=1; i<=10; i++) ratingCounts[i] = 0;
      movies.forEach(m => {
@@ -1142,7 +1109,6 @@
      });
      const maxRatingCount = Math.max(...Object.values(ratingCounts)) || 1;
 
-     // Format (Durée)
      let shortM = 0, mediumM = 0, longM = 0;
      movies.forEach(m => {
          if(!m.runtime) return;
@@ -1152,7 +1118,6 @@
      });
 
 
-     // --- RENDU AFFICHAGE ---
      const headerCards = document.createElement('div');
      headerCards.className = 'stats-grid mb-6'; 
      headerCards.innerHTML = `
@@ -1207,7 +1172,6 @@
      const detailsGrid = document.createElement('div');
      detailsGrid.className = 'stats-grid'; 
 
-     // -- Carte Genres --
      const genreCard = document.createElement('div');
      genreCard.className = 'stat-card';
      genreCard.innerHTML = `<div class="stat-title">Répartition par genre</div><div id="genreList" class="mt-3"></div>`;
@@ -1237,7 +1201,6 @@
      }
      detailsGrid.appendChild(genreCard);
 
-     // -- Carte Notes (Stars) --
      const ratingCard = document.createElement('div');
      ratingCard.className = 'stat-card';
      ratingCard.innerHTML = `<div class="stat-title">Notes (Étoiles)</div><div id="ratingList" class="mt-3"></div>`;
@@ -1258,7 +1221,6 @@
      }
      detailsGrid.appendChild(ratingCard);
 
-     // -- Carte Réalisateurs --
      const dirCard = document.createElement('div');
      dirCard.className = 'stat-card';
      dirCard.innerHTML = `<div class="stat-title">Réalisateurs fréquents</div>`;
@@ -1269,7 +1231,6 @@
      dirCard.appendChild(dirList);
      detailsGrid.appendChild(dirCard);
 
-     // -- Carte Acteurs --
      const actorCard = document.createElement('div');
      actorCard.className = 'stat-card';
      actorCard.innerHTML = `<div class="stat-title">Acteurs fréquents</div>`;
@@ -1288,7 +1249,6 @@
      actorCard.appendChild(actorList);
      detailsGrid.appendChild(actorCard);
 
-     // -- Carte Pays --
      const countryCard = document.createElement('div');
      countryCard.className = 'stat-card';
      countryCard.innerHTML = `<div class="stat-title">Pays d'origine</div>`;
@@ -1299,7 +1259,6 @@
      countryCard.appendChild(countryListEl);
      detailsGrid.appendChild(countryCard);
 
-     // -- Carte Décennies --
      const decadeCard = document.createElement('div');
      decadeCard.className = 'stat-card';
      decadeCard.innerHTML = `<div class="stat-title">Par décennie</div><div class="flex flex-wrap gap-2 mt-3"></div>`;
@@ -1314,8 +1273,6 @@
      });
      detailsGrid.appendChild(decadeCard);
 
-
-     // -- Carte Formats --
      const runtimeDistCard = document.createElement('div');
      runtimeDistCard.className = 'stat-card';
      runtimeDistCard.innerHTML = `
@@ -1337,7 +1294,6 @@
      `;
      detailsGrid.appendChild(runtimeDistCard);
 
-     // --- STAT FORMATS & PACKAGING (4K, Steelbook...) ---
      let count4k = 0;
      let countBluray = 0;
      let countSteelbook = 0;
@@ -1381,7 +1337,6 @@
 
      statsView.appendChild(detailsGrid);
 
-     // Donut
      const donut = statsView.querySelector('#seenDonut');
      const seenCenterEl = statsView.querySelector('#seenCenter');
      if (donut) {
@@ -1390,7 +1345,6 @@
        if (seenCenterEl) seenCenterEl.textContent = `${pct}%`;
      }
 
-     // Croissance
      const currentYear = new Date().getFullYear();
      let addedThisYear = 0;
      let addedLast30Days = 0;
@@ -1425,7 +1379,6 @@
      `;
      detailsGrid.appendChild(growthCard);
 
-     // Saisonnalité
      const monthCounts = Array(12).fill(0);
      const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
      
@@ -1825,13 +1778,11 @@
     });    
 
     els.randomBtn.addEventListener('click', () => {
-        // 1. Vérifier qu'il y a des films
         if (state.filtered.length === 0) {
             alert("Aucun film trouvé dans la sélection actuelle !");
             return;
         }
 
-        // 2. Préparer les éléments
         const overlay = document.getElementById('randomRoulette');
         const rPoster = document.getElementById('roulettePoster');
         const rTitle = document.getElementById('rouletteTitle');
@@ -1841,14 +1792,12 @@
         rPoster.classList.remove('shake-effect'); // Reset effet
 
         let duration = 0;
-        let speed = 50; // Vitesse initiale (ms)
-        let maxDuration = 2000; // Durée totale du shuffle
+        let speed = 50; 
+        let maxDuration = 2000; 
         let shuffles = 0;
         let lastIndex = -1;
 
-        // 3. Fonction récursive pour l'effet de ralentissement
         const shuffle = () => {
-            // Choisir un index différent du précédent
             let randomIndex;
             do {
                 randomIndex = Math.floor(Math.random() * state.filtered.length);
@@ -1857,27 +1806,21 @@
             lastIndex = randomIndex;
             const movie = state.filtered[randomIndex];
 
-            // Mettre à jour l'interface
             rPoster.src = movie.poster || movie.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(movie.title))}`;
             rTitle.textContent = movie.title;
             
-            // Logique de vitesse (ralentissement exponentiel)
             duration += speed;
             shuffles++;
 
             if (duration < maxDuration) {
-                // On continue de tourner
-                // On ralentit légèrement à chaque tour pour l'effet de friction
                 if (duration > maxDuration * 0.7) speed += 20; 
                 setTimeout(shuffle, speed);
             } else {
-                // 4. C'EST GAGNÉ !
                 finish(movie);
             }
         };
 
         const finish = (movie) => {
-            // Effet visuel final
             rTitle.textContent = "🎬 " + movie.title;
             rTitle.classList.remove('animate-pulse');
             rTitle.classList.add('text-green-400'); // Titre devient vert
@@ -1885,26 +1828,21 @@
             rPoster.parentElement.classList.remove('ring-white/5');
             rPoster.parentElement.classList.add('ring-green-500'); // Bordure verte
 
-            // Attendre 1 seconde pour que l'utilisateur réalise quel film a gagné
             setTimeout(() => {
-                // Masquer l'overlay
                 overlay.classList.add('opacity-0');
                 
                 setTimeout(() => {
                     overlay.classList.add('hidden');
-                    // Reset styles pour la prochaine fois
                     rTitle.classList.add('animate-pulse');
                     rTitle.classList.remove('text-green-400');
                     rPoster.parentElement.classList.remove('ring-green-500');
                     rPoster.parentElement.classList.add('ring-white/5');
                     
-                    // OUVRIR LA FICHE DU FILM
                     openModal(movie);
                 }, 500); // Temps de la transition CSS opacity
             }, 1200);
         };
 
-        // Lancer la roulette
         shuffle();
     });
 
@@ -1952,9 +1890,7 @@
       hideAllViews();
       document.getElementById('gridView').classList.remove('hidden');
       
-      // FIX: Reset de l'état visuel du toggle mobile si on revient sur Grid
       if (filterInputsContainer) {
-          // On ne masque pas de force ici pour laisser le choix à l'utilisateur s'il est déjà là
           if (toggleFiltersBtn) toggleFiltersBtn.textContent = filterInputsContainer.classList.contains('hidden') ? "Afficher les filtres & tri" : "Masquer les filtres & tri";
       }
       applyFilters();
@@ -1964,13 +1900,11 @@
   </script>
 
   <script>
-    // Configuration : Remplacez par VOS informations GitHub
     const GITHUB_USERNAME = "Mathis1371"; // Ex: jean-dupont
     const GITHUB_REPO = "Collection-blu-ray";         // Ex: ma-collection-bluray
 
     const btn = document.getElementById('bugReportBtn');
     
-    // On récupère quelques infos techniques pour vous aider à débuguer
     const userAgent = navigator.userAgent;
     const screenRes = `${window.screen.width}x${window.screen.height}`;
     
@@ -1990,7 +1924,6 @@
   *Résolution : ${screenRes}*`
     );
 
-    // Construction du lien
     btn.href = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${title}&body=${body}`;
   </script>
 
