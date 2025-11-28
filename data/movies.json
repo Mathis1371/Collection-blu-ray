@@ -154,7 +154,7 @@
       "overview": "De la nuit des temps à l'humanité atteignant les étoiles, 2001: L'odyssée de l'espace raconte l'histoire du Monolithe Noir, l'évolution de l'humanité et l'essor du superordinateur ultime HAL 9000 doté d'intelligence artificielle.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/2tEhtQfYTOX8wYl0fTRpK9v2aqS.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/9yTOU2SvTfAEHDPEG5qraLoe4MI.jpg",
-      "altPoster": "https://digitalcine.b-cdn.net/wp-content/uploads/2023/10/2001-lodyssee-de-lespace-stanley-kubrick-edition-limitee-steelbook-the-film-vault-packshot-blu-ray-4k-uhd.jpg",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/37/04/0f/17761335/1507-1/tsp20240626154113/2001-L-Odyee-de-l-espace-Steelbook-The-Film-Vault-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Classiques"],
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
@@ -1867,7 +1867,7 @@
       "year": 2009,
       "price": 0.00,
       "marketValue": 2.00,
-      "genres": ["Thriller", "Science-fiction", "Mystère"],
+      "genres": ["Thriller", "Science-fiction", "Mystère", "Catastrophe"],
       "people": ["Nicolas Cage", "Rose Bryne", "Chandler Canterbury", "Lara Robinson", "Nadia Townsend", "Liam Hemsworth"],
       "directors": ["Alex Proyas"],
       "runtime": 121,
@@ -2158,7 +2158,6 @@
       "id": "tt12361974",
       "title": "Zack Snyder's Justice League",
       "year": 2021,
-      "price": 14.99,
       "genres": ["Fantastique", "Action", "Aventure", "Super héros"],
       "people": ["Erza Miller", "Henry Cavill", "Jared Leto", "Gal Gadot", "Ben Affleck", "Jason Momoa", "Jesse Einsenberg", "Amy Adams", "Willem Dafoe", "Ray Fisher", "Amber Heard", "Ray Porter", "Billy Crudup", "Ciarán Hinds", "Russell Crowe", "Jeremy Irons", "Diane Lane", "J.K. Simmons"],
       "directors": ["Zack Snyder"],
@@ -2168,10 +2167,10 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/xx7YR2kmu6Xji31au9VvGdCp4T1.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mKTccI6mwC4TumkzgzXoI8b2Qul.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/3a/04/cc/13370426/1507-1/tsp20210323152148/Zack-Snyder-s-Justice-League-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
-      "categories": ["Films d'action", "Blockbusters", "Univers DC Comics"],
+      "categories": ["wishlist"],
       "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2025-11-28"
+      "added": "2026-11-11"
     }
   ]
 }
