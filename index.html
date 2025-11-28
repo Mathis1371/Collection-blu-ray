@@ -882,12 +882,15 @@
           
           if (!carousel || !viewport) return;
           carousel.innerHTML = '';
+          
+          // Suppression des anciens indicateurs
           const existingDots = viewport.querySelector('.banner-indicators');
           if (existingDots) existingDots.remove();
 
           const movies = bannerMovies; 
           if (!movies.length) return;
 
+          // --- 1. Indicateurs (Points) ---
           const indicatorsContainer = document.createElement('div');
           indicatorsContainer.className = 'banner-indicators';
           
@@ -896,7 +899,8 @@
               dot.className = 'indicator-dot';
               dot.addEventListener('click', (e) => {
                   e.stopPropagation(); 
-                  currentIndex = index;
+                  // On vise index + 1 car l'index 0 est maintenant le clone du dernier
+                  currentIndex = index + 1;
                   updateCarousel(true);
                   restartInterval();
               });
@@ -905,15 +909,8 @@
           viewport.appendChild(indicatorsContainer);
           const dots = Array.from(indicatorsContainer.children);
 
-          let isDragging = false;
-          let startPos = 0;
-          let currentTranslate = 0;
-          let prevTranslate = 0;
-          if (bannerIndex >= movies.length) bannerIndex = 0; 
-          let currentIndex = bannerIndex;
-          let didMove = false;
-
-          movies.forEach((m, i) => {
+          // --- 2. Fonction utilitaire pour créer une carte HTML ---
+          function createCard(m) {
             const card = document.createElement('div');
             card.className = 'banner-card';
             
@@ -939,15 +936,40 @@
                     </div>
                 </div>
             `;
-            
+            // Réattacher l'événement click
             card.addEventListener('click', () => {
                if (!didMove) openModal(m);
             });
-            
-            carousel.appendChild(card);
+            return card;
+          }
+
+          // --- 3. Construction du DOM avec CLONES ---
+          
+          // A. Clone du DERNIER film (placé au début)
+          // C'est lui qui apparaîtra à gauche du 1er film
+          const lastMovieClone = createCard(movies[movies.length - 1]);
+          carousel.appendChild(lastMovieClone);
+
+          // B. Les films originaux
+          movies.forEach(m => {
+             carousel.appendChild(createCard(m));
           });
 
+          // C. Clone du PREMIER film (placé à la fin)
+          const firstMovieClone = createCard(movies[0]);
+          carousel.appendChild(firstMovieClone);
+
           const items = Array.from(carousel.querySelectorAll('.banner-card'));
+
+          // --- 4. Logique de positionnement ---
+          // On commence à 1 (le premier vrai film), car 0 est le clone
+          let currentIndex = 1; 
+          
+          let isDragging = false;
+          let startPos = 0;
+          let currentTranslate = 0;
+          let prevTranslate = 0;
+          let didMove = false;
 
           function getPositionX(event) {
             return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
@@ -963,17 +985,24 @@
             const itemOffsetLeft = current.offsetLeft;
             const itemWidth = current.clientWidth;
             const viewportWidth = viewport.clientWidth;
+            // Centre parfaitement l'élément
             return -(itemOffsetLeft - (viewportWidth - itemWidth) / 2);
           }
 
           function updateCarousel(useTransition = true) {
+            // Mise à jour des classes active
             items.forEach(item => item.classList.remove('active'));
             if(items[currentIndex]) items[currentIndex].classList.add('active');
-            bannerIndex = currentIndex;
 
+            // Mise à jour des points (dots)
             dots.forEach(d => d.classList.remove('active'));
-            if(dots[currentIndex]) dots[currentIndex].classList.add('active');
+            // Calcul de l'index "réel" pour les points (0 à N-1)
+            let realIndex = currentIndex - 1;
+            if (realIndex < 0) realIndex = movies.length - 1; 
+            if (realIndex >= movies.length) realIndex = 0;
+            if(dots[realIndex]) dots[realIndex].classList.add('active');
 
+            // Déplacement
             const targetTranslate = calculateCenterOffset(currentIndex);
             
             if (useTransition) {
@@ -987,14 +1016,27 @@
             setSliderPosition();
           }
           
-          function touchStart(index) {
-            return function(event) {
-              isDragging = true;
-              didMove = false;
-              startPos = getPositionX(event);
-              if (bannerInterval) clearInterval(bannerInterval); 
-              carousel.style.transition = 'none';
-            }
+          // --- 5. GESTION DE L'INFINI (Le saut invisible) ---
+          carousel.addEventListener('transitionend', () => {
+             // Si on est sur le clone de gauche (Index 0), on saute au vrai dernier
+             if (currentIndex === 0) {
+                 currentIndex = items.length - 2;
+                 updateCarousel(false); // false = pas d'anim, saut instantané
+             }
+             // Si on est sur le clone de droite (Index Max), on saute au vrai premier
+             if (currentIndex === items.length - 1) {
+                 currentIndex = 1;
+                 updateCarousel(false);
+             }
+          });
+
+          // --- 6. Events Touch / Drag ---
+          function touchStart(event) {
+            isDragging = true;
+            didMove = false;
+            startPos = getPositionX(event);
+            if (bannerInterval) clearInterval(bannerInterval); 
+            carousel.style.transition = 'none';
           }
 
           function touchMove(event) {
@@ -1017,29 +1059,29 @@
                 currentIndex -= 1;
             }
 
-            if (currentIndex < 0) currentIndex = items.length - 1;
-            if (currentIndex >= items.length) currentIndex = 0;
+            // Sécurité bornes
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= items.length) currentIndex = items.length - 1;
 
             updateCarousel(true);
             restartInterval();
           }
 
-          carousel.addEventListener('mousedown', touchStart(currentIndex));
-          carousel.addEventListener('touchstart', touchStart(currentIndex), {passive: true});
-
+          carousel.addEventListener('mousedown', touchStart);
+          carousel.addEventListener('touchstart', touchStart, {passive: true});
           carousel.addEventListener('mousemove', touchMove);
           carousel.addEventListener('touchmove', touchMove, {passive: true});
-
           carousel.addEventListener('mouseup', touchEnd);
           carousel.addEventListener('mouseleave', () => { if(isDragging) touchEnd() });
           carousel.addEventListener('touchend', touchEnd);
 
+          // Initialisation
           updateCarousel(false); 
 
           function restartInterval() {
              if (bannerInterval) clearInterval(bannerInterval);
              bannerInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % items.length;
+                currentIndex++;
                 updateCarousel(true);
              }, 6000); 
           }
@@ -1589,12 +1631,23 @@
      els.modalMeta.innerHTML = metaHtml.join(' ');
      els.modalOverview.textContent = m.overview || '';
 
-     // FIX: Protection contre les valeurs undefined
-     if (m.price && m.price > 0) {
-        els.modalPrice.textContent = `Prix d'achat : ${Number(m.price).toFixed(2)} €`;
+     const price = m.price ? Number(m.price) : 0;
+     const value = m.marketValue ? Number(m.marketValue) : 0;
+
+     if (price > 0 || value > 0) {
+        const priceStr = price.toFixed(2) + ' €';
+        const valueStr = value.toFixed(2) + ' €';
+        
+        els.modalPrice.innerHTML = `
+            <span class="text-slate-400 text-base font-normal">Achat :</span> 
+            <span class="text-green-400">${priceStr}</span>
+            <span class="mx-2 text-slate-600">/</span>
+            <span class="text-slate-400 text-base font-normal">Valeur :</span> 
+            <span class="text-purple-400">${valueStr}</span>
+        `;
         els.modalPrice.classList.remove('hidden');
      } else {
-        els.modalPrice.textContent = '';
+        els.modalPrice.innerHTML = '';
         els.modalPrice.classList.add('hidden');
      }
 
