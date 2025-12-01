@@ -284,8 +284,8 @@
       "id": "tt0816692",
       "title": "Interstellar",
       "year": 2014,
-      "price": 15.00,
-      "marketValue": 6.00,
+      "price": 39.99,
+      "marketValue": 50.00,
       "genres": ["Science-fiction", "Drame", "Aventure"],
       "people": ["Mattew McConaughey", "Anne Hathaway", "Jessica Chastain", "Mackenzie Foy", "Timothée Chalamet", "John Lithgow", "Ellen Burstyn", "Michael Caine", "Casey Affleck", "Matt Damon"],
       "directors": ["Christopher Nolan"],
@@ -294,11 +294,11 @@
       "overview": "Dans un monde post-apocalyptique et en famine, une équipe d'explorateurs cherche une nouvelle planète habitable pour l'espèce humaine.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/iawqQdFKI7yTUoSkDNP8gyV3J3r.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/huD4cMhHtLkxcdM6PbKBcivBZuE.jpg",
-      "altPoster": "https://m.media-amazon.com/images/I/81O--G+741L.jpg",
+      "altPoster": "https://www.edition-limitee.fr/images/00000000_1111_222/jujutsu/tintin/Interstellar-steelbook-bluray-4k-ultra-hd-warner-100-2023.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Blockbusters", "Top 10"],
-      "tags": ["4K", "amaray"],
+      "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2023-12-01"
+      "added": "2025-12-01"
     },
     {
       "id": "tt1745960",
