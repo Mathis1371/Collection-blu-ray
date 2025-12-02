@@ -2149,10 +2149,10 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/aHvilwk70Hv2zDxYXcf651Ur1ab.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/ovtIuyrlPMIgmt09ChIqMJRpxkB.jpg",
       "altPoster": "https://www.son-video.com/images/article/universal-pictures/ESC3701432036397/apollo-13-edition-limitee-steelbook-the-film-vault-6661ce64d4c940.81818400.jpg?p=1200",
-      "categories": ["wishlist"],
-      "tags": ["4K", "amaray"],
+      "categories": ["Récompensés aux Oscars", "Années 90"],
+      "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-11-11"
+      "added": "2025-12-24"
     },
     {
       "id": "tt12361974",
@@ -2168,7 +2168,43 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mKTccI6mwC4TumkzgzXoI8b2Qul.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/3a/04/cc/13370426/1507-1/tsp20210323152148/Zack-Snyder-s-Justice-League-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["wishlist"],
-      "tags": ["4K", "Steelbook"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0081505",
+      "title": "Shining",
+      "year": 1980,
+      "genres": ["Drame", "Horreur"],
+      "people": ["Jack Nicholson", "Shelley Duvall", "Danny Lloyd", "Scatman Crothers", "Lia Beldam", "Philip Stone", "Joe Turkel", "Barry Nelson", "Tony Burton"],
+      "directors": ["Stanley Kubrick"],
+      "runtime": 146,
+      "rating": 8.4,
+      "overview": "Une famille se rend dans un hôtel isolé pour l'hiver, où une présence spirituelle et maléfique incite le père à la violence, tandis que son fils télépathe fait l'expérience d'horribles visions du passé et du futur.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/uAR0AWqhQL1hQa69UDEbb2rE5Wx.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/alvhIoOxHO2axWdpcWvHz8UG0tQ.jpg",
+      "altPoster": "https://universeofentertainment.es/cdn/shop/files/shiningfilmvaultsteelbook01.jpg?v=1744620863&width=1024",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0093058",
+      "title": "Full Metal Jacket",
+      "year": 1987,
+      "genres": ["Drame", "Guerre"],
+      "people": ["Matthew Modine", "R. Lee Ermey", "Vincent D'Onofrio", "Adam Baldwin", "Arliss Howard", "Kevin Major Howard", "Tim Colceri"],
+      "directors": ["Stanley Kubrick"],
+      "runtime": 116,
+      "rating": 8.2,
+      "overview": "Un marine américain pragmatique observe les effets déshumanisants de la guerre du Vietnam sur ses camarades recrues, de leur entraînement violent du camp militaire jusqu'aux combats de rue sanglants à Hue.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/kMKyx1k8hWWscYFnPbnxxN4Eqo4.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/lQvuJEeT8sA2jBNZCIOAI4ypYtQ.jpg",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/95/83/19/18449301/1507-1/tsp20250218145106/Full-Metal-Jacket-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-11-11"
     }
