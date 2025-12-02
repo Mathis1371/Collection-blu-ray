@@ -458,6 +458,7 @@
        <div class="md:col-span-2 space-y-3">
          <h3 id="modalTitle" class="text-2xl font-semibold pr-16"></h3>
          <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
+         <div id="modalDirectors" class="text-xs opacity-80 mt-2"></div> 
          <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
          <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
          <p id="modalOverview" class="text-slate-200 text-sm leading-relaxed"></p>
@@ -499,6 +500,7 @@
       modalTitle: document.getElementById('modalTitle'),
       country: document.getElementById('countrySelect'),
       modalMeta: document.getElementById('modalMeta'),
+      modalDirectors: document.getElementById('modalDirectors'),
       modalOverview: document.getElementById('modalOverview'),
       modalTags: document.getElementById('modalTags'),
       modalActors: document.getElementById('modalActors'),
@@ -1651,54 +1653,86 @@
         els.modalPrice.classList.add('hidden');
      }
 
-     let userRating = localStorage.getItem("myrating_" + m.id) || "";
-     const oldRatingBlock = document.getElementById("userRatingBlock");
-     if (oldRatingBlock) oldRatingBlock.remove();
+     const oldActions = document.getElementById('userActions');
+     if (oldActions) oldActions.remove();
 
-     let ratingHTML = `
-       <div id="userRatingBlock" class="mt-1 flex items-center gap-2 text-sm">
+     const actionsContainer = document.createElement('div');
+     actionsContainer.id = "userActions";
+     actionsContainer.className = "mt-3 flex flex-wrap items-center gap-4"; 
+
+     let userRating = localStorage.getItem("myrating_" + m.id) || "";
+     const ratingHTML = `
+       <div class="flex items-center gap-2 text-sm">
          <span class="opacity-80">Ma note :</span>
-         <select id="userRatingSelect" class="px-2 py-1 rounded bg-white/10 text-slate-900 md:text-white">
+         <select id="userRatingSelect" class="px-2 py-1 rounded bg-white/10 text-slate-900 md:text-white border border-white/10 focus:bg-slate-800 outline-none cursor-pointer hover:bg-white/20 transition">
            <option value="">–</option>
            ${[...Array(10)].map((_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}
          </select>
        </div>
      `;
 
-     els.modalMeta.insertAdjacentHTML("afterend", ratingHTML);
+     const isSeen = localStorage.getItem('seen_' + m.id);
+     const seenBtnHtml = document.createElement('button');
+     seenBtnHtml.className = "px-4 py-1 rounded-full border border-white/10 text-xs font-semibold transition-all hover:bg-white/20 flex items-center gap-2";
+
+     const updateSeenBtn = (active) => {
+         if (active) {
+             seenBtnHtml.classList.add('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+             seenBtnHtml.innerHTML = "<span>👁️</span> Visionné";
+         } else {
+             seenBtnHtml.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
+             seenBtnHtml.innerHTML = "<span class='opacity-50'>⭕</span> Non visionné";
+         }
+     };
+     updateSeenBtn(isSeen); // Initialisation
+
+     seenBtnHtml.onclick = () => {
+         if (localStorage.getItem('seen_' + m.id)) {
+             localStorage.removeItem('seen_' + m.id);
+             updateSeenBtn(false);
+         } else {
+             localStorage.setItem('seen_' + m.id, 'true');
+             updateSeenBtn(true);
+         }
+         applyFilters(); // Met à jour les stats en arrière-plan
+     };
+
+     actionsContainer.innerHTML = ratingHTML;
+     actionsContainer.appendChild(seenBtnHtml);
+
+     els.modalMeta.insertAdjacentElement("afterend", actionsContainer);
 
      const selectRating = document.getElementById("userRatingSelect");
-     selectRating.value = userRating;
-     selectRating.addEventListener("change", () => {
-       if (selectRating.value === "") localStorage.removeItem("myrating_" + m.id);
-       else localStorage.setItem("myrating_" + m.id, selectRating.value);
-     });
+     if(selectRating) {
+         selectRating.value = userRating;
+         selectRating.addEventListener("change", () => {
+           if (selectRating.value === "") localStorage.removeItem("myrating_" + m.id);
+           else localStorage.setItem("myrating_" + m.id, selectRating.value);
+         });
+     }
 
-     const oldSeenBtn = document.getElementById('toggleSeenBtn');
-     if (oldSeenBtn) oldSeenBtn.remove();
+     if (m.directors && m.directors.length) {
+       els.modalDirectors.innerHTML = '<span class="text-slate-500">Réalisation : </span>' + 
+         m.directors
+         .map(d => `<span class="director-link text-red-400 hover:underline cursor-pointer font-medium">${d}</span>`)
+         .join(', ');
 
-     const seenBtn = document.createElement('button');
-     seenBtn.id = 'toggleSeenBtn'; 
-     const isSeen = localStorage.getItem('seen_' + m.id);
-
-     seenBtn.className = "px-4 py-2 rounded bg-white/10 hover:bg-white/20 ml-2 transition-colors text-xs font-semibold";
-     if (isSeen) seenBtn.classList.add('text-green-400', 'bg-green-900/30'); 
-     seenBtn.innerHTML = isSeen ? "👁️ Visionné" : "⭕ Non visionné";
-
-     seenBtn.onclick = () => {
-       if (localStorage.getItem('seen_' + m.id)) {
-         localStorage.removeItem('seen_' + m.id);
-         seenBtn.innerHTML = "⭕ Non visionné";
-         seenBtn.classList.remove('text-green-400', 'bg-green-900/30');
-       } else {
-         localStorage.setItem('seen_' + m.id, 'true');
-         seenBtn.innerHTML = "👁️ Visionné";
-         seenBtn.classList.add('text-green-400', 'bg-green-900/30');
-       }
-       applyFilters();
-     };
-     
-     els.modalMeta.parentNode.insertBefore(seenBtn, els.modalMeta.nextSibling);
+       els.modalDirectors.querySelectorAll('.director-link').forEach(el => {
+         el.addEventListener('click', (e) => {
+           e.stopPropagation();
+           state.query = el.textContent.trim();
+           els.search.value = state.query;
+           currentView = 'grid';
+           setActiveTab('grid');
+           hideAllViews();
+           document.getElementById('gridView').classList.remove('hidden');
+           applyFilters();
+           closeModal();
+         });
+       });
+     } else {
+       els.modalDirectors.innerHTML = '';
+     }
 
      if (m.people && m.people.length) {
        els.modalActors.innerHTML = m.people
