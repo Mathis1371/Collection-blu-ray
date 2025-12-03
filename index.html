@@ -398,6 +398,14 @@
        </select>
       </div>
       <div class="md:col-span-2">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Statut</label>
+       <select id="seenSelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+         <option value="">Tous</option>
+         <option value="seen">Vus</option>
+         <option value="not-seen">Pas vus</option>
+       </select>
+      </div>
+      <div class="md:col-span-2">
        <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Durée</label>
        <select id="runtimeSelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
          <option value="">Toutes</option>
@@ -483,11 +491,12 @@
 
   <script>
 
-    let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: ""};
+    let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: ""};
     const els = {
       grid: document.getElementById('grid'),
       search: document.getElementById('searchInput'),
       genre: document.getElementById('genreSelect'),
+      seen: document.getElementById('seenSelect'),
       yearExact: document.getElementById('yearExact'),
       runtime: document.getElementById('runtimeSelect'),
       sort: document.getElementById('sortSelect'),
@@ -664,6 +673,17 @@
 
       const countries = [...new Set(state.all.map(m => m.country).filter(Boolean))].sort();
       els.country.innerHTML = '<option value="">Tous</option>' + countries.map(c => `<option value="${c}">${c}</option>`).join('');
+      const validYears = state.all.map(m => m.year).filter(y => y && y > 0);
+      
+      if (validYears.length > 0) {
+          const minYear = Math.min(...validYears);
+          const maxYear = Math.max(...validYears);
+
+          els.yearExact.min = minYear;
+          els.yearExact.max = maxYear;
+          
+          els.yearExact.placeholder = `${minYear} - ${maxYear}`;
+      }
     }
 
     function resetFilters() {
@@ -677,6 +697,7 @@
      state.sortDir = "asc";
      state.country = "";
      state.period = "";
+     state.seen = "";
 
      els.search.value = "";
      els.genre.value = "";
@@ -685,6 +706,7 @@
      els.sort.value = "title";
      els.country.value = "";
      els.period.value = "";
+     els.seen.value = "";
 
      applyFilters();
     }
@@ -723,6 +745,11 @@
                 return m.year && m.year >= start && m.year <= end;
             })();
 
+            const isSeenInStorage = localStorage.getItem('seen_' + m.id);
+            const matchesS = !state.seen || 
+                             (state.seen === 'seen' && isSeenInStorage) || 
+                             (state.seen === 'not-seen' && !isSeenInStorage);
+
             const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
 
             const notWishlist = currentView === 'wishlist' ? true : !(
@@ -730,7 +757,7 @@
                 (m.categories && m.categories.includes('wishlist'))
             );
 
-            return matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming && notWishlist;
+            return matchesG && matchesY && matchesR && matchesC && matchesP && matchesS && notUpcoming && notWishlist;
         });
 
         list.sort((a, b) => {
@@ -765,7 +792,17 @@
         container.innerHTML = '';
         container.className = "w-full px-4 py-6 relative";
 
-        if (state.filtered.length === 0) {
+        // --- CORRECTION: On filtre state.all pour ne garder que les films dispos (pas de wishlist, pas de futur)
+        // On ignore les filtres de recherche/genre ici.
+        const today = new Date();
+        const netflixMovies = state.all.filter(m => {
+            const isWishlist = (m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'));
+            const isUpcoming = (m.added && new Date(m.added) > today);
+            return !isWishlist && !isUpcoming;
+        });
+        // --- FIN CORRECTION
+
+        if (netflixMovies.length === 0) {
             container.innerHTML = `
               <div class="flex flex-col items-center justify-center h-[60vh] text-center text-slate-400">
                   <div class="text-6xl mb-4 opacity-20">📂</div>
@@ -780,14 +817,16 @@
         }
 
         const banner = document.getElementById('netflixBanner');
-        if (currentView === 'netflix' && state.filtered.length > 0) {
+        // On affiche la bannière si on est sur la vue netflix et qu'il y a des films
+        if (currentView === 'netflix' && netflixMovies.length > 0) {
             banner.classList.remove('hidden');
         } else {
             banner.classList.add('hidden');
         }
 
         const categoriesMap = {};
-        state.filtered.forEach(movie => {
+        // On utilise netflixMovies au lieu de state.filtered
+        netflixMovies.forEach(movie => {
             (movie.categories || []).forEach(cat => {
                 if (!categoriesMap[cat]) categoriesMap[cat] = [];
                 categoriesMap[cat].push(movie);
@@ -796,7 +835,7 @@
 
         for (const cat in categoriesMap) {
             const section = document.createElement('section');
-            section.className = "mb-7 group"; // Marge ajustée
+            section.className = "mb-7 group"; 
 
             const title = document.createElement('h2');
             title.textContent = cat;
@@ -824,7 +863,6 @@
                 const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
                 
                 const card = document.createElement('div');
-              
                 card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
                 
                 card.innerHTML = `
@@ -835,34 +873,16 @@
                 carousel.appendChild(card);
             });
 
-            btnLeft.onclick = (e) => {
-                e.stopPropagation();
-                const scrollAmount = carousel.clientWidth * 0.90;
-                carousel.scrollLeft -= scrollAmount;
-            };
-
-            btnRight.onclick = (e) => {
-                e.stopPropagation();
-                const scrollAmount = carousel.clientWidth * 0.90;
-                carousel.scrollLeft += scrollAmount;
-            };
-
+            // Logique de scroll (inchangée)
+            btnLeft.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft -= carousel.clientWidth * 0.90; };
+            btnRight.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft += carousel.clientWidth * 0.90; };
             const updateArrows = () => {
-                if (carousel.scrollLeft > 20) {
-                    btnLeft.classList.remove('hidden');
-                    btnLeft.style.display = 'flex';
-                } else {
-                    btnLeft.style.display = 'none';
-                }
-
+                if (carousel.scrollLeft > 20) btnLeft.classList.remove('hidden'); else btnLeft.classList.add('hidden'); // petit fix display ici
+                if (carousel.scrollLeft > 20) btnLeft.style.display = 'flex'; else btnLeft.style.display = 'none';
+                
                 const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-                if (carousel.scrollLeft >= maxScroll - 20) {
-                    btnRight.style.display = 'none';
-                } else {
-                    btnRight.style.display = 'flex';
-                }
+                if (carousel.scrollLeft >= maxScroll - 20) btnRight.style.display = 'none'; else btnRight.style.display = 'flex';
             };
-
             carousel.addEventListener('scroll', updateArrows);
             setTimeout(updateArrows, 100); 
 
@@ -873,15 +893,18 @@
             container.appendChild(section);
         }
 
+        // Gestion de la bannière (utilise netflixMovies maintenant pour la sélection initiale)
         if (bannerMovies.length === 0) {
-            let candidates = state.filtered.filter(m => m.netflixPoster || m.poster);
+            let candidates = netflixMovies.filter(m => m.netflixPoster || m.poster);
             candidates.sort(() => 0.5 - Math.random());
             bannerMovies = candidates.slice(0, 10);
         }
         
+        // La fonction startBannerAutoScroll reste inchangée, elle utilise bannerMovies qui est global
         startBannerAutoScroll(); 
-
-        function startBannerAutoScroll() {
+        
+        // ... (fonction interne startBannerAutoScroll inchangée) ...
+         function startBannerAutoScroll() {
           if (bannerInterval) clearInterval(bannerInterval);
           const viewport = document.getElementById('netflixBanner');
           const carousel = document.getElementById('bannerCarousel');
@@ -903,7 +926,6 @@
               dot.className = 'indicator-dot';
               dot.addEventListener('click', (e) => {
                   e.stopPropagation(); 
-                  // On vise index + 1 car l'index 0 est maintenant le clone du dernier
                   currentIndex = index + 1;
                   updateCarousel(true);
                   restartInterval();
@@ -939,41 +961,26 @@
                     </div>
                 </div>
             `;
-            // Réattacher l'événement click
-            card.addEventListener('click', () => {
-               if (!didMove) openModal(m);
-            });
+            card.addEventListener('click', () => { if (!didMove) openModal(m); });
             return card;
           }
 
           const lastMovieClone = createCard(movies[movies.length - 1]);
           carousel.appendChild(lastMovieClone);
-
-          movies.forEach(m => {
-             carousel.appendChild(createCard(m));
-          });
-
+          movies.forEach(m => { carousel.appendChild(createCard(m)); });
           const firstMovieClone = createCard(movies[0]);
           carousel.appendChild(firstMovieClone);
 
           const items = Array.from(carousel.querySelectorAll('.banner-card'));
-
           let currentIndex = 1; 
-          
           let isDragging = false;
           let startPos = 0;
           let currentTranslate = 0;
           let prevTranslate = 0;
           let didMove = false;
 
-          function getPositionX(event) {
-            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-          }
-
-          function setSliderPosition() {
-             carousel.style.transform = `translateX(${currentTranslate}px)`;
-          }
-
+          function getPositionX(event) { return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX; }
+          function setSliderPosition() { carousel.style.transform = `translateX(${currentTranslate}px)`; }
           function calculateCenterOffset(index) {
             const current = items[index];
             if (!current) return 0;
@@ -986,70 +993,42 @@
           function updateCarousel(useTransition = true) {
             items.forEach(item => item.classList.remove('active'));
             if(items[currentIndex]) items[currentIndex].classList.add('active');
-
             dots.forEach(d => d.classList.remove('active'));
             let realIndex = currentIndex - 1;
             if (realIndex < 0) realIndex = movies.length - 1; 
             if (realIndex >= movies.length) realIndex = 0;
             if(dots[realIndex]) dots[realIndex].classList.add('active');
-
             const targetTranslate = calculateCenterOffset(currentIndex);
-            
-            if (useTransition) {
-                carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; 
-            } else {
-                carousel.style.transition = 'none';
-            }
-            
+            if (useTransition) { carousel.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)'; } 
+            else { carousel.style.transition = 'none'; }
             currentTranslate = targetTranslate;
             prevTranslate = targetTranslate;
             setSliderPosition();
           }
           
           carousel.addEventListener('transitionend', () => {
-             if (currentIndex === 0) {
-                 currentIndex = items.length - 2;
-                 updateCarousel(false); // false = pas d'anim, saut instantané
-             }
-             if (currentIndex === items.length - 1) {
-                 currentIndex = 1;
-                 updateCarousel(false);
-             }
+             if (currentIndex === 0) { currentIndex = items.length - 2; updateCarousel(false); }
+             if (currentIndex === items.length - 1) { currentIndex = 1; updateCarousel(false); }
           });
 
           function touchStart(event) {
-            isDragging = true;
-            didMove = false;
-            startPos = getPositionX(event);
+            isDragging = true; didMove = false; startPos = getPositionX(event);
             if (bannerInterval) clearInterval(bannerInterval); 
             carousel.style.transition = 'none';
           }
-
           function touchMove(event) {
             if (isDragging) {
-              const currentPosition = getPositionX(event);
-              const diff = currentPosition - startPos;
+              const currentPosition = getPositionX(event); const diff = currentPosition - startPos;
               if (Math.abs(diff) > 5) didMove = true;
-              currentTranslate = prevTranslate + diff;
-              setSliderPosition();
+              currentTranslate = prevTranslate + diff; setSliderPosition();
             }
           }
-
           function touchEnd() {
-            isDragging = false;
-            const movedBy = currentTranslate - prevTranslate;
-
-            if (movedBy < -100) {
-                currentIndex += 1;
-            } else if (movedBy > 100) {
-                currentIndex -= 1;
-            }
-
+            isDragging = false; const movedBy = currentTranslate - prevTranslate;
+            if (movedBy < -100) currentIndex += 1; else if (movedBy > 100) currentIndex -= 1;
             if (currentIndex < 0) currentIndex = 0;
             if (currentIndex >= items.length) currentIndex = items.length - 1;
-
-            updateCarousel(true);
-            restartInterval();
+            updateCarousel(true); restartInterval();
           }
 
           carousel.addEventListener('mousedown', touchStart);
@@ -1059,22 +1038,13 @@
           carousel.addEventListener('mouseup', touchEnd);
           carousel.addEventListener('mouseleave', () => { if(isDragging) touchEnd() });
           carousel.addEventListener('touchend', touchEnd);
-
           updateCarousel(false); 
-
           function restartInterval() {
              if (bannerInterval) clearInterval(bannerInterval);
-             bannerInterval = setInterval(() => {
-                currentIndex++;
-                updateCarousel(true);
-             }, 6000); 
+             bannerInterval = setInterval(() => { currentIndex++; updateCarousel(true); }, 6000); 
           }
-
           restartInterval();
-          
-          window.addEventListener('resize', () => {
-              updateCarousel(false);
-          });
+          window.addEventListener('resize', () => { updateCarousel(false); });
         }
     }
 
@@ -1855,6 +1825,7 @@
     els.sort.addEventListener('change', e=>{ state.sort = e.target.value; applyFilters(); });
     els.country.addEventListener('change', e => {state.country = e.target.value; applyFilters(); });
     els.period.addEventListener('change', e => {state.period = e.target.value; applyFilters(); });
+    els.seen.addEventListener('change', e => { state.seen = e.target.value; applyFilters(); });
     
     els.reset.addEventListener('click', ()=>{
         resetFilters();
@@ -1965,7 +1936,7 @@
      setActiveTab('netflix');
      hideAllViews();
      document.getElementById('mainView').classList.remove('hidden');
-     applyFilters();
+     renderNetflixView();
    });
 
    document.getElementById('tabGrid').addEventListener('click', () => {
