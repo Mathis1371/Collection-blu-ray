@@ -5,6 +5,7 @@
   <meta name="theme-color" content="#2a181c">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ma collection de blu-ray — Local</title>
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="description" content="Interface locale type Netflix pour cataloguer vos films sans lecture vidéo.">
   <style>
@@ -616,18 +617,20 @@
 
    setActiveTab(currentView);
 
+   let fuse;
+
     async function loadInitial() {
-       try {
-         const res = await fetch('data/movies.json', { cache: 'no-store' });
-         if (!res.ok) throw new Error('no json');
-         const data = await res.json();
-         if (!data.movies) throw new Error('bad schema');
-         state.all = normalize(data.movies);
-       } catch (e) {
-         console.log("Aucun fichier automatique trouvé. En attente d'import manuel.");
-         // On initialise avec un tableau vide au lieu des données d'exemple
-         state.all = []; 
-       }
+      try {
+        const res = await fetch('data/movies.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('no json');
+        const data = await res.json();
+        if (!data.movies) throw new Error('bad schema');
+        state.all = normalize(data.movies);
+      } catch (e) {
+        console.log("En attente d'import manuel.");
+        state.all = []; 
+      }
+      initFuse();
       initFilters();
       applyFilters();
     }
@@ -686,72 +689,82 @@
      applyFilters();
     }
 
-    function applyFilters(){
-     const q = state.query.trim().toLowerCase();
-     let today = new Date();
+    function applyFilters() {
+        const q = state.query.trim(); 
+        const today = new Date();
 
-     let list = state.all.filter(m => {
-       const matchesQ = !q || [
-           m.title, 
-           ...(m.people||[]), 
-           ...(m.directors || []), 
-           ...(m.genres||[]), 
-           ...(m.tags||[]), // <--- C'est ici que ça manquait
-           (m.overview||'')
-       ].join(' ').toLowerCase().includes(q);
-       const matchesG = !state.genre || (m.genres||[]).includes(state.genre);
-       const matchesY = !state.yearExact || (m.year||0) === Number(state.yearExact);
-       const matchesR = !state.runtime || 
-         (state.runtime === "short" && m.runtime && m.runtime < 120) ||
-         (state.runtime === "medium" && m.runtime && m.runtime >= 120 && m.runtime <= 150) ||
-         (state.runtime === "long" && m.runtime && m.runtime > 150);
-       const matchesC = !state.country || (m.country && m.country.toLowerCase().trim() === state.country.toLowerCase().trim());
-       const matchesP = !state.period || (() => {const [start, end] = state.period.split('-').map(Number);return m.year && m.year >= start && m.year <= end; })();
+        let baseList = state.all;
 
-       const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
+        if (q && typeof fuse !== 'undefined') {
+            const results = fuse.search(q);
+            baseList = results.map(result => result.item);
+        } 
+        else if (q) {
+            const lowerQ = q.toLowerCase();
+            baseList = state.all.filter(m => 
+                [m.title, ...(m.people||[]), ...(m.directors||[]), ...(m.tags||[])]
+                .join(' ').toLowerCase().includes(lowerQ)
+            );
+        }
 
-       const notWishlist = currentView === 'wishlist' ? true : !(
-         (m.tags && m.tags.includes('wishlist')) ||
-         (m.categories && m.categories.includes('wishlist'))
-       );
+        let list = baseList.filter(m => {
 
-       return matchesQ && matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming && notWishlist;
-     });
+            const matchesG = !state.genre || (m.genres || []).includes(state.genre);
+            const matchesY = !state.yearExact || (m.year || 0) === Number(state.yearExact);
+            const matchesR = !state.runtime ||
+                (state.runtime === "short" && m.runtime && m.runtime < 120) ||
+                (state.runtime === "medium" && m.runtime && m.runtime >= 120 && m.runtime <= 150) ||
+                (state.runtime === "long" && m.runtime && m.runtime > 150);
 
-     list.sort((a,b)=>{
-         let result = 0;
-         switch(state.sort){
-           case 'year': result = (a.year||0) - (b.year||0); break;
-           case 'rating': result = (a.rating||0) - (b.rating||0); break;
-           case 'runtime': result = (a.runtime||0) - (b.runtime||0); break;
-           case 'added': result = String(a.added||'').localeCompare(String(b.added||'')); break;
-           default: result = String(a.title||'').localeCompare(String(b.title||'')); break;
-         }
-         return state.sortDir === "asc" ? result : -result;
-      });
+            const matchesC = !state.country || (m.country && m.country.toLowerCase().trim() === state.country.toLowerCase().trim());
 
-     state.filtered = list;
+            const matchesP = !state.period || (() => {
+                const [start, end] = state.period.split('-').map(Number);
+                return m.year && m.year >= start && m.year <= end;
+            })();
 
-     if (currentView === 'netflix') {
-       renderNetflixView();
-     } else if (currentView === 'stats') {
-       renderStats();
-     } else if (currentView === 'wishlist') {
-       renderWishlistView();
-     } else if (currentView === 'upcoming') {
-       renderUpcomingView();
-     } else {
-       renderGrid();
-     }
+            const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
+
+            const notWishlist = currentView === 'wishlist' ? true : !(
+                (m.tags && m.tags.includes('wishlist')) ||
+                (m.categories && m.categories.includes('wishlist'))
+            );
+
+            return matchesG && matchesY && matchesR && matchesC && matchesP && notUpcoming && notWishlist;
+        });
+
+        list.sort((a, b) => {
+            let result = 0;
+            switch (state.sort) {
+                case 'year': result = (a.year || 0) - (b.year || 0); break;
+                case 'rating': result = (a.rating || 0) - (b.rating || 0); break;
+                case 'runtime': result = (a.runtime || 0) - (b.runtime || 0); break;
+                case 'added': result = String(a.added || '').localeCompare(String(b.added || '')); break;
+                default: result = String(a.title || '').localeCompare(String(b.title || '')); break;
+            }
+            return state.sortDir === "asc" ? result : -result;
+        });
+
+        state.filtered = list;
+
+        if (currentView === 'netflix') {
+            renderNetflixView();
+        } else if (currentView === 'stats') {
+            renderStats();
+        } else if (currentView === 'wishlist') {
+            renderWishlistView();
+        } else if (currentView === 'upcoming') {
+            renderUpcomingView();
+        } else {
+            renderGrid();
+        }
     }
     
-    // REVERSION : Code exact de la bannière d'origine
     function renderNetflixView() {
         const container = document.getElementById('mainView');
         container.innerHTML = '';
         container.className = "w-full px-4 py-6 relative";
 
-        // Cas vide
         if (state.filtered.length === 0) {
             container.innerHTML = `
               <div class="flex flex-col items-center justify-center h-[60vh] text-center text-slate-400">
@@ -766,7 +779,6 @@
             return;
         }
 
-        // Gestion de la Bannière
         const banner = document.getElementById('netflixBanner');
         if (currentView === 'netflix' && state.filtered.length > 0) {
             banner.classList.remove('hidden');
@@ -774,7 +786,6 @@
             banner.classList.add('hidden');
         }
 
-        // 1. Regrouper les films par catégorie
         const categoriesMap = {};
         state.filtered.forEach(movie => {
             (movie.categories || []).forEach(cat => {
@@ -783,38 +794,31 @@
             });
         });
 
-        // 2. Créer les sections avec flèches
         for (const cat in categoriesMap) {
             const section = document.createElement('section');
             section.className = "mb-7 group"; // Marge ajustée
 
-            // Titre de la catégorie
             const title = document.createElement('h2');
             title.textContent = cat;
             title.className = "text-xl font-bold mb-3 px-1 flex items-baseline"; 
             section.appendChild(title);
 
-            // Wrapper relatif pour positionner les flèches
             const wrapper = document.createElement('div');
             wrapper.className = "carousel-wrapper relative";
 
-            // --- Bouton Gauche ---
             const btnLeft = document.createElement('button');
             btnLeft.className = "nav-btn nav-left hidden";
             btnLeft.innerHTML = "&#10094;";
             btnLeft.ariaLabel = "Précédent";
             
-            // --- Bouton Droite ---
             const btnRight = document.createElement('button');
             btnRight.className = "nav-btn nav-right";
             btnRight.innerHTML = "&#10095;";
             btnRight.ariaLabel = "Suivant";
 
-            // Le Carrousel
             const carousel = document.createElement('div');
             carousel.className = "carousel flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-4 px-1";
 
-            // Remplissage des films
             const shuffled = [...categoriesMap[cat]].sort(() => 0.5 - Math.random());
             shuffled.forEach(m => {
                 const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
@@ -885,14 +889,12 @@
           if (!carousel || !viewport) return;
           carousel.innerHTML = '';
           
-          // Suppression des anciens indicateurs
           const existingDots = viewport.querySelector('.banner-indicators');
           if (existingDots) existingDots.remove();
 
           const movies = bannerMovies; 
           if (!movies.length) return;
 
-          // --- 1. Indicateurs (Points) ---
           const indicatorsContainer = document.createElement('div');
           indicatorsContainer.className = 'banner-indicators';
           
@@ -911,7 +913,6 @@
           viewport.appendChild(indicatorsContainer);
           const dots = Array.from(indicatorsContainer.children);
 
-          // --- 2. Fonction utilitaire pour créer une carte HTML ---
           function createCard(m) {
             const card = document.createElement('div');
             card.className = 'banner-card';
@@ -945,26 +946,18 @@
             return card;
           }
 
-          // --- 3. Construction du DOM avec CLONES ---
-          
-          // A. Clone du DERNIER film (placé au début)
-          // C'est lui qui apparaîtra à gauche du 1er film
           const lastMovieClone = createCard(movies[movies.length - 1]);
           carousel.appendChild(lastMovieClone);
 
-          // B. Les films originaux
           movies.forEach(m => {
              carousel.appendChild(createCard(m));
           });
 
-          // C. Clone du PREMIER film (placé à la fin)
           const firstMovieClone = createCard(movies[0]);
           carousel.appendChild(firstMovieClone);
 
           const items = Array.from(carousel.querySelectorAll('.banner-card'));
 
-          // --- 4. Logique de positionnement ---
-          // On commence à 1 (le premier vrai film), car 0 est le clone
           let currentIndex = 1; 
           
           let isDragging = false;
@@ -987,24 +980,19 @@
             const itemOffsetLeft = current.offsetLeft;
             const itemWidth = current.clientWidth;
             const viewportWidth = viewport.clientWidth;
-            // Centre parfaitement l'élément
             return -(itemOffsetLeft - (viewportWidth - itemWidth) / 2);
           }
 
           function updateCarousel(useTransition = true) {
-            // Mise à jour des classes active
             items.forEach(item => item.classList.remove('active'));
             if(items[currentIndex]) items[currentIndex].classList.add('active');
 
-            // Mise à jour des points (dots)
             dots.forEach(d => d.classList.remove('active'));
-            // Calcul de l'index "réel" pour les points (0 à N-1)
             let realIndex = currentIndex - 1;
             if (realIndex < 0) realIndex = movies.length - 1; 
             if (realIndex >= movies.length) realIndex = 0;
             if(dots[realIndex]) dots[realIndex].classList.add('active');
 
-            // Déplacement
             const targetTranslate = calculateCenterOffset(currentIndex);
             
             if (useTransition) {
@@ -1018,21 +1006,17 @@
             setSliderPosition();
           }
           
-          // --- 5. GESTION DE L'INFINI (Le saut invisible) ---
           carousel.addEventListener('transitionend', () => {
-             // Si on est sur le clone de gauche (Index 0), on saute au vrai dernier
              if (currentIndex === 0) {
                  currentIndex = items.length - 2;
                  updateCarousel(false); // false = pas d'anim, saut instantané
              }
-             // Si on est sur le clone de droite (Index Max), on saute au vrai premier
              if (currentIndex === items.length - 1) {
                  currentIndex = 1;
                  updateCarousel(false);
              }
           });
 
-          // --- 6. Events Touch / Drag ---
           function touchStart(event) {
             isDragging = true;
             didMove = false;
@@ -1061,7 +1045,6 @@
                 currentIndex -= 1;
             }
 
-            // Sécurité bornes
             if (currentIndex < 0) currentIndex = 0;
             if (currentIndex >= items.length) currentIndex = items.length - 1;
 
@@ -1077,7 +1060,6 @@
           carousel.addEventListener('mouseleave', () => { if(isDragging) touchEnd() });
           carousel.addEventListener('touchend', touchEnd);
 
-          // Initialisation
           updateCarousel(false); 
 
           function restartInterval() {
@@ -1456,6 +1438,20 @@
      seasonCard.appendChild(seasonChart);
      detailsGrid.appendChild(seasonCard);
    }
+
+   function initFuse() {
+        const options = {
+            includeScore: true,
+            threshold: 0.3, // 0 = correspondance parfaite, 1 = correspond à tout. 0.3 est un bon équilibre.
+            keys: [
+                { name: 'title', weight: 0.7 },      // Le titre est prioritaire
+                { name: 'directors', weight: 0.3 },  // Ensuite les réalisateurs
+                { name: 'people', weight: 0.3 },     // Puis les acteurs
+                { name: 'tags', weight: 0.2 }        // Et les tags
+            ]
+        };
+        fuse = new Fuse(state.all, options);
+    }
 
     function renderGrid() {
      els.grid.innerHTML = '';
@@ -1956,6 +1952,7 @@
         if(!parsed.movies || !Array.isArray(parsed.movies)) throw new Error('Schéma invalide');
         bannerMovies = [];
         state.all = normalize(parsed.movies);
+        initFuse();
         initFilters();
         resetFilters();
       }catch(err){
