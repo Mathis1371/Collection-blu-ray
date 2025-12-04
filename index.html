@@ -1509,7 +1509,7 @@
      const wishlistMovies = state.all.filter(m => 
        (m.tags && m.tags.includes('wishlist')) || 
        (m.categories && m.categories.includes('wishlist'))
-     );
+     ).sort((a, b) => a.title.localeCompare(b.title));
 
      if (wishlistMovies.length === 0) {
        container.innerHTML = '<p class="text-slate-200">Aucun film dans la wishlist.</p>';
