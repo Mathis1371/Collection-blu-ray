@@ -2207,6 +2207,42 @@
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-11-11"
+    },
+    {
+      "id": "tt6751668",
+      "title": "Parasite",
+      "year": 2019,
+      "genres": ["Drame", "Thriller"],
+      "people": ["Cho Yeo-jeong", "Park So-dam", "Lee Sun Gyun", "Choi Woo-shik", "Song Kang-ho", "Park Seo-joon", "Jung Ji-so", "Lee Jung-eun", "Park Myeong-hoon", "Jang Hye-jin"],
+      "directors": ["Bong Joon Ho"],
+      "runtime": 132,
+      "rating": 8.5,
+      "overview": "Toute la famille de Ki-taek est au chômage et s'intéresse fortement au train de vie de la richissime famille Park, jusqu'à ce qu'ils soient impliqués dans un incident inattendu.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gf1cTS5rYIgGDMvqjPZaTbD3Ycy.jpg",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/d5/48/ab/11225301/1507-1/tsp20200203094200/Parasite-Edition-Collector-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "Corée du Sud",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0470752",
+      "title": "Ex Machina",
+      "year": 2014,
+      "genres": ["Drame", "Thriller"],
+      "people": ["Domhnall Gleeson", "Oscar Isaac", "Alicia Vikander", "Sonoya Mizuno", "Corey Johnson", "Claire Selby", "Gana Bayarsaikhan"],
+      "directors": ["Alex Garland"],
+      "runtime": 108,
+      "rating": 7.7,
+      "overview": "Un jeune programmeur est sélectionné pour participer à une expérience novatrice d'intelligence synthétique en évaluant les qualités humaines d'un humanoïde doté d'intelligence artificielle à couper le souffle.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/weiMWhPoxMdGu89zE0UDbzQhCF.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dMVtj98LvAzqiykJr7iNMBfsNw.jpg",
+      "altPoster": "https://m.media-amazon.com/images/I/61BZFSG2qaL._AC_UF894,1000_QL80_.jpg",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
     }
   ]
 }
