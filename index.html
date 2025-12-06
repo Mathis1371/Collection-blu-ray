@@ -1117,11 +1117,13 @@
      const headerCards = document.createElement('div');
      headerCards.className = 'stats-grid mb-6'; 
      headerCards.innerHTML = `
-       <div class="stat-card">
-         <div class="stat-title">Total films</div>
-         <div class="stat-value">${total}</div>
-         <div class="mt-2 text-sm text-slate-400">
-            ${topYear ? `Meilleure année : <span class="text-white">${topYear[0]}</span>` : ''}
+       <div class="stat-card flex flex-col items-center justify-center py-4 group hover:bg-white/10 transition-colors">
+         <div class="text-7xl font-black text-white leading-none drop-shadow-xl tracking-tighter">
+            ${total}
+         </div>
+         
+         <div class="text-xs text-slate-400 uppercase tracking-widest font-medium mt-2">
+            total de films dans la collection
          </div>
        </div>
 
