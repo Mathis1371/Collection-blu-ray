@@ -317,6 +317,13 @@
      transform: scale(1.3);
      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
    }
+
+   /* --- Styles pour les onglets de la modale --- */
+   .tab-button {
+      cursor: pointer;
+      white-space: nowrap; 
+      transition: all 0.2s;
+   }
 </style>
 </head>
 <body class="min-h-screen text-slate-100">
@@ -334,6 +341,7 @@
              <li><button id="tabUpcoming" class="nav-item text-base transition-all duration-300">Prochainement</button></li>
              <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Wishlist</button></li>
              <li><button id="tabStats" class="nav-item text-base transition-all duration-300">Stats</button></li>
+             <li><button id="tabBingo" class="nav-item text-base transition-all duration-300">Bingo Réal</button></li>
            </ul>
        </nav>
 
@@ -453,6 +461,36 @@
   <main id="wishlistView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="statsView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
 
+  <main id="bingoView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+
+  <div id="bingoModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center">
+      <div id="bingoBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
+      <div class="relative w-full max-w-5xl h-[85vh] bg-[#1a1a1a] rounded-3xl border border-white/10 shadow-2xl flex flex-col overflow-hidden transform transition-all scale-95 opacity-0" id="bingoContent">
+          
+          <div class="relative h-48 shrink-0 overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-b from-red-900/40 to-[#1a1a1a] z-10"></div>
+              <img id="bingoHeaderImg" class="w-full h-full object-cover opacity-50 blur-sm" src="" />
+              <div class="absolute bottom-0 left-0 p-6 z-20 flex items-end gap-6 w-full">
+                  <div class="w-24 h-24 rounded-full border-4 border-[#1a1a1a] overflow-hidden shadow-xl shrink-0 bg-slate-700">
+                      <img id="bingoAvatar" class="w-full h-full object-cover" src="" />
+                  </div>
+                  <div class="mb-2">
+                      <h2 id="bingoDirectorName" class="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-lg"></h2>
+                      <div class="text-slate-300 text-sm font-medium mt-1 flex items-center gap-2">
+                          <span id="bingoScore" class="text-green-400 font-bold text-lg"></span> de complétion
+                      </div>
+                  </div>
+                  <button id="closeBingo" class="ml-auto mb-4 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-sm font-bold backdrop-blur-md border border-white/10 transition">Fermer</button>
+              </div>
+          </div>
+
+          <div class="flex-1 overflow-y-auto p-6 bg-[#1a1a1a]">
+              <div id="bingoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  </div>
+          </div>
+      </div>
+  </div>
+
   <div id="modal" class="hidden fixed inset-0 z-50">
    <div id="modalBackdrop" class="absolute inset-0 bg-black/70"></div>
 
@@ -460,19 +498,38 @@
         class="relative mx-auto mt-16 w-[92vw] max-w-4xl rounded-3xl glass p-4 md:p-6 shadow-2xl border border-white/10
               transition-all duration-200 transform scale-95 opacity-0 overflow-y-auto max-h-[85vh]">
      <button id="modalClose" class="absolute top-3 right-3 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 z-10">Fermer</button>
+     
      <div class="grid md:grid-cols-3 gap-4">
        <div class="relative">
          <img id="modalPoster" class="w-full h-72 md:h-full rounded-2xl object-cover border border-white/10" alt="Poster" />
-         </div>
+       </div>
+
        <div class="md:col-span-2 space-y-3">
          <h3 id="modalTitle" class="text-2xl font-semibold pr-16"></h3>
          <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
-         <div id="modalDirectors" class="text-xs opacity-80 mt-2"></div> 
-         <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
-         <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
-         <p id="modalOverview" class="text-slate-200 text-sm leading-relaxed"></p>
-         <div id="modalPrice" class="font-bold text-slate-200 text-lg my-2 hidden"></div>
-         <div id="modalTags" class="flex flex-wrap gap-2"></div>
+         
+         <div id="modalActionsContainer"></div>
+
+         <div id="modalTabsContainer" class="border-b border-white/10 mb-4 flex gap-4 mt-4">
+            <button id="tabOverview" class="tab-button py-2 px-3 text-sm font-semibold border-b-2 border-red-600 text-red-400">Synopsis & Infos</button>
+            <button id="tabSpecs" class="tab-button py-2 px-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-white transition">Caractéristiques et prix</button>
+         </div>
+
+         <div id="contentOverview">
+             <div id="modalDirectors" class="text-xs opacity-80 mt-2"></div> 
+             <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
+             <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
+             <p id="modalOverview" class="text-slate-200 text-sm leading-relaxed mt-4"></p>
+             <div id="modalPrice" class="font-bold text-slate-200 text-lg my-2 hidden"></div>
+             <div id="modalTags" class="flex flex-wrap gap-2 mt-2"></div>
+         </div>
+
+         <div id="contentSpecs" class="hidden">
+             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="specsGrid">
+                 </div>
+             <p class="text-sm text-slate-400 mt-4" id="specsNote"></p>
+         </div>
+
        </div>
      </div>
    </div>
@@ -518,7 +575,15 @@
       modalPrice: document.getElementById('modalPrice'),
       randomBtn: document.getElementById('randomBtn'),
       modalBackdrop: document.getElementById('modalBackdrop'),
-      sortDirBtn: document.getElementById('sortDirBtn')
+      sortDirBtn: document.getElementById('sortDirBtn'),
+      // Elements pour les onglets
+      tabOverviewBtn: document.getElementById('tabOverview'),
+      tabSpecsBtn: document.getElementById('tabSpecs'),
+      contentOverview: document.getElementById('contentOverview'),
+      contentSpecs: document.getElementById('contentSpecs'),
+      specsGrid: document.getElementById('specsGrid'),
+      specsNote: document.getElementById('specsNote'),
+      modalActionsContainer: document.getElementById('modalActionsContainer')
     };
 
     const filterInputsContainer = document.getElementById('filterInputsContainer');
@@ -559,7 +624,8 @@
        grid: tabGridBtn,
        upcoming: document.getElementById('tabUpcoming'),
        wishlist: document.getElementById('tabWishlist'),
-       stats: tabStatsBtn
+       stats: tabStatsBtn,
+       bingo: document.getElementById('tabBingo')
      };
 
      // Classes pour l'onglet ACTIF (Blanc, Gras, Curseur par défaut)
@@ -663,7 +729,8 @@
         altPoster: m.altPoster || '',
         tags: Array.isArray(m.tags)?m.tags:[],
         country: m.country || '',
-        added: m.added||new Date().toISOString().slice(0,10)
+        added: m.added||new Date().toISOString().slice(0,10),
+        technicalSpecs: m.technicalSpecs || null // AJOUT DU CHAMP TECHNIQUE
       }));
     }
 
@@ -1586,8 +1653,8 @@
 
      els.modalPoster.src = mainPoster;
      els.modalTitle.textContent = m.title;
-     els.modalOverview.textContent = m.overview || '';
-     
+     // els.modalOverview.textContent = m.overview || ''; // Déplacé plus bas
+
      const metaHtml = [
        m.year ? `<span>${m.year}</span>` : '',
        m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
@@ -1599,34 +1666,119 @@
      }
 
      els.modalMeta.innerHTML = metaHtml.join(' ');
-     els.modalOverview.textContent = m.overview || '';
+     
+     // --- DEBUT MODIFICATIONS ONGLETS (LOGIQUE) ---
+     
+     // 1. Reset des onglets
+     function switchTab(tabId) {
+         // Styles reset
+         els.tabOverviewBtn.classList.remove('border-red-600', 'text-red-400');
+         els.tabSpecsBtn.classList.remove('border-red-600', 'text-red-400');
+         
+         els.tabOverviewBtn.classList.add('border-transparent', 'text-slate-400', 'hover:text-white');
+         els.tabSpecsBtn.classList.add('border-transparent', 'text-slate-400', 'hover:text-white');
 
-     const price = m.price ? Number(m.price) : 0;
-     const value = m.marketValue ? Number(m.marketValue) : 0;
+         // Hide content
+         els.contentOverview.classList.add('hidden');
+         els.contentSpecs.classList.add('hidden');
 
-     if (price > 0 || value > 0) {
-        const priceStr = price.toFixed(2) + ' €';
-        const valueStr = value.toFixed(2) + ' €';
-        
-        els.modalPrice.innerHTML = `
-            <span class="text-slate-400 text-base font-normal">Achat :</span> 
-            <span class="text-green-400">${priceStr}</span>
-            <span class="mx-2 text-slate-600">/</span>
-            <span class="text-slate-400 text-base font-normal">Valeur :</span> 
-            <span class="text-purple-400">${valueStr}</span>
-        `;
-        els.modalPrice.classList.remove('hidden');
+         // Active state
+         if (tabId === 'overview') {
+             els.tabOverviewBtn.classList.remove('border-transparent', 'text-slate-400', 'hover:text-white');
+             els.tabOverviewBtn.classList.add('border-red-600', 'text-red-400');
+             els.contentOverview.classList.remove('hidden');
+         } else if (tabId === 'specs') {
+             els.tabSpecsBtn.classList.remove('border-transparent', 'text-slate-400', 'hover:text-white');
+             els.tabSpecsBtn.classList.add('border-red-600', 'text-red-400');
+             els.contentSpecs.classList.remove('hidden');
+         }
+     }
+     
+     // Initialisation
+     switchTab('overview');
+     els.tabOverviewBtn.onclick = () => switchTab('overview');
+     els.tabSpecsBtn.onclick = () => switchTab('specs');
+
+   els.modalOverview.textContent = m.overview || '';
+     
+     if (m.directors && m.directors.length) {
+       els.modalDirectors.innerHTML = '<span class="text-slate-500">Réalisation : </span>' + 
+         m.directors
+         .map(d => `<span class="director-link text-red-400 hover:underline cursor-pointer font-medium">${d}</span>`)
+         .join(', ');
      } else {
-        els.modalPrice.innerHTML = '';
-        els.modalPrice.classList.add('hidden');
+       els.modalDirectors.innerHTML = '';
      }
 
-     const oldActions = document.getElementById('userActions');
-     if (oldActions) oldActions.remove();
+     if (m.people && m.people.length) {
+       els.modalActors.innerHTML = m.people
+         .map(actor => `<span class="actor-link text-red-400 hover:underline cursor-pointer">${actor}</span>`)
+         .join(', ');
+     } else {
+       els.modalActors.textContent = '';
+     }
 
-     const actionsContainer = document.createElement('div');
-     actionsContainer.id = "userActions";
-     actionsContainer.className = "mt-3 flex flex-wrap items-center gap-4"; 
+     els.modalCountry.innerHTML = m.country ? `Pays d'origine : ${escapeHtml(m.country)}` : '';
+
+     // --- ANCIENNE LOGIQUE DE PRIX SUPPRIMÉE ICI (Le code a été déplacé plus bas) ---
+
+     els.modalTags.innerHTML = (m.tags || []).map(t => 
+       `<span class='tag-link text-xs px-2 py-1 rounded-full bg-white/10 hover:bg-red-600 transition cursor-pointer'>${escapeHtml(t)}</span>`
+     ).join('');
+     
+     // 3. Remplissage contenu "Specs" & Prix (MODIFIÉ)
+     // 3. Remplissage contenu "Specs" & Prix
+     els.specsGrid.innerHTML = '';
+     const specs = m.technicalSpecs || {}; 
+     
+     // --- NOUVEAU : Préparation des prix ---
+     const priceVal = m.price ? Number(m.price).toFixed(2) + ' €' : null;
+     const marketVal = m.marketValue ? Number(m.marketValue).toFixed(2) + ' €' : null;
+
+     const specsData = [
+         // Caractéristiques techniques
+         { title: "Master", key: "resolution", value: specs.resolution, icon: "📺" },
+         { title: "Format HDR", key: "hdr", value: specs.hdr, icon: "✨" },
+         { title: "Bitrate", key: "bitrate", value: specs.bitrate, icon: "📊" },
+         { title: "Format Audio VO", key: "audio", value: specs.audio, icon: "🔊" },
+         { title: "Type de Disque", key: "diskType", value: specs.diskType, icon: "💿" },
+         { title: "Format Image", key: "aspectRatio", value: specs.aspectRatio, icon: "🖼️" },
+         
+         // --- NOUVEAU : Ajout des cartes de prix ---
+         { title: "Prix d'achat", value: priceVal, icon: "🏷️" },
+         { title: "Estimation", value: marketVal, icon: "📈" }
+     ];
+
+     let hasSpecs = false;
+     specsData.forEach(item => {
+         // On affiche la carte seulement si une valeur existe
+         if (item.value) {
+             hasSpecs = true;
+             // Si une couleur spécifique est définie (pour les prix), on l'utilise, sinon blanc par défaut
+             const valueColor = item.color ? item.color : "text-white";
+             
+             els.specsGrid.innerHTML += `
+                 <div class="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                     <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1 flex items-center gap-2">
+                         ${item.icon} ${item.title}
+                     </div>
+                     <div class="text-lg font-bold ${valueColor}">${escapeHtml(item.value)}</div>
+                 </div>
+             `;
+         }
+     });
+
+     if (!hasSpecs) {
+         els.specsGrid.innerHTML = '<p class="text-slate-400 col-span-full">Aucune information technique ou tarifaire renseignée.</p>';
+         els.specsNote.textContent = '';
+     }
+     
+     const actionsContainer = document.getElementById('modalActionsContainer');
+     actionsContainer.innerHTML = ''; 
+     
+     // Création de userActions wrapper
+     const userActionsWrapper = document.createElement('div');
+     userActionsWrapper.className = "flex flex-wrap items-center gap-4";
 
      let userRating = localStorage.getItem("myrating_" + m.id) || "";
      const ratingHTML = `
@@ -1652,7 +1804,7 @@
              seenBtnHtml.innerHTML = "<span class='opacity-50'>⭕</span> Non visionné";
          }
      };
-     updateSeenBtn(isSeen); // Initialisation
+     updateSeenBtn(isSeen); 
 
      seenBtnHtml.onclick = () => {
          if (localStorage.getItem('seen_' + m.id)) {
@@ -1662,13 +1814,12 @@
              localStorage.setItem('seen_' + m.id, 'true');
              updateSeenBtn(true);
          }
-         applyFilters(); // Met à jour les stats en arrière-plan
+         applyFilters(); 
      };
 
-     actionsContainer.innerHTML = ratingHTML;
-     actionsContainer.appendChild(seenBtnHtml);
-
-     els.modalMeta.insertAdjacentElement("afterend", actionsContainer);
+     userActionsWrapper.innerHTML = ratingHTML;
+     userActionsWrapper.appendChild(seenBtnHtml);
+     actionsContainer.appendChild(userActionsWrapper);
 
      const selectRating = document.getElementById("userRatingSelect");
      if(selectRating) {
@@ -1679,13 +1830,8 @@
          });
      }
 
-     if (m.directors && m.directors.length) {
-       els.modalDirectors.innerHTML = '<span class="text-slate-500">Réalisation : </span>' + 
-         m.directors
-         .map(d => `<span class="director-link text-red-400 hover:underline cursor-pointer font-medium">${d}</span>`)
-         .join(', ');
-
-       els.modalDirectors.querySelectorAll('.director-link').forEach(el => {
+     // Réattachement des listeners (reste identique)
+     els.modalDirectors.querySelectorAll('.director-link').forEach(el => {
          el.addEventListener('click', (e) => {
            e.stopPropagation();
            state.query = el.textContent.trim();
@@ -1697,16 +1843,9 @@
            applyFilters();
            closeModal();
          });
-       });
-     } else {
-       els.modalDirectors.innerHTML = '';
-     }
+     });
 
-     if (m.people && m.people.length) {
-       els.modalActors.innerHTML = m.people
-         .map(actor => `<span class="actor-link text-red-400 hover:underline cursor-pointer">${actor}</span>`)
-         .join(', ');
-       els.modalActors.querySelectorAll('.actor-link').forEach(el => {
+     els.modalActors.querySelectorAll('.actor-link').forEach(el => {
          el.addEventListener('click', (e) => {
            e.stopPropagation();
            state.query = el.textContent.trim();
@@ -1718,15 +1857,7 @@
            applyFilters();
            closeModal();
          });
-       });
-     } else {
-       els.modalActors.textContent = '';
-     }
-
-     els.modalCountry.innerHTML = m.country ? `Pays d'origine : ${escapeHtml(m.country)}` : '';
-     els.modalTags.innerHTML = (m.tags || []).map(t => 
-       `<span class='tag-link text-xs px-2 py-1 rounded-full bg-white/10 hover:bg-red-600 transition cursor-pointer'>${escapeHtml(t)}</span>`
-     ).join('');
+     });
 
      els.modalTags.querySelectorAll('.tag-link').forEach(el => {
          el.addEventListener('click', (e) => {
@@ -1740,7 +1871,7 @@
            applyFilters();
            closeModal();
          });
-       });
+     });
 
      const posterWrapper = els.modalPoster.parentElement;
      const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
@@ -1776,7 +1907,7 @@
        content.classList.remove('scale-95','opacity-0');
        content.classList.add('scale-100','opacity-100');
      });
-   }
+    } // <--- C'EST CETTE ACCOLADE QUI MANQUAIT
 
     function closeModal() {
      const content = document.getElementById('modalContent');
@@ -1794,6 +1925,7 @@
      document.getElementById('upcomingView').classList.add('hidden');
      document.getElementById('wishlistView').classList.add('hidden');
      document.getElementById('statsView').classList.add('hidden');
+     document.getElementById('bingoView').classList.add('hidden');
    }
 
    document.getElementById('tabUpcoming').addEventListener('click', () => {
@@ -1952,6 +2084,193 @@
       }
       applyFilters();
     });
+
+   const tabBingoBtn = document.getElementById('tabBingo');
+   const bingoView = document.getElementById('bingoView');
+   const bingoModal = document.getElementById('bingoModal');
+   const bingoContent = document.getElementById('bingoContent');
+   
+   const referenceFilmographies = {
+       "Christopher Nolan": ["Following", "Memento", "Insomnia", "Batman Begins", "Le Prestige", "The Dark Knight", "Inception", "The Dark Knight Rises", "Interstellar", "Dunkerque", "Tenet", "Oppenheimer"],
+       "Quentin Tarantino": ["Reservoir Dogs", "Pulp Fiction", "Jackie Brown", "Kill Bill: Volume I", "Kill Bill: Volume II", "Boulevard de la mort", "Inglourious Basterds", "Django Unchained", "Les 8 Salopards", "Once Upon a Time... in Hollywood"],
+       "Denis Villeneuve": ["Polytechnique", "Incendies", "Prisoners", "Enemy", "Sicario", "Premier Contact", "Blade Runner 2049", "Dune : Première Partie", "Dune : Deuxième Partie"],
+       "David Fincher": ["Alien 3", "Seven", "The Game", "Fight Club", "Panic Room", "Zodiac", "L'Étrange Histoire de Benjamin Button", "The Social Network", "Millénium : Les Hommes qui n'aimaient pas les femmes", "Gone Girl", "Mank", "The Killer"],
+       "Stanley Kubrick": ["L'Ultime Razzia", "Les Sentiers de la gloire", "Spartacus", "Lolita", "Dr. Folamour", "2001 : L'Odyssée de l'espace", "Orange mécanique", "Barry Lyndon", "Shining", "Full Metal Jacket", "Eyes Wide Shut"],
+       "Steven Spielberg": ["Les Dents de la mer", "Rencontres du troisième type", "Les Aventuriers de l'arche perdue", "E.T., l'extra-terrestre", "Indiana Jones et le Temple maudit", "La Couleur pourpre", "Empire du soleil", "Indiana Jones et la Dernière Croisade", "Hook ou la Revanche du capitaine Crochet", "Jurassic Park", "La Liste de Schindler", "Le Monde perdu : Jurassic Park", "Amistad", "Il faut sauver le soldat Ryan", "A.I. Intelligence artificielle", "Minority Report", "Arrête-moi si tu peux", "Le Terminal", "La Guerre des mondes", "Munich", "Indiana Jones et le Royaume du crâne de cristal", "Les Aventures de Tintin : Le Secret de la Licorne", "Cheval de guerre", "Lincoln", "Le Pont des espions", "Le BGG : Le Bon Gros Géant", "Pentagon Papers", "Ready Player One", "West Side Story", "The Fabelmans"],
+       "James Cameron": ["Terminator", "Aliens, le retour", "Abyss", "Terminator 2 : Le Jugement dernier", "True Lies", "Titanic", "Avatar", "Avatar : La Voie de l'eau"],
+       "Martin Scorsese": ["Mean Streets", "Taxi Driver", "Raging Bull", "After Hours: Quelle nuit de galère", "La Couleur de l'argent", "La Dernière Tentation du Christ", "Les Affranchis", "Les Nerfs à Vif", "Le Temps de l'innocence", "Casino", "À tombeau ouvert", "Gangs of New York", "Aviator", "Les Infiltrés", "Shutter Island", "Hugo Cabret", "Le Loup de Wall Street", "Silence", "The Irishman", "Killers of the Flower Moon"],
+       "Paul Thomas Anderson": ["Double Mise", "Boogie Nights", "Magnolia", "Punch-Drunk Love", "There Will Be Blood", "The Master", "Inherent Vice", "Phantom Thread", "Licorice Pizza", "Une bataille après l'autre"],
+       "Ridley Scott": ["Alien", "Blade Runner", "Legend", "Black Rain", "Thelma & Louise", "Gladiator", "Hannibal", "La Chute du faucon noir", "Les Associés", "Kingdom of Heaven", "Une grande année", "American Gangster", "Mensonges d'état", "Robin des Bois", "Prometheus", "Cartel", "Exodus : Gods and Kings", "Seul sur Mars", "Alien : Covenant", "Tout l'argent du monde", "Le Dernier Duel", "House of Gucci", "Napoléon", "Gladiator II"],
+       "Damien Chazelle": ["Whiplash", "La La Land", "First Man", "Babylon"],
+       "Tim Burton": ["Pee-wee Big Adventure", "Beetlejuice", "Batman", "Edward aux mains d'argent", "Batman : Le Défi", "Ed Wood", "Mars Attacks!", "Sleepy Hollow", "La planète des singes", "Big Fish", "Charlie et la Chocolaterie", "Les Noces funèbres", "Sweeney Todd", "Alice au pays des merveilles", "Dark Shadows", "Frankenweenie", "Big Eyes", "Miss Peregrine et les Enfants particuliers", "Dumbo", "Beetlejuice Beetlejuice"],
+       "Robert Zemeckis": ["À la poursuite du diamant vert", "Retour vers le futur", "Qui veut la peau de Roger Rabbit", "Retour vers le futur 2", "Retour vers le futur 3", "La mort vous va si bien", "Forrest Gump", "Contact", "Apparences", "Seul au monde", "Le Pôle Express", "La légende de Beowulf", "Le drôle de Noël de Scrooge", "Flight", "The Walk", "Alliés", "Bienvenue à Marwen", "Sacrées sorcières", "Pinocchio", "Here"],
+       "Sam Mendes": ["American Beauty", "Les sentiers de la perdition", "Jarhead: La fin de l'innocence", "Les noces rebelles", "Away We Go", "Skyfall", "Spectre", "1917", "Empire of Light"],
+       "Frank Darabont": ["Les Évadés", "La Ligne verte", "The Majestic", "The Mist"],
+       "Rian Johnson": ["Brick", "Une arnaque presque parfaite", "Looper", "Star Wars, épisode VIII : Les Derniers Jedi", "À couteaux tirés", "Glass Onion", "Wake Up Dead Man"]
+   };
+
+   function getDirectorAvatar(name) {
+       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=256&font-size=0.4`;
+   }
+
+   tabBingoBtn.addEventListener('click', () => {
+       currentView = 'bingo';
+       setActiveTab('bingo'); // Il faudra mettre à jour setActiveTab plus bas
+       hideAllViews();
+       bingoView.classList.remove('hidden');
+       renderBingo();
+   });
+
+   function renderBingo() {
+       bingoView.innerHTML = `
+        <div class="mb-8 text-center">
+            <h2 class="text-4xl font-black text-white mb-2">🎬 Bingo des Réalisateurs</h2>
+            <p class="text-slate-400">Complétez les filmographies (basé sur votre catalogue actuel).</p>
+        </div>
+        <div id="directorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+       `;
+
+       const grid = document.getElementById('directorsGrid');
+       const today = new Date(); // <--- AJOUT : Date du jour pour comparer
+
+       const targetDirectors = Object.keys(referenceFilmographies);
+
+       targetDirectors.forEach(dirName => {
+           const refList = referenceFilmographies[dirName];
+           
+           const ownedMovies = state.all.filter(m => {
+               const matchDir = m.directors && m.directors.includes(dirName);
+               const matchTitle = refList.some(refTitle => refTitle.toLowerCase() === m.title.toLowerCase());
+               
+               const isWishlist = (m.tags && m.tags.includes('wishlist')) || 
+                                  (m.categories && m.categories.includes('wishlist'));
+               const isUpcoming = (m.added && new Date(m.added) > today);
+
+               return matchDir && matchTitle && !isWishlist && !isUpcoming;
+           });
+           
+           const totalMovies = refList.length;
+           const ownedCount = ownedMovies.length;
+           const progress = Math.round((ownedCount / totalMovies) * 100);
+           
+           let barColor = "bg-slate-600";
+           if(progress === 100) barColor = "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]";
+           else if(progress >= 75) barColor = "bg-green-500";
+           else if(progress >= 50) barColor = "bg-blue-500";
+           else if(progress >= 25) barColor = "bg-orange-500";
+
+           const card = document.createElement('div');
+           card.className = "bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition cursor-pointer group relative overflow-hidden";
+           
+           card.innerHTML = `
+                <div class="flex items-center gap-4 mb-4 relative z-10">
+                    <img src="${getDirectorAvatar(dirName)}" class="w-16 h-16 rounded-full border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />
+                    <div>
+                        <h3 class="font-bold text-lg text-white leading-tight group-hover:text-red-400 transition-colors">${dirName}</h3>
+                        <div class="text-xs text-slate-400 mt-1">${ownedCount} / ${totalMovies} films</div>
+                    </div>
+                </div>
+                
+                <div class="relative w-full h-3 bg-black/50 rounded-full overflow-hidden z-10">
+                    <div class="absolute top-0 left-0 h-full ${barColor} transition-all duration-1000" style="width: ${progress}%"></div>
+                </div>
+                <div class="text-right text-xs font-bold mt-1 ${progress === 100 ? 'text-yellow-500' : 'text-slate-500'}">${progress}%</div>
+
+                <div class="absolute -bottom-10 -right-10 text-[150px] opacity-[0.03] rotate-12 pointer-events-none select-none">🎬</div>
+           `;
+
+           card.addEventListener('click', () => openBingoCard(dirName, refList));
+           grid.appendChild(card);
+       });
+   }
+
+   function openBingoCard(directorName, refList) {
+        const modal = document.getElementById('bingoModal');
+        const content = document.getElementById('bingoContent');
+        const grid = document.getElementById('bingoGrid');
+        
+        document.getElementById('bingoDirectorName').textContent = directorName;
+        document.getElementById('bingoAvatar').src = getDirectorAvatar(directorName);
+        
+        const ownedMap = new Map();
+        const today = new Date(); // <--- AJOUT
+
+        state.all.forEach(m => {
+            const isWishlist = (m.tags && m.tags.includes('wishlist')) || 
+                               (m.categories && m.categories.includes('wishlist'));
+            const isUpcoming = (m.added && new Date(m.added) > today);
+
+            if (m.directors && m.directors.includes(directorName) && !isWishlist && !isUpcoming) {
+                ownedMap.set(m.title.toLowerCase(), m);
+            }
+        });
+
+        let ownedCount = 0;
+        refList.forEach(refTitle => {
+            if (ownedMap.has(refTitle.toLowerCase())) ownedCount++;
+        });
+        const pct = Math.round((ownedCount / refList.length) * 100);
+        document.getElementById('bingoScore').textContent = `${pct}%`;
+
+        const firstOwnedKey = Array.from(ownedMap.keys())[0]; 
+        const firstOwned = firstOwnedKey ? ownedMap.get(firstOwnedKey) : null;
+        
+        const bgImg = firstOwned ? (firstOwned.poster || firstOwned.netflixPoster) : '';
+        document.getElementById('bingoHeaderImg').src = bgImg;
+
+        grid.innerHTML = '';
+
+        refList.forEach(refTitle => {
+            const isOwned = ownedMap.has(refTitle.toLowerCase());
+            const card = document.createElement('div');
+            
+            if (isOwned) {
+                 const m = ownedMap.get(refTitle.toLowerCase());
+                 const poster = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+                
+                card.className = "relative group aspect-[2/3] rounded-xl overflow-hidden border-2 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)] transition transform hover:scale-105 cursor-pointer";
+                card.innerHTML = `
+                    <img src="${poster}" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">
+                        <span class="text-green-400 font-bold text-xs uppercase tracking-wider">Acquis</span>
+                        <span class="text-white font-semibold leading-tight text-sm">${m.title}</span>
+                    </div>
+                    <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg">✓</div>
+                `;
+                card.onclick = () => {
+                    closeBingoModal();
+                    openModal(m); 
+                };
+            } else {
+                card.className = "relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center p-4 text-center grayscale opacity-60 hover:opacity-100 transition hover:bg-white/10 cursor-pointer";
+                card.innerHTML = `
+                    <div class="text-4xl mb-2 opacity-20">📼</div>
+                    <div class="text-sm font-semibold text-slate-400 leading-tight">${refTitle}</div>
+                    <div class="mt-2 text-[10px] uppercase tracking-widest text-red-400 font-bold">Manquant</div>
+                `;
+                card.onclick = () => {
+                    const query = encodeURIComponent(refTitle);
+                    window.open(`https://www.imdb.com/find/?q=${query}`, '_blank');
+                };
+            }
+            grid.appendChild(card);
+        });
+
+        modal.classList.remove('hidden');
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+   }
+
+   function closeBingoModal() {
+        const modal = document.getElementById('bingoModal');
+        const content = document.getElementById('bingoContent');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => modal.classList.add('hidden'), 200);
+   }
+
+   document.getElementById('closeBingo').onclick = closeBingoModal;
+   document.getElementById('bingoBackdrop').onclick = closeBingoModal;
 
    loadInitial();
   </script>
