@@ -16,6 +16,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/cUIqZd6jJCbO94Txt1CkTs7MSeP.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/61DQJCWNZrL._UF894,1000_QL80_.jpg",
       "categories": ["Récompensés aux Oscars", "Blockbusters"],
+     
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "Dolby Atmos",
+      "bitrate": "61 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2023-12-25"
@@ -36,6 +43,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/6ghaZQqJ9YCOivdl6Z01pJs3nfr.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/91RqZc5lkEL._UF894,1000_QL80_FMwebp_.jpg",
       "categories": ["Récompensés aux Oscars", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "56 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2025-09-03"
@@ -56,6 +70,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/wzKOeY5QSNpwCM1Vt0zwuuo68yM.jpg",
       "altPoster": "https://www.film-game.eu/i/?i=0940663.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "Dolby Atmos",
+      "bitrate": "58 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-02-06"
@@ -116,6 +137,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/60Sg4EJPXZWFQ5Rugc0tcbZnLyy.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/fc/f5/f2/15922684/1507-1/tsp20231228101036/Dune-Steelbook-Exclusivite-Web-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Films d'action", "Blockbusters", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "60 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-02-16"
@@ -136,6 +164,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/rmqiV9OperdByzpmCbhQ5DrImXu.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/710YRqqlcOL._UF350,350_QL50_.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "51 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-07-10"
@@ -156,6 +191,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/9yTOU2SvTfAEHDPEG5qraLoe4MI.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/37/04/0f/17761335/1507-1/tsp20240626154113/2001-L-Odyee-de-l-espace-Steelbook-The-Film-Vault-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "62 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2024-08-02"
@@ -176,6 +218,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/xxIc4OOQDNGmoN4cSyzNHfoSiGq.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/62/fd/19/18480482/1507-1/tsp20241219150117/The-Social-Network-Edition-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "32 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-03-24"
@@ -196,6 +245,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/28j7tgDu5FgrmJZ5xH4roW5tEWU.jpg",
       "altPoster": "https://bluraymania.com/cdn/shop/products/inoplanetyanin-angl-yaz-4k-uhd-blu-ray-steelbook-892198.jpg?v=1741694109&width=1500",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS:X",
+      "bitrate": "57 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2023-12-13"
@@ -216,6 +272,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/A24tA6JCg9b667YWAlegTgIocI9.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/38/04/0f/17761336/1507-1/tsp20240626154113/Les-Affranchis-Steelbook-The-Film-Vault-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars", "Années 90", "Top 10", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "75 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-04-26"
@@ -236,6 +299,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/vQa2mnlfhj8o9g3x5G8PruzYAu.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81R6mLGEOAL._UF894,1000_QL80_.jpg",
       "categories": ["Années 90", "Top 10", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "70 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-01-08"
@@ -256,6 +326,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/aEhTK1bAp9N8yyHnAtgQdDyltoR.jpg",
       "altPoster": "https://filmnadvd.b-cdn.net/PICTURES/americky-sniper-2blu-ray-uhd-bd-steelbook-8595731300786.jpg?height=598",
       "categories": ["Récompensés aux Oscars", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "HDR10",
+      "audio": "Dolby Atmos",
+      "bitrate": "51 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-12-07"
@@ -276,6 +353,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/3vr3n4bgNMUeFJwWlC9goFEiHJ9.jpg",
       "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2022/07/5565-The-Batman-4K.jpg",
       "categories": ["Univers DC Comics", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "53 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2023-11-27"
@@ -296,6 +380,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/huD4cMhHtLkxcdM6PbKBcivBZuE.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/00000000_1111_222/jujutsu/tintin/Interstellar-steelbook-bluray-4k-ultra-hd-warner-100-2023.jpg",
       "categories": ["Récompensés aux Oscars", "Science-fiction", "Blockbusters", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA",
+      "bitrate": "52 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-12-01"
@@ -316,6 +407,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/h9FntJvpgFCBhL46UAH2ihSPZCZ.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/71vdrTmUo4L.jpg",
       "categories": ["Récompensés aux Oscars", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "67 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2024-03-12"
@@ -336,6 +434,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/3CvMKbEJPRrjBxTYdhaNktgQvvD.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/00_bastide/oceans/Le-cinquieme-element-bluray-4k-ultra-hd-uhd.jpg",
       "categories": ["Années 90", "Science-fiction", "Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "68 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "France",
       "added": "2024-08-28"
@@ -356,6 +461,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/e8rNsJBrOsspbdC9TLbZtZm9npX.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/c7/67/ec/15493063/1540-1/tsp20230428101129/The-Truman-Show-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Années 90", "Comédie"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "55 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2024-03-12"
@@ -376,6 +488,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/k7skT3Z5xOBvatvaMHRqVlMKblO.jpg",
       "altPoster": "https://www.dvdfr.com/images/dvd/covers/200x280/e78484a4e21a2d554fd07b4d1e886230/300515/3d-joker_2019_uhd.0.jpg",
       "categories": ["Récompensés aux Oscars", "Univers DC Comics"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "50 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2023-11-27"
@@ -416,6 +535,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/1qx8OeHeNMDGXbSgZpYmQIgjJNt.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81MTD9Ko1QL.jpg",
       "categories": ["Science-fiction", "Films d'action", "Blockbusters", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "Dolby Atmos",
+      "bitrate": "50 Mbps"
+  },
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2024-10-03"
@@ -496,6 +622,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zqaNz8Ux8DoJBxeZLq7Jc2gy4wp.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/15373427-1055144234313795.jpg",
       "categories": ["Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "72 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-12-19"
@@ -516,6 +649,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dX3MtUGld7nmsyPuUwwTBpTvzm7.jpg",
       "altPoster": "https://fr.shopping.rakuten.com/photo/2329431843.jpg",
       "categories": ["Science-fiction", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2023-12-25"
@@ -536,6 +675,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/5EyYbIK3TLOFmdr9Gb9CSxrRTNA.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/43/98/13/18061379/1507-1/tsp20240704101023/The-Northman-Edition-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "56 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2024-09-25"
@@ -556,6 +702,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mz3bXh1VG4NvAfvAhS4UY2FVaK7.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/3a/04/0f/17761338/1507-1/tsp20240626154113/Les-Evades-Steelbook-The-Film-Vault-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Années 90", "Top 10", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "49 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-12-10"
@@ -576,6 +729,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/vy9UcZnKeQRPWMHS27rkELF0GBm.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/00-00-juju_2021/0_ron/Babylon-film-steelbook-Bluray-4K-Ultra-HD-UHD-edition-collector-limitee.jpg",
       "categories": ["Comédie"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "56 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-04-10"
@@ -596,6 +756,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dJD4i4xYkUP5ELuGGzc4B6Fermn.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/f0/24/e9/15279344/1507-1/tsp20230425134157/The-Dark-Knight-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Récompensés aux Oscars", "Univers DC Comics", "Films d'action", "Blockbusters", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "47 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-03-12"
@@ -616,6 +783,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/73lKeIl7MOQsFK74shmoSAhitg6.jpg",
       "altPoster": "https://cdn.ozone.ro/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/t/h/07c2436dba67292656886d319b33a784/the-dark-knight-rises-2012-limited-edition-steelbook-4k-ultra-hd--blu-ray-30.jpg",
       "categories": ["Univers DC Comics", "Films d'action", "Blockbusters", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "56 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-10-19"
@@ -636,6 +810,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/skov80os5kaSL1rHFAtYLv7w2bP.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81RGyp2M3vL._UF894,1000_QL80_.jpg",
       "categories": ["Univers DC Comics", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR 10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "52 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2024-04-25"
@@ -656,6 +837,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/1FRLkF7lJFEhn0y4WfLcQMS4rBz.jpg",
       "altPoster": "https://www.son-video.com/images/article/paramount/MIRA3701432015095/pulp-fiction-steelbook-edition-limitee_638e00b2041d8_1200.jpg",
       "categories": ["Récompensés aux Oscars", "Années 90", "Top 10", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "67 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-04-05"
@@ -676,6 +864,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/feQ9HwQJ87V0DSe5l85abcTwHvV.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/83/e7/f2/15918979/1507-1/tsp20230915155141/Asterix-et-Obelix-Miion-Cleopatre-Edition-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Films français", "Comédie"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "93 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "France",
       "added": "2024-12-28"
@@ -696,6 +891,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/9MFDfqhqcXTmJbYdw7OoETgdMUq.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/15395160-8895175820754583.jpg",
       "categories": ["Science-fiction", "Films d'action", "Classiques"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "67 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2024-11-15"
@@ -716,6 +918,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/1dLRpOdczKgqXYJWaOMbGOorvEJ.jpg",
       "altPoster": "https://multimedia.bbycastatic.ca/multimedia/products/500x500/m22/m2235/m2235638.jpg",
       "categories": ["Comédie"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "80 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-01-22"
@@ -736,6 +945,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/tjmSPQtGPQCeVw7g39HLl5gxmby.jpg",
       "altPoster": "https://fr.shopping.rakuten.com/photo/2622929546.jpg",
       "categories": ["Saga Mission: Impossible", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "68 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-05-21"
@@ -756,6 +972,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/rKp9egBwdnrmQaAfh06HfxanDK4.jpg",
       "altPoster": "https://media.s-bol.com/7w4WMyNJW5lQ/jzyNj5/550x708.jpg",
       "categories": ["Saga Mission: Impossible", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "56 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-05-21"
@@ -776,6 +999,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/eys9taPcuaPrb4MaDNkVjVJpSOS.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/0b/5b/19/18438923/1507-1/tsp20241209171125/Gladiator-II-Edition-Limitee-Speciale-Fnac-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "66 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-07-04"
@@ -796,6 +1026,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/su5b09ndCM276d2anVNatih53QI.jpg",
       "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2025/05/fury-4k-steelbook-p1.jpg",
       "categories": ["Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "53 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-07-23"
@@ -816,6 +1053,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/p5AdYNJL92XCxfI102LOw29gbev.jpg",
       "altPoster": "https://digitalcine.b-cdn.net/wp-content/uploads/2020/05/batman-v-superman-laube-de-la-justice-edition-steelbook-mondo-ultimate-packshot-blu-ray-4k-uhd.jpg",
       "categories": ["Univers DC Comics", "Science-fiction", "Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "Dolby Atmos",
+      "bitrate": "54 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-08-02"
@@ -836,6 +1080,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/lwG78tb6wZoKE1UgrfqhK2JydTh.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81VJEqNIYVL._UF894,1000_QL80_.jpg",
       "categories": ["Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "53 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-08-14"
@@ -1016,6 +1267,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mHyL85VOYCEv95BvLW1PZ9qHVp3.jpg",
       "altPoster": "https://i.ebayimg.com/images/g/0AEAAOSw4edlzI3w/s-l1200.jpg",
       "categories": ["Comédie"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "72 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-09-13"
@@ -1056,6 +1314,13 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/m2e2VNe5VCLT4sUeX2aQP5PMyEH.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17414400-1115270707102863.png",
       "categories": ["Films d'action", "Science-fiction", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "38 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-10-08"
