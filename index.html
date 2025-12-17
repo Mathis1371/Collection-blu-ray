@@ -2104,14 +2104,43 @@
        "Damien Chazelle": ["Whiplash", "La La Land", "First Man", "Babylon"],
        "Tim Burton": ["Pee-wee Big Adventure", "Beetlejuice", "Batman", "Edward aux mains d'argent", "Batman : Le Défi", "Ed Wood", "Mars Attacks!", "Sleepy Hollow", "La planète des singes", "Big Fish", "Charlie et la Chocolaterie", "Les Noces funèbres", "Sweeney Todd", "Alice au pays des merveilles", "Dark Shadows", "Frankenweenie", "Big Eyes", "Miss Peregrine et les Enfants particuliers", "Dumbo", "Beetlejuice Beetlejuice"],
        "Robert Zemeckis": ["À la poursuite du diamant vert", "Retour vers le futur", "Qui veut la peau de Roger Rabbit", "Retour vers le futur 2", "Retour vers le futur 3", "La mort vous va si bien", "Forrest Gump", "Contact", "Apparences", "Seul au monde", "Le Pôle Express", "La légende de Beowulf", "Le drôle de Noël de Scrooge", "Flight", "The Walk", "Alliés", "Bienvenue à Marwen", "Sacrées sorcières", "Pinocchio", "Here"],
-       "Sam Mendes": ["American Beauty", "Les sentiers de la perdition", "Jarhead: La fin de l'innocence", "Les noces rebelles", "Away We Go", "Skyfall", "Spectre", "1917", "Empire of Light"],
+       "Sam Mendes": ["American Beauty", "Les sentiers de la perdition", "Jarhead : La fin de l'innocence", "Les noces rebelles", "Away We Go", "Skyfall", "Spectre", "1917", "Empire of Light"],
        "Frank Darabont": ["Les Évadés", "La Ligne verte", "The Majestic", "The Mist"],
        "Rian Johnson": ["Brick", "Une arnaque presque parfaite", "Looper", "Star Wars, épisode VIII : Les Derniers Jedi", "À couteaux tirés", "Glass Onion", "Wake Up Dead Man"]
    };
 
+   // --- DÉBUT MODIFICATION : PHOTOS RÉALISATEURS ---
+
+   const directorPhotos = {
+       "Christopher Nolan": "https://media.themoviedb.org/t/p/w440_and_h660_face/62gmVhxnamAtZkhVWw1t2QHK9dL.jpg",
+       "Quentin Tarantino": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Quentin_Tarantino_by_Gage_Skidmore.jpg/440px-Quentin_Tarantino_by_Gage_Skidmore.jpg",
+       "Denis Villeneuve": "https://media.themoviedb.org/t/p/w440_and_h660_face/c9vs3EJpx555US89I975csyf5js.jpg",
+       "David Fincher": "https://media.themoviedb.org/t/p/w440_and_h660_face/xwGXpxDugyTVE422aDeIy9WzpXu.jpg",
+       "Stanley Kubrick": "https://media.themoviedb.org/t/p/w440_and_h660_face/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg",
+       "Steven Spielberg": "https://media.themoviedb.org/t/p/w440_and_h660_face/8RlUJCqmZGKeeaBarul4ZoUWcHG.jpg",
+       "James Cameron": "https://media.themoviedb.org/t/p/w440_and_h660_face/2Hh4Jos62luf90CCglP5K32qaWO.jpg",
+       "Martin Scorsese": "https://media.themoviedb.org/t/p/w440_and_h660_face/4Xwx5XL1RJj0JQmEo8Fhr6nkpOg.jpg",
+       "Paul Thomas Anderson": "https://media.themoviedb.org/t/p/w440_and_h660_face/eEVauco4LVwu1LixmZGUddAnghy.jpg",
+       "Ridley Scott": "https://media.themoviedb.org/t/p/w440_and_h660_face/zABJmN9opmqD4orWl3KSdCaSo7Q.jpg",
+       "Damien Chazelle": "https://media.themoviedb.org/t/p/w440_and_h660_face/eTaJchHKDccgEGrbYzVumPzkneZ.jpg",
+       "Tim Burton": "https://media.themoviedb.org/t/p/w440_and_h660_face/yHEHAHQpN9PfSEQx1UxZPczhcAi.jpg",
+       "Robert Zemeckis": "https://media.themoviedb.org/t/p/w440_and_h660_face/eB64gT0tY3x7veXLjN6Ea7Bw2Y8.jpg",
+       "Sam Mendes": "https://media.themoviedb.org/t/p/w440_and_h660_face/5z89X9rB76JDblqMQ52fviwXxAN.jpg",
+       "Frank Darabont": "https://media.themoviedb.org/t/p/w440_and_h660_face/7LqmE3p1XTwCdNCOmBxovq210Qk.jpg",
+       "Rian Johnson": "https://media.themoviedb.org/t/p/w440_and_h660_face/uPWwvdppeZVKPbYcjXKU8zyuAVh.jpg"
+   };
+
    function getDirectorAvatar(name) {
+       // 1. Si on a une photo définie dans la liste ci-dessus, on l'utilise
+       if (directorPhotos[name]) {
+           return directorPhotos[name];
+       }
+       
+       // 2. Sinon, on garde l'ancien système (initiales générées) pour éviter les images cassées
        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=256&font-size=0.4`;
    }
+
+   // --- FIN MODIFICATION ---
 
    tabBingoBtn.addEventListener('click', () => {
        currentView = 'bingo';
@@ -2164,7 +2193,7 @@
            
            card.innerHTML = `
                 <div class="flex items-center gap-4 mb-4 relative z-10">
-                    <img src="${getDirectorAvatar(dirName)}" class="w-16 h-16 rounded-full border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />
+                    <img src="${getDirectorAvatar(dirName)}" class="w-16 h-16 rounded-full object-cover object-top border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />
                     <div>
                         <h3 class="font-bold text-lg text-white leading-tight group-hover:text-red-400 transition-colors">${dirName}</h3>
                         <div class="text-xs text-slate-400 mt-1">${ownedCount} / ${totalMovies} films</div>
