@@ -42,7 +42,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/4EiNdof7wsvNBueqWmGULkJF0SN.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/6ghaZQqJ9YCOivdl6Z01pJs3nfr.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/91RqZc5lkEL._UF894,1000_QL80_FMwebp_.jpg",
-      "categories": ["Récompensés aux Oscars", "Classiques"],
+      "categories": ["Récompensés aux Oscars", "Classiques", "Guerre"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -325,7 +325,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/i1U46OwMc6vlm7OoSUKfqUH615e.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/aEhTK1bAp9N8yyHnAtgQdDyltoR.jpg",
       "altPoster": "https://filmnadvd.b-cdn.net/PICTURES/americky-sniper-2blu-ray-uhd-bd-steelbook-8595731300786.jpg?height=598",
-      "categories": ["Récompensés aux Oscars", "Films d'action", "Blockbusters"],
+      "categories": ["Récompensés aux Oscars", "Films d'action", "Blockbusters", "Guerre"],
 
       "technicalSpecs": {
       "resolution": "2K",
@@ -561,7 +561,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/uH9qGH5XS1iZXCSb3tgu40dxQoh.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/uj94xWCK9LrUM09dzBX9HxmGlpN.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/a9/a2/80/8430249/1507-1/tsp20210326091040/War-Dogs-Blu-ray-4K-Ultra-HD.jpg",
-      "categories": ["Comédie"],
+      "categories": ["Comédie", "Guerre"],
       "tags": ["4K", "amaray"],
       "country": "États-Unis",
       "added": "2024-04-04"
@@ -1025,7 +1025,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/1dpWPhBxI4B9y8acwAc0CLtYZ7Y.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/su5b09ndCM276d2anVNatih53QI.jpg",
       "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2025/05/fury-4k-steelbook-p1.jpg",
-      "categories": ["Films d'action", "Blockbusters"],
+      "categories": ["Films d'action", "Blockbusters", "Guerre"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1403,8 +1403,10 @@
     },
     {
       "id": "tt0418763",
-      "title": "Jarhead: La fin de l'innocence",
+      "title": "Jarhead : La fin de l'innocence",
       "year": 2005,
+      "price": 29.99,
+      "marketValue": 30.00,
       "genres": ["Guerre", "Drame", "Histoire"],
       "people": ["Jake Gyllenhaal", "Jamie Foxx", "Lucas Black", "Peter Sarsgaard", "Ming Lo", "Kevin Foster", "Brian Geraghty", "Damion Poitier"],
       "directors": ["Sam Mendes"],
@@ -1414,6 +1416,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/6vdj47RAWOUZBkeQmqToeZ7eaio.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/fr2IBOqYC8XFxGOY3sQGIaiPLo7.jpg",
       "altPoster": "https://www.film-game.eu/i/?i=0941157.jpg",
+      "categories": ["Nouveautés", "Guerre"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-12-17"
@@ -1758,7 +1761,7 @@
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol1-Steelbook-4.webp?v=1739382450&width=3840",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-17"
+      "added": "2025-12-24"
     },
     {
       "id": "tt0378194",
@@ -1775,7 +1778,7 @@
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol2-Steelbook-5.webp?v=1740096809&width=1800",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-17"
+      "added": "2025-12-24"
     },
     {
       "id": "tt0118749",
@@ -2064,7 +2067,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/nnQLuzh2H6tSk1U0Zyu0ju16FXU.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/o9r0ghT3c7Cuju6mVi3JZkMRqOb.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/2f/e3/54/5563183/1505-1/tsp20230612080455/La-reine-des-neiges-Blu-Ray.jpg",
-      "categories": ["Nouveautés", "Animation"],
+      "categories": ["Animation"],
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-11-02"
@@ -2633,6 +2636,78 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/x6OIJWkwe6Kj4pQXTkhhBb7gluA.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/iSMLVrFaKODhexmIoP8PjvoQCLm.jpg",
       "altPoster": "https://chocobonplan.com/wp-content/uploads/2024/05/collateral-4k-steelbook-visuel-produit-300x300.png",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0072684",
+      "title": "Barry Lyndon",
+      "year": 1975,
+      "genres": ["Aventure", "Drame"],
+      "people": ["Ryan O'Neal", "Marisa Berenson", "Leon Vitali", "Patrick Magee", "Murray Melvin", "Hardy Krüger", "Gay Hamilton", "Steve Berkoff", "Leonard Rossiter", "Marie Kean", "David Morley"],
+      "directors": ["Stanley Kubrick"],
+      "runtime": 185,
+      "rating": 8.1,
+      "overview": "En Angleterre au dix-huitième siècle, un Irlandais malhonnête gagne le coeur d'une veuve riche et assume la position aristocratique de son mari décédé.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/3YJEv83HWWgCKezTiQ9LhdR7cFU.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/cL7yffog268FC1OWzCAHgMGJPSg.jpg",
+      "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17158279-2025275927989093.png",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "Royaume-Uni",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt20969586",
+      "title": "Thunderbolts*",
+      "year": 2025,
+      "genres": ["Aventure", "Drame", "Crime", "Action", "Super héros", "Fantastique"],
+      "people": ["Florence Pugh", "Lewis Pullman", "David Harbour", "Wyatt Russell", "Olga Kurylenko", "Sebastian Stan", "Julia Louis-Dreyfus", "Hannah John-Kamen", "Geraldine Viswanathan", "Chris Bauer"],
+      "directors": ["Jake Schreier"],
+      "runtime": 127,
+      "rating": 7.1,
+      "overview": "Un monde sans Avengers ne signifie pas qu'il n'y a pas de groupe de super-héros. Il y a un groupe et ils s'appellent les Thunderbolts.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vnfgoohSwKNOcRfJOPULXTvX0cu.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/cDWm1Onn5SFbKVZy42eHxEcCnv9.jpg",
+      "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17007831-3855252062661970.png",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt5040012",
+      "title": "Nosferatu",
+      "year": 2024,
+      "genres": ["Mystère", "Horreur", "Vampire", "Fantastique"],
+      "people": ["Bill Skarsgard", "Lily-Rose Depp", "Nicholas Hoult", "Willem Dafoe", "Emma Corrin", "Ralph Ineson", "Aaron Taylor-Johnson", "Simon McBurney", "Stacy Thunes"],
+      "directors": ["Robert Eggers"],
+      "runtime": 132,
+      "rating": 7.1,
+      "overview": "Une histoire gothique d'obsession entre une jeune femme hantée dans l'Allemagne du 19ème siècle et l'ancien vampire transylvanien qui la traque, apportant avec lui des horreurs indicibles.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/inL6BKEe7IyjEJyHocyKW7QuJlN.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/7sU2zrDAZotvbevjLzkeBY2GsvF.jpg",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/84/f1/1b/18608516/1507-1/tsp20250228160332/Nosferatu-Edition-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0066921",
+      "title": "Orange mécanique",
+      "year": 1971,
+      "genres": ["Science-fiction", "Crime"],
+      "people": ["Malcolm McDowell", "Adrienne Corri", "Patrick Magee", "Warren Clarke", "John Clive", "Michael Bates", "Miriam Karlin", "Clive Francis", "Aubrey Morris"],
+      "directors": ["Stanley Kubrick"],
+      "runtime": 136,
+      "rating": 8.2,
+      "overview": "Dans un monde du futur, un chef de gang sadique est emprisonné et se porte volontaire pour une expérience, mais tout ne se passe pas comme prévu.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hfs2NljEaNq5VQlLbLLdp4Elb1V.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gbYOu3VcD26g5to6I40AgFXdEFr.jpg",
+      "altPoster": "https://www.edition-limitee.fr/images/02/art/pokemon/Orange-mecanique-Steelbook-collector-Blu-ray-4K-Ultra-HD.jpg",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
