@@ -2092,7 +2092,7 @@
    
    const referenceFilmographies = {
        "Christopher Nolan": ["Following", "Memento", "Insomnia", "Batman Begins", "Le Prestige", "The Dark Knight", "Inception", "The Dark Knight Rises", "Interstellar", "Dunkerque", "Tenet", "Oppenheimer"],
-       "Quentin Tarantino": ["Reservoir Dogs", "Pulp Fiction", "Jackie Brown", "Kill Bill: Volume I", "Kill Bill: Volume II", "Boulevard de la mort", "Inglourious Basterds", "Django Unchained", "Les 8 Salopards", "Once Upon a Time... in Hollywood"],
+       "Quentin Tarantino": ["Reservoir Dogs", "Pulp Fiction", "Jackie Brown", "Kill Bill: Volume I", "Kill Bill: Volume II", "Boulevard de la mort", "Inglourious Basterds", "Django Unchained", "Les 8 Salopards", "Once Upon a Time in... Hollywood"],
        "Denis Villeneuve": ["Polytechnique", "Incendies", "Prisoners", "Enemy", "Sicario", "Premier Contact", "Blade Runner 2049", "Dune : Première Partie", "Dune : Deuxième Partie"],
        "David Fincher": ["Alien 3", "Seven", "The Game", "Fight Club", "Panic Room", "Zodiac", "L'Étrange Histoire de Benjamin Button", "The Social Network", "Millénium : Les Hommes qui n'aimaient pas les femmes", "Gone Girl", "Mank", "The Killer"],
        "Stanley Kubrick": ["L'Ultime Razzia", "Les Sentiers de la gloire", "Spartacus", "Lolita", "Dr. Folamour", "2001 : L'Odyssée de l'espace", "Orange mécanique", "Barry Lyndon", "Shining", "Full Metal Jacket", "Eyes Wide Shut"],
@@ -2222,13 +2222,16 @@
         document.getElementById('bingoAvatar').src = getDirectorAvatar(directorName);
         
         const ownedMap = new Map();
-        const today = new Date(); // <--- AJOUT
+        const today = new Date(); 
 
+        // 1. On identifie les films "Vraiment possédés" (hors wishlist/futur)
         state.all.forEach(m => {
             const isWishlist = (m.tags && m.tags.includes('wishlist')) || 
                                (m.categories && m.categories.includes('wishlist'));
             const isUpcoming = (m.added && new Date(m.added) > today);
 
+            // On stocke TOUS les films dans une map temporaire pour recherche globale
+            // mais on ne met dans ownedMap que ceux qui sont vraiment acquis
             if (m.directors && m.directors.includes(directorName) && !isWishlist && !isUpcoming) {
                 ownedMap.set(m.title.toLowerCase(), m);
             }
@@ -2241,20 +2244,23 @@
         const pct = Math.round((ownedCount / refList.length) * 100);
         document.getElementById('bingoScore').textContent = `${pct}%`;
 
+        // Image de fond (premier film possédé trouvé)
         const firstOwnedKey = Array.from(ownedMap.keys())[0]; 
         const firstOwned = firstOwnedKey ? ownedMap.get(firstOwnedKey) : null;
-        
         const bgImg = firstOwned ? (firstOwned.poster || firstOwned.netflixPoster) : '';
         document.getElementById('bingoHeaderImg').src = bgImg;
 
         grid.innerHTML = '';
 
         refList.forEach(refTitle => {
-            const isOwned = ownedMap.has(refTitle.toLowerCase());
+            const lowerTitle = refTitle.toLowerCase();
+            const isOwned = ownedMap.has(lowerTitle);
+
             const card = document.createElement('div');
             
             if (isOwned) {
-                 const m = ownedMap.get(refTitle.toLowerCase());
+                 // --- CAS 1 : FILM POSSÉDÉ (Affiche le poster) ---
+                 const m = ownedMap.get(lowerTitle);
                  const poster = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
                 
                 card.className = "relative group aspect-[2/3] rounded-xl overflow-hidden border-2 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)] transition transform hover:scale-105 cursor-pointer";
@@ -2271,16 +2277,55 @@
                     openModal(m); 
                 };
             } else {
-                card.className = "relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center p-4 text-center grayscale opacity-60 hover:opacity-100 transition hover:bg-white/10 cursor-pointer";
-                card.innerHTML = `
-                    <div class="text-4xl mb-2 opacity-20">📼</div>
-                    <div class="text-sm font-semibold text-slate-400 leading-tight">${refTitle}</div>
-                    <div class="mt-2 text-[10px] uppercase tracking-widest text-red-400 font-bold">Manquant</div>
-                `;
-                card.onclick = () => {
-                    const query = encodeURIComponent(refTitle);
-                    window.open(`https://www.imdb.com/find/?q=${query}`, '_blank');
-                };
+                // --- CAS 2 : NON POSSÉDÉ (Vérification Wishlist / Prochainement) ---
+                
+                // On cherche si le film existe ailleurs dans la collection (Wishlist ou Futur)
+                const foundInOtherLists = state.all.find(m => m.title.toLowerCase() === lowerTitle);
+
+                if (foundInOtherLists) {
+                    // C'est dans la Wishlist ou Prochainement !
+                    let label = "En attente";
+                    let colorClass = "text-blue-400";
+                    let borderClass = "border-blue-500/50";
+                    let icon = "📅";
+
+                    const isWishlist = (foundInOtherLists.tags && foundInOtherLists.tags.includes('wishlist')) || 
+                                       (foundInOtherLists.categories && foundInOtherLists.categories.includes('wishlist'));
+                    
+                    if (isWishlist) {
+                        label = "Wishlist";
+                        colorClass = "text-purple-400";
+                        borderClass = "border-purple-500/50";
+                        icon = "🎁";
+                    } else {
+                        label = "Prochainement";
+                    }
+
+                    card.className = `relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed ${borderClass} flex flex-col items-center justify-center p-4 text-center hover:bg-white/10 transition cursor-pointer`;
+                    card.innerHTML = `
+                        <div class="text-4xl mb-2">${icon}</div>
+                        <div class="text-sm font-semibold text-slate-300 leading-tight">${refTitle}</div>
+                        <div class="mt-2 text-[10px] uppercase tracking-widest ${colorClass} font-bold">${label}</div>
+                    `;
+                    // Au clic, on ferme le bingo et on ouvre la fiche du film
+                    card.onclick = () => {
+                        closeBingoModal();
+                        openModal(foundInOtherLists);
+                    };
+
+                } else {
+                    // --- CAS 3 : VRAIMENT MANQUANT (Lien IMDb) ---
+                    card.className = "relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center p-4 text-center grayscale opacity-60 hover:opacity-100 transition hover:bg-white/10 cursor-pointer";
+                    card.innerHTML = `
+                        <div class="text-4xl mb-2 opacity-20">📼</div>
+                        <div class="text-sm font-semibold text-slate-400 leading-tight">${refTitle}</div>
+                        <div class="mt-2 text-[10px] uppercase tracking-widest text-red-400 font-bold">Manquant</div>
+                    `;
+                    card.onclick = () => {
+                        const query = encodeURIComponent(refTitle);
+                        window.open(`https://www.imdb.com/find/?q=${query}`, '_blank');
+                    };
+                }
             }
             grid.appendChild(card);
         });
