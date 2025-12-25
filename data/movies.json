@@ -1597,10 +1597,10 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/wuRf6gkX0JUJsu1MeECPubhMRdd.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sSzu6tDRN7ZxPqXYLZkpDiVC8H1.jpg",
       "altPoster": "https://edition-collector-production.s3.amazonaws.com/uploads/image/file/73234/steelbook-%C3%A9dition-sp%C3%A9ciale-_Fnac-pour-le-50%C3%A8me-anniversaire-du-film-_Les-Dents-de-la-mer-_1975_.jpg",
-      "categories": ["wishlist"],
+      "categories": ["Nouveautés", "Classiques"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-31"
+      "added": "2025-12-24"
     },
     {
       "id": "tt0499549",
@@ -1759,6 +1759,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/v7TaX8kXMXs5yFFGR41guUDNcnB.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/byGvsjXuTXk0jAm7OxJiCqeRa91.jpg",
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol1-Steelbook-4.webp?v=1739382450&width=3840",
+      "categories": ["Nouveautés"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-12-24"
@@ -1776,6 +1777,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/2yhg0mZQMhDyvUQ4rG1IZ4oIA8L.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zNg1WpW0XZLyYZPiv4ehOMm7XZM.jpg",
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol2-Steelbook-5.webp?v=1740096809&width=1800",
+      "categories": ["Nouveautés"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2025-12-24"
@@ -2770,6 +2772,38 @@
       "altPoster": "https://www.hidefninja.com/community/attachments/hollywood-fr-jpg.450510/",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0469494",
+      "title": "There Will Be Blood",
+      "year": 2007,
+      "genres": ["Drame"],
+      "people": ["Daniel Day-Lewis", "Paul Dano", "Dillon Freasier", "Colton Woodward", "Erica Sullivan", "Russell Harvard"],
+      "directors": ["Paul Thomas Anderson"],
+      "runtime": 158,
+      "rating": 8.2,
+      "overview": "Une histoire de famille, de religion, de haine, de pétrole et de folie, centrée sur un prospecteur aux débuts de l'entreprise.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/nuZDiX8okojcwkStdaMjA9LUQAT.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dmKrdeVAsO9zTc8CHUGQtODY20w.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "tt0469494",
+      "title": "Eyes Wide Shut",
+      "year": 1999,
+      "genres": ["Drame", "Thriller", "Mystère"],
+      "people": ["Tom Cruise", "Nicole Kidman", "Sydney Pollack", "Madison Eginton", "Todd Field", "Alan Cumming", "Leelee Sobieski", "Vinessa Shaw", "Sky du Mont"],
+      "directors": ["Stanley Kubrick"],
+      "runtime": 179,
+      "rating": 7.5,
+      "overview": "Bill et Alice formaient le couple parfait jusqu'au jour où elle lui avoua son fantasme inassouvi. Troublé, imaginant cette aventure extraconjugale, il déambule seul dans les rues de New York, attiré par de nouvelles expériences charnelles.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/knEIz1eNGl5MQDbrEAVWA7iRqF9.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/eAuS9UpWi44tyI7PdOLrcgLpZuV.jpg",
+      "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-11-11"
     }
