@@ -713,8 +713,11 @@
         if (!data.movies) throw new Error('bad schema');
         state.all = normalize(data.movies);
       } catch (e) {
+        // --- MODIFICATION ICI POUR VOIR L'ERREUR ---
+        console.error("DÉTAIL DE L'ERREUR :", e); 
+        // ------------------------------------------
         console.log("En attente d'import manuel.");
-        state.all = []; 
+        state.all = [];
       }
       initFuse();
       initFilters();
