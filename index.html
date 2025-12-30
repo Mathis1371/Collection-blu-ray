@@ -325,6 +325,18 @@
       white-space: nowrap; 
       transition: all 0.2s;
    }
+   
+   /* --- RESPONSIVE : Masquer la bannière sur mobile --- */
+   @media (max-width: 768px) {
+     #netflixBanner {
+       display: none !important;
+     }
+     
+     /* Optionnel : Ajuster la marge du haut sur mobile pour remonter le contenu */
+     #mainView {
+        margin-top: 1rem !important;
+     }
+   }
 </style>
 </head>
 <body class="min-h-screen text-slate-100">
