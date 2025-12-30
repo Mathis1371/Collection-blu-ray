@@ -707,17 +707,37 @@
 
     async function loadInitial() {
       try {
-        const res = await fetch('data/movies.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('no json');
-        const data = await res.json();
-        if (!data.movies) throw new Error('bad schema');
+        const res = await fetch('./data/movies.json', { cache: 'no-store' });
+        
+        if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
+        
+        // --- MODIFICATION DE SECURITÉ ---
+        // On lit le fichier comme du texte brut d'abord
+        let textData = await res.text();
+        
+        // On nettoie les espaces vides au début et à la fin
+        textData = textData.trim();
+        
+        // ASTUCE : Si le fichier finit par une accolade en trop, on cherche la dernière fermeture valide
+        // On cherche la position du dernier '}' qui ferme l'objet principal
+        const lastBrace = textData.lastIndexOf('}');
+        
+        // Si on trouve du texte après le dernier '}', on coupe !
+        if (lastBrace !== -1 && lastBrace < textData.length - 1) {
+            console.warn("Correction automatique : Suppression de caractères en trop à la fin du JSON");
+            textData = textData.substring(0, lastBrace + 1);
+        }
+
+        const data = JSON.parse(textData);
+        // -------------------------------
+        
+        if (!data.movies) throw new Error('Pas de clé "movies" dans le JSON');
         state.all = normalize(data.movies);
+        
       } catch (e) {
-        // --- MODIFICATION ICI POUR VOIR L'ERREUR ---
-        console.error("DÉTAIL DE L'ERREUR :", e); 
-        // ------------------------------------------
+        console.error("DÉTAIL DE L'ERREUR :", e);
         console.log("En attente d'import manuel.");
-        state.all = [];
+        state.all = []; 
       }
       initFuse();
       initFilters();
