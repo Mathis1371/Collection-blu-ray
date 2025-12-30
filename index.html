@@ -506,7 +506,10 @@
 
        <div class="md:col-span-2 space-y-3">
          <h3 id="modalTitle" class="text-2xl font-semibold pr-16"></h3>
+         
          <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
+         
+         <div id="modalTechBadges" class="flex flex-wrap gap-3 mt-1 h-6 items-center"></div>
          
          <div id="modalActionsContainer"></div>
 
@@ -525,8 +528,7 @@
          </div>
 
          <div id="contentSpecs" class="hidden">
-             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="specsGrid">
-                 </div>
+             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="specsGrid"></div>
              <p class="text-sm text-slate-400 mt-4" id="specsNote"></p>
          </div>
 
@@ -545,6 +547,13 @@
    </h2>
    <div class="mt-4 text-red-500 font-mono text-sm tracking-[0.2em] uppercase">Sélection aléatoire</div>
   </div>
+
+  <button id="backToTopBtn" 
+          class="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 hover:scale-110 transition-all duration-300 opacity-0 translate-y-10 pointer-events-none ring-1 ring-white/20">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+    </svg>
+  </button>
 
   <script>
 
@@ -567,6 +576,7 @@
       modalTitle: document.getElementById('modalTitle'),
       country: document.getElementById('countrySelect'),
       modalMeta: document.getElementById('modalMeta'),
+      modalTechBadges: document.getElementById('modalTechBadges'), 
       modalDirectors: document.getElementById('modalDirectors'),
       modalOverview: document.getElementById('modalOverview'),
       modalTags: document.getElementById('modalTags'),
@@ -1159,7 +1169,7 @@
             decadesCount[decade] = (decadesCount[decade] || 0) + 1;
         }
      });
-     const topYear = Object.entries(yearCounts).sort((a,b)=>b[1]-a[1])[0];
+     // const topYear = Object.entries(yearCounts).sort((a,b)=>b[1]-a[1])[0]; // Inutilisé
      const decadesArr = Object.entries(decadesCount).sort((a, b) => a[0] - b[0]);
 
      const ratingCounts = {};
@@ -1184,16 +1194,15 @@
      const headerCards = document.createElement('div');
      headerCards.className = 'stats-grid mb-6'; 
      headerCards.innerHTML = `
-       <div class="stat-card flex flex-col items-center justify-center py-4 group hover:bg-white/10 transition-colors">
-         <div class="text-7xl font-black text-white leading-none drop-shadow-xl tracking-tighter">
-            ${total}
-         </div>
+       <div class="stat-card flex flex-col group hover:bg-white/10 transition-colors">
+         <div class="stat-title">Nombre de films dans ma collection</div>
          
-         <div class="text-xs text-slate-400 uppercase tracking-widest font-medium mt-2">
-            total de films dans la collection
+         <div class="flex-1 flex items-center justify-center">
+            <div class="text-7xl font-black text-white leading-none drop-shadow-xl tracking-tighter">
+                ${total}
+            </div>
          </div>
        </div>
-
        <div class="stat-card flex flex-col justify-between">
          <div>
             <div class="flex justify-between items-baseline">
@@ -1476,6 +1485,133 @@
      
      seasonCard.appendChild(seasonChart);
      detailsGrid.appendChild(seasonCard);
+
+     // --- DÉBUT AJOUT TIMELINE (LIGNE SEGMENTÉE PARFAITE) ---
+     const validMovies = movies.filter(m => m.added);
+
+     const moviesByDate = {};
+     validMovies.forEach(m => {
+         const dateKey = m.added.substring(0, 10); 
+         if (!moviesByDate[dateKey]) moviesByDate[dateKey] = [];
+         moviesByDate[dateKey].push(m);
+     });
+
+     const sortedDates = Object.keys(moviesByDate).sort((a, b) => new Date(a) - new Date(b));
+
+     if (sortedDates.length > 0) {
+        const timelineSection = document.createElement('div');
+        timelineSection.className = 'mt-12 mb-12 relative';
+        timelineSection.innerHTML = '<h3 class="text-xl font-bold mb-6 px-1">Chronologie des acquisitions</h3>';
+
+        const scrollArea = document.createElement('div');
+        scrollArea.className = 'relative w-full overflow-x-auto h-[450px] no-scrollbar flex items-center px-10';
+        
+        // NOTE : On a supprimé la "centerLine" globale ici. 
+        // La ligne est maintenant construite morceau par morceau dans la boucle ci-dessous.
+
+        sortedDates.forEach((dateKey, index) => {
+             const groupMovies = moviesByDate[dateKey];
+             const dateObj = new Date(dateKey);
+             const dateStr = dateObj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit' });
+             
+             const isTop = index % 2 === 0;
+             const isFirst = index === 0;
+             const isLast = index === sortedDates.length - 1;
+
+             // Calcul de la largeur du conteneur
+             const count = groupMovies.length;
+             const widthPx = (count * 96) + ((count - 1) * 12) + 32;
+
+             // Génération HTML des posters
+             let postersHtml = `<div class="flex items-center gap-3 justify-center">`; 
+             groupMovies.forEach(m => {
+                 const posterSrc = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+                 postersHtml += `
+                    <div class="poster-trigger relative w-24 aspect-[2/3] rounded-md overflow-hidden bg-white/5 border border-white/10 shadow-xl transition-all duration-300 group hover:scale-110 hover:border-black hover:z-30 cursor-pointer" 
+                         data-movie-id="${m.id}">
+                         <img src="${posterSrc}" class="w-full h-full object-cover" loading="lazy" />
+                         <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                            <span class="text-[10px] font-bold text-white text-center leading-tight mb-1 drop-shadow-md">${escapeHtml(m.title)}</span>
+                         </div>
+                    </div>
+                 `;
+             });
+             postersHtml += `</div>`;
+
+             const item = document.createElement('div');
+             item.className = 'relative h-full flex-shrink-0 snap-center flex justify-center px-4';
+             item.style.width = `${widthPx}px`;
+
+             // --- CRÉATION DE LA LIGNE HORIZONTALE (CONNECTOR) ---
+             const hLine = document.createElement('div');
+             // CORRECTION ICI : on remplace '-z-10' par 'z-0' pour qu'elle ne passe pas sous le fond de page
+             let hLineClasses = 'absolute top-1/2 h-0.5 bg-white/30 z-0';
+             
+             if (sortedDates.length > 1) { 
+                 if (isFirst) {
+                     // PREMIER : La ligne part du milieu et va vers la droite
+                     hLineClasses += ' left-1/2 w-1/2'; 
+                 } else if (isLast) {
+                     // DERNIER : La ligne part de gauche et s'arrête au milieu
+                     hLineClasses += ' left-0 w-1/2';
+                 } else {
+                     // MILIEU : La ligne traverse tout le conteneur
+                     hLineClasses += ' left-0 w-full';
+                 }
+                 hLine.className = hLineClasses;
+                 item.appendChild(hLine);
+             }
+
+             // Point central
+             const dot = document.createElement('div');
+             dot.className = `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 border-2 border-[#1a1a1a] z-20 shadow-lg`;
+             
+             // Tige verticale
+             const stem = document.createElement('div');
+             stem.className = `absolute left-1/2 -translate-x-1/2 w-0.5 bg-white/30 h-10 z-0 ${isTop ? 'bottom-1/2' : 'top-1/2'}`;
+
+             // Contenu (Posters + Date)
+             const contentBox = document.createElement('div');
+             contentBox.className = `absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-max ${isTop ? 'bottom-[calc(50%+2.5rem)]' : 'top-[calc(50%+2.5rem)]'}`;
+             
+             const dateBadge = `<div class="text-[11px] font-mono text-slate-300 font-bold bg-black/60 px-2 py-0.5 rounded-full border border-white/20 backdrop-blur-sm mb-2 shadow-sm whitespace-nowrap">${dateStr}</div>`;
+
+             if (isTop) {
+                 contentBox.innerHTML = `
+                    <div class="mb-1">${postersHtml}</div>
+                    ${dateBadge}
+                 `;
+             } else {
+                 contentBox.innerHTML = `
+                    ${dateBadge}
+                    <div class="mt-1">${postersHtml}</div>
+                 `;
+             }
+
+             item.appendChild(stem);
+             item.appendChild(dot);
+             item.appendChild(contentBox);
+             
+             const posterElements = item.querySelectorAll('.poster-trigger');
+             posterElements.forEach((el, idx) => {
+                 el.onclick = (e) => {
+                     e.stopPropagation();
+                     const movieToOpen = groupMovies[idx]; 
+                     openModal(movieToOpen);
+                 };
+             });
+
+             scrollArea.appendChild(item);
+        });
+
+        timelineSection.appendChild(scrollArea);
+        statsView.appendChild(timelineSection);
+        
+        setTimeout(() => { 
+            scrollArea.scrollLeft = scrollArea.scrollWidth; 
+        }, 300);
+     }
+     // --- FIN AJOUT TIMELINE ---
    }
 
    function initFuse() {
@@ -1653,8 +1789,8 @@
 
      els.modalPoster.src = mainPoster;
      els.modalTitle.textContent = m.title;
-     // els.modalOverview.textContent = m.overview || ''; // Déplacé plus bas
 
+     // 1. Métadonnées (Année, Durée, Note, Date ajout)
      const metaHtml = [
        m.year ? `<span>${m.year}</span>` : '',
        m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
@@ -1664,25 +1800,91 @@
      if (m.added) {
        metaHtml.push(`<span>• Ajouté le ${formatAddedDate(m.added)}</span>`);
      }
-
      els.modalMeta.innerHTML = metaHtml.join(' ');
-     
-     // --- DEBUT MODIFICATIONS ONGLETS (LOGIQUE) ---
-     
-     // 1. Reset des onglets
+
+     // ... (votre code existant au dessus) ...
+
+     // --- DEBUT LOGOS OFFICIELS (IMAGES) ---
+     const specs = m.technicalSpecs || {};
+     const audioStr = (specs.audio || '').toLowerCase();
+     const hdrStr = (specs.hdr || '').toLowerCase();
+     let badgesHtml = '';
+
+     // URL des logos officiels (Wikimedia Commons)
+     const urlDolbyVision = "https://upload.wikimedia.org/wikipedia/commons/0/03/Dolby_Vision_2021_logo.svg";
+     const urlDolbyAtmos = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Logo_Dolby_Atmos.svg/2560px-Logo_Dolby_Atmos.svg.png";
+     const urlDtsHd = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/DTS-HD-MA.svg/2560px-DTS-HD-MA.svg.png";
+     const urlDtsX = "https://leclaireur.fnac.com/wp-content/uploads/2022/12/dts-x-logo-1024x298.png";
+     const urlHdr10 = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/HDR_10_logo_%28black%29.svg/1280px-HDR_10_logo_%28black%29.svg.png";
+
+     // Logo Dolby Vision
+     if (hdrStr.includes('vision') || hdrStr.includes('dv')) {
+         badgesHtml += `
+           <img src="${urlDolbyVision}" 
+                alt="Dolby Vision" 
+                class="h-4 w-auto object-contain invert opacity-90 select-none" 
+                title="Dolby Vision" />
+         `;
+      } 
+     else if (hdrStr.includes('hdr10') || hdrStr.includes('hdr 10')) {
+         badgesHtml += `
+           <img src="${urlHdr10}" 
+                alt="HDR10" 
+                class="h-4 w-auto object-contain invert opacity-90 select-none" 
+                title="HDR10" />
+         `;
+     }
+
+     // Logo Dolby Atmos
+     if (audioStr.includes('atmos')) {
+         badgesHtml += `
+           <img src="${urlDolbyAtmos}" 
+                alt="Dolby Atmos" 
+                class="h-4 w-auto object-contain invert opacity-90 select-none" 
+                title="Dolby Atmos" />
+         `;
+     }
+
+     if (audioStr.includes('dts:x') || audioStr.includes('dts x')) {
+         badgesHtml += `
+           <img src="${urlDtsX}" 
+                alt="DTS:X" 
+                class="h-3.5 w-auto object-contain invert opacity-90 select-none" 
+                title="DTS:X" />
+         `;
+     }
+
+     if (audioStr.includes('dts-hd') || audioStr.includes('dts hd') || audioStr.includes('master audio')) {
+         badgesHtml += `
+           <img src="${urlDtsHd}" 
+                alt="DTS-HD Master Audio" 
+                class="h-5 w-auto object-contain invert opacity-90 select-none" 
+                title="DTS-HD Master Audio" />
+         `;
+     }
+
+     if (els.modalTechBadges) {
+         els.modalTechBadges.innerHTML = badgesHtml;
+         
+         if (badgesHtml.trim() === '') {
+             els.modalTechBadges.classList.add('hidden');
+             els.modalTechBadges.classList.remove('flex', 'h-6', 'mt-1');
+         } else {
+             els.modalTechBadges.classList.remove('hidden');
+             els.modalTechBadges.classList.add('flex', 'h-6', 'mt-1');
+         }
+     }
+
      function switchTab(tabId) {
-         // Styles reset
          els.tabOverviewBtn.classList.remove('border-red-600', 'text-red-400');
          els.tabSpecsBtn.classList.remove('border-red-600', 'text-red-400');
          
          els.tabOverviewBtn.classList.add('border-transparent', 'text-slate-400', 'hover:text-white');
          els.tabSpecsBtn.classList.add('border-transparent', 'text-slate-400', 'hover:text-white');
 
-         // Hide content
          els.contentOverview.classList.add('hidden');
          els.contentSpecs.classList.add('hidden');
 
-         // Active state
          if (tabId === 'overview') {
              els.tabOverviewBtn.classList.remove('border-transparent', 'text-slate-400', 'hover:text-white');
              els.tabOverviewBtn.classList.add('border-red-600', 'text-red-400');
@@ -1694,69 +1896,51 @@
          }
      }
      
-     // Initialisation
      switchTab('overview');
      els.tabOverviewBtn.onclick = () => switchTab('overview');
      els.tabSpecsBtn.onclick = () => switchTab('specs');
 
-   els.modalOverview.textContent = m.overview || '';
+     els.modalOverview.textContent = m.overview || '';
      
      if (m.directors && m.directors.length) {
        els.modalDirectors.innerHTML = '<span class="text-slate-500">Réalisation : </span>' + 
-         m.directors
-         .map(d => `<span class="director-link text-red-400 hover:underline cursor-pointer font-medium">${d}</span>`)
-         .join(', ');
+         m.directors.map(d => `<span class="director-link text-red-400 hover:underline cursor-pointer font-medium">${d}</span>`).join(', ');
      } else {
        els.modalDirectors.innerHTML = '';
      }
 
      if (m.people && m.people.length) {
-       els.modalActors.innerHTML = m.people
-         .map(actor => `<span class="actor-link text-red-400 hover:underline cursor-pointer">${actor}</span>`)
-         .join(', ');
+       els.modalActors.innerHTML = m.people.map(actor => `<span class="actor-link text-red-400 hover:underline cursor-pointer">${actor}</span>`).join(', ');
      } else {
        els.modalActors.textContent = '';
      }
 
      els.modalCountry.innerHTML = m.country ? `Pays d'origine : ${escapeHtml(m.country)}` : '';
-
-     // --- ANCIENNE LOGIQUE DE PRIX SUPPRIMÉE ICI (Le code a été déplacé plus bas) ---
-
      els.modalTags.innerHTML = (m.tags || []).map(t => 
        `<span class='tag-link text-xs px-2 py-1 rounded-full bg-white/10 hover:bg-red-600 transition cursor-pointer'>${escapeHtml(t)}</span>`
      ).join('');
      
-     // 3. Remplissage contenu "Specs" & Prix (MODIFIÉ)
-     // 3. Remplissage contenu "Specs" & Prix
      els.specsGrid.innerHTML = '';
-     const specs = m.technicalSpecs || {}; 
      
-     // --- NOUVEAU : Préparation des prix ---
      const priceVal = m.price ? Number(m.price).toFixed(2) + ' €' : null;
      const marketVal = m.marketValue ? Number(m.marketValue).toFixed(2) + ' €' : null;
 
      const specsData = [
-         // Caractéristiques techniques
-         { title: "Master", key: "resolution", value: specs.resolution, icon: "📺" },
-         { title: "Format HDR", key: "hdr", value: specs.hdr, icon: "✨" },
-         { title: "Bitrate", key: "bitrate", value: specs.bitrate, icon: "📊" },
-         { title: "Format Audio VO", key: "audio", value: specs.audio, icon: "🔊" },
-         { title: "Type de Disque", key: "diskType", value: specs.diskType, icon: "💿" },
-         { title: "Format Image", key: "aspectRatio", value: specs.aspectRatio, icon: "🖼️" },
-         
-         // --- NOUVEAU : Ajout des cartes de prix ---
-         { title: "Prix d'achat", value: priceVal, icon: "🏷️" },
-         { title: "Estimation", value: marketVal, icon: "📈" }
+         { title: "Master", value: specs.resolution, icon: "📺" },
+         { title: "Format HDR", value: specs.hdr, icon: "✨" },
+         { title: "Bitrate", value: specs.bitrate, icon: "📊" },
+         { title: "Format Audio VO", value: specs.audio, icon: "🔊" },
+         { title: "Type de Disque", value: specs.diskType, icon: "💿" },
+         { title: "Format Image", value: specs.aspectRatio, icon: "🖼️" },
+         { title: "Prix d'achat", value: priceVal, icon: "🏷️", color: "text-green-400" },
+         { title: "Estimation", value: marketVal, icon: "📈", color: "text-purple-400" }
      ];
 
      let hasSpecs = false;
      specsData.forEach(item => {
-         // On affiche la carte seulement si une valeur existe
          if (item.value) {
              hasSpecs = true;
-             // Si une couleur spécifique est définie (pour les prix), on l'utilise, sinon blanc par défaut
              const valueColor = item.color ? item.color : "text-white";
-             
              els.specsGrid.innerHTML += `
                  <div class="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
                      <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1 flex items-center gap-2">
@@ -1770,13 +1954,11 @@
 
      if (!hasSpecs) {
          els.specsGrid.innerHTML = '<p class="text-slate-400 col-span-full">Aucune information technique ou tarifaire renseignée.</p>';
-         els.specsNote.textContent = '';
      }
-     
+
      const actionsContainer = document.getElementById('modalActionsContainer');
      actionsContainer.innerHTML = ''; 
      
-     // Création de userActions wrapper
      const userActionsWrapper = document.createElement('div');
      userActionsWrapper.className = "flex flex-wrap items-center gap-4";
 
@@ -1830,48 +2012,21 @@
          });
      }
 
-     // Réattachement des listeners (reste identique)
-     els.modalDirectors.querySelectorAll('.director-link').forEach(el => {
-         el.addEventListener('click', (e) => {
-           e.stopPropagation();
-           state.query = el.textContent.trim();
-           els.search.value = state.query;
-           currentView = 'grid';
-           setActiveTab('grid');
-           hideAllViews();
-           document.getElementById('gridView').classList.remove('hidden');
-           applyFilters();
-           closeModal();
-         });
-     });
+     const navigateToSearch = (e) => {
+         e.stopPropagation();
+         state.query = e.target.textContent.trim();
+         els.search.value = state.query;
+         currentView = 'grid';
+         setActiveTab('grid');
+         hideAllViews();
+         document.getElementById('gridView').classList.remove('hidden');
+         applyFilters();
+         closeModal();
+     };
 
-     els.modalActors.querySelectorAll('.actor-link').forEach(el => {
-         el.addEventListener('click', (e) => {
-           e.stopPropagation();
-           state.query = el.textContent.trim();
-           els.search.value = state.query;
-           currentView = 'grid';
-           setActiveTab('grid');
-           hideAllViews();
-           document.getElementById('gridView').classList.remove('hidden');
-           applyFilters();
-           closeModal();
-         });
-     });
-
-     els.modalTags.querySelectorAll('.tag-link').forEach(el => {
-         el.addEventListener('click', (e) => {
-           e.stopPropagation();
-           state.query = el.textContent.trim();
-           els.search.value = state.query;
-           currentView = 'grid';
-           setActiveTab('grid');
-           hideAllViews();
-           document.getElementById('gridView').classList.remove('hidden');
-           applyFilters();
-           closeModal();
-         });
-     });
+     els.modalDirectors.querySelectorAll('.director-link').forEach(el => el.addEventListener('click', navigateToSearch));
+     els.modalActors.querySelectorAll('.actor-link').forEach(el => el.addEventListener('click', navigateToSearch));
+     els.modalTags.querySelectorAll('.tag-link').forEach(el => el.addEventListener('click', navigateToSearch));
 
      const posterWrapper = els.modalPoster.parentElement;
      const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
@@ -1907,7 +2062,7 @@
        content.classList.remove('scale-95','opacity-0');
        content.classList.add('scale-100','opacity-100');
      });
-    } // <--- C'EST CETTE ACCOLADE QUI MANQUAIT
+    } // FIN DE openModal (ne pas effacer cette accolade !)
 
     function closeModal() {
      const content = document.getElementById('modalContent');
@@ -2097,7 +2252,7 @@
        "David Fincher": ["Alien 3", "Seven", "The Game", "Fight Club", "Panic Room", "Zodiac", "L'Étrange Histoire de Benjamin Button", "The Social Network", "Millénium : Les Hommes qui n'aimaient pas les femmes", "Gone Girl", "Mank", "The Killer"],
        "Stanley Kubrick": ["L'Ultime Razzia", "Les Sentiers de la gloire", "Spartacus", "Lolita", "Dr. Folamour", "2001 : L'Odyssée de l'espace", "Orange mécanique", "Barry Lyndon", "Shining", "Full Metal Jacket", "Eyes Wide Shut"],
        "Steven Spielberg": ["Les Dents de la mer", "Rencontres du troisième type", "Les Aventuriers de l'arche perdue", "E.T., l'extra-terrestre", "Indiana Jones et le Temple maudit", "La Couleur pourpre", "Empire du soleil", "Indiana Jones et la Dernière Croisade", "Hook ou la Revanche du capitaine Crochet", "Jurassic Park", "La Liste de Schindler", "Le Monde perdu : Jurassic Park", "Amistad", "Il faut sauver le soldat Ryan", "A.I. Intelligence artificielle", "Minority Report", "Arrête-moi si tu peux", "Le Terminal", "La Guerre des mondes", "Munich", "Indiana Jones et le Royaume du crâne de cristal", "Les Aventures de Tintin : Le Secret de la Licorne", "Cheval de guerre", "Lincoln", "Le Pont des espions", "Le BGG : Le Bon Gros Géant", "Pentagon Papers", "Ready Player One", "West Side Story", "The Fabelmans"],
-       "James Cameron": ["Terminator", "Aliens, le retour", "Abyss", "Terminator 2 : Le Jugement dernier", "True Lies", "Titanic", "Avatar", "Avatar : La Voie de l'eau"],
+       "James Cameron": ["Terminator", "Aliens, le retour", "Abyss", "Terminator 2 : Le Jugement dernier", "True Lies", "Titanic", "Avatar", "Avatar : La Voie de l'eau", "Avatar: De feu et de cendres"],
        "Martin Scorsese": ["Mean Streets", "Taxi Driver", "Raging Bull", "After Hours: Quelle nuit de galère", "La Couleur de l'argent", "La Dernière Tentation du Christ", "Les Affranchis", "Les Nerfs à Vif", "Le Temps de l'innocence", "Casino", "À tombeau ouvert", "Gangs of New York", "Aviator", "Les Infiltrés", "Shutter Island", "Hugo Cabret", "Le Loup de Wall Street", "Silence", "The Irishman", "Killers of the Flower Moon"],
        "Paul Thomas Anderson": ["Double Mise", "Boogie Nights", "Magnolia", "Punch-Drunk Love", "There Will Be Blood", "The Master", "Inherent Vice", "Phantom Thread", "Licorice Pizza", "Une bataille après l'autre"],
        "Ridley Scott": ["Alien", "Blade Runner", "Legend", "Black Rain", "Thelma & Louise", "Gladiator", "Hannibal", "La Chute du faucon noir", "Les Associés", "Kingdom of Heaven", "Une grande année", "American Gangster", "Mensonges d'état", "Robin des Bois", "Prometheus", "Cartel", "Exodus : Gods and Kings", "Seul sur Mars", "Alien : Covenant", "Tout l'argent du monde", "Le Dernier Duel", "House of Gucci", "Napoléon", "Gladiator II"],
@@ -2345,6 +2500,27 @@
 
    document.getElementById('closeBingo').onclick = closeBingoModal;
    document.getElementById('bingoBackdrop').onclick = closeBingoModal;
+
+   // --- LOGIQUE RETOUR EN HAUT ---
+   const backToTopBtn = document.getElementById('backToTopBtn');
+
+   // On écoute le scroll de la fenêtre
+   window.addEventListener('scroll', () => {
+       // Si on a scrollé plus de 300px, on affiche le bouton
+       if (window.scrollY > 300) {
+           backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+           backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+       } else {
+           // Sinon on le cache
+           backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+           backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+       }
+   });
+
+   // Au clic, on remonte doucement
+   backToTopBtn.addEventListener('click', () => {
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+   });
 
    loadInitial();
   </script>
