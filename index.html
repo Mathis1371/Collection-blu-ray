@@ -526,47 +526,63 @@
    <div id="modalBackdrop" class="absolute inset-0 bg-black/70"></div>
 
    <div id="modalContent"
-        class="relative mx-auto mt-16 w-[92vw] max-w-4xl rounded-3xl glass p-4 md:p-6 shadow-2xl border border-white/10
-              transition-all duration-200 transform scale-95 opacity-0 overflow-y-auto max-h-[85vh]">
-     <button id="modalClose" class="absolute top-3 right-3 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 z-10">Fermer</button>
+        class="relative mx-auto mt-16 md:mt-12 w-[95vw] max-w-5xl rounded-3xl glass shadow-2xl border border-white/10
+              transition-all duration-200 transform scale-95 opacity-0 overflow-hidden flex flex-col max-h-[85vh]">
      
-     <div class="grid md:grid-cols-3 gap-4">
-       <div class="relative">
-         <img id="modalPoster" class="w-full h-72 md:h-full rounded-2xl object-cover border border-white/10" alt="Poster" />
-       </div>
+     <button id="modalClose" class="absolute top-3 right-3 z-50 p-2 rounded-full bg-black/50 text-white/80 hover:bg-red-600 hover:text-white border border-white/10 backdrop-blur-md transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+     </button>
+     
+     <div class="overflow-y-auto p-4 md:p-8 custom-scrollbar">
+       
+       <div class="flex flex-col md:grid md:grid-cols-12 gap-5 md:gap-8">
+         
+         <div class="flex flex-row gap-4 md:contents">
+             
+             <div class="relative shrink-0 w-28 md:w-auto md:col-span-4 lg:col-span-3 self-start">
+               <img id="modalPoster" class="w-full aspect-[2/3] object-cover rounded-xl shadow-2xl border border-white/10" alt="Poster" />
+               </div>
 
-       <div class="md:col-span-2 space-y-3">
-         <h3 id="modalTitle" class="text-2xl font-semibold pr-16"></h3>
-         
-         <div class="flex flex-wrap gap-2 text-sm opacity-80" id="modalMeta"></div>
-         
-         <div id="modalTechBadges" class="flex flex-wrap gap-3 mt-1 h-6 items-center"></div>
-         
-         <div id="modalActionsContainer"></div>
+             <div class="flex flex-col justify-center md:block md:col-span-8 lg:col-span-9 space-y-2 md:space-y-4">
+               
+               <h3 id="modalTitle" class="text-xl md:text-4xl font-black leading-tight text-white drop-shadow-md pr-8 md:pr-0"></h3>
+               
+               <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs md:text-sm font-medium text-slate-300" id="modalMeta"></div>
+               
+               <div id="modalTechBadges" class="flex flex-wrap gap-2 md:gap-3 items-center min-h-[1.5rem]"></div>
+               
+               <div id="modalActionsContainer" class="pt-1 md:pt-2"></div>
 
-         <div id="modalTabsContainer" class="border-b border-white/10 mb-4 flex gap-4 mt-4">
-            <button id="tabOverview" class="tab-button py-2 px-3 text-sm font-semibold border-b-2 border-red-600 text-red-400">Synopsis & Infos</button>
-            <button id="tabSpecs" class="tab-button py-2 px-3 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-white transition">Caractéristiques et prix</button>
+             </div>
          </div>
 
-         <div id="contentOverview">
-             <div id="modalDirectors" class="text-xs opacity-80 mt-2"></div> 
-             <div id="modalActors" class="text-xs opacity-80 mt-1"></div>
-             <div id="modalCountry" class="text-xs opacity-80 mt-1"></div>
-             <p id="modalOverview" class="text-slate-200 text-sm leading-relaxed mt-4"></p>
-             <div id="modalPrice" class="font-bold text-slate-200 text-lg my-2 hidden"></div>
-             <div id="modalTags" class="flex flex-wrap gap-2 mt-2"></div>
-         </div>
+         <div class="md:col-span-8 md:col-start-5 lg:col-span-9 lg:col-start-4">
+             
+             <div id="modalTabsContainer" class="border-b border-white/10 mb-4 flex gap-6 mt-2">
+                <button id="tabOverview" class="tab-button pb-2 text-sm md:text-base font-bold border-b-2 border-red-600 text-red-400">Synopsis</button>
+                <button id="tabSpecs" class="tab-button pb-2 text-sm md:text-base font-bold border-b-2 border-transparent text-slate-400 hover:text-white transition">Détails Techniques</button>
+             </div>
 
-         <div id="contentSpecs" class="hidden">
-             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="specsGrid"></div>
-             <p class="text-sm text-slate-400 mt-4" id="specsNote"></p>
-         </div>
+             <div id="contentOverview" class="animate-fade-in">
+                 <div class="space-y-1 mb-4 text-xs md:text-sm">
+                    <div id="modalDirectors" class="opacity-90"></div> 
+                    <div id="modalActors" class="opacity-80 line-clamp-1"></div>
+                 </div>
+                 
+                 <p id="modalOverview" class="text-slate-200 text-sm md:text-base leading-relaxed md:leading-7 opacity-95"></p>
+                 
+                 <div id="modalTags" class="flex flex-wrap gap-2 mt-6 opacity-80"></div>
+                 <div id="modalCountry" class="text-xs opacity-50 mt-4 text-right"></div>
+             </div>
 
+             <div id="contentSpecs" class="hidden animate-fade-in">
+                 <div class="grid grid-cols-2 gap-3" id="specsGrid"></div>
+             </div>
+
+         </div>
        </div>
      </div>
    </div>
-  </div>
   
   <div id="randomRoulette" class="hidden fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/90 backdrop-blur-xl transition-opacity duration-500">
    <div class="relative w-64 h-96 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(220,38,38,0.4)] border border-white/10 ring-4 ring-white/5">
@@ -2084,27 +2100,30 @@
      els.modalActors.querySelectorAll('.actor-link').forEach(el => el.addEventListener('click', navigateToSearch));
      els.modalTags.querySelectorAll('.tag-link').forEach(el => el.addEventListener('click', navigateToSearch));
 
-     const posterWrapper = els.modalPoster.parentElement;
+     // Gestion du bouton pour changer de poster (Alt Poster)
+     // On cherche le parent direct de l'image
+     const posterWrapper = els.modalPoster.parentElement; 
+     
+     // On supprime l'ancien bouton s'il existe (pour éviter les doublons)
      const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
      if (oldBtn) oldBtn.remove();
 
      if (altPoster) {
        const switchBtn = document.createElement('button');
-       switchBtn.className = "switchPosterBtn absolute top-1/2 right-2 -translate-y-1/2 bg-black/60 text-white p-2 rounded-full z-10 hover:bg-black/80";
-       switchBtn.innerHTML = "➡️";
+       // Ajustement des classes pour le nouveau design
+       switchBtn.className = "switchPosterBtn absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white w-8 h-8 flex items-center justify-center rounded-full z-20 hover:bg-red-600 transition shadow-lg border border-white/20";
+       switchBtn.innerHTML = '<span class="text-xs">↻</span>'; // Icone de rotation simple
+       
        posterWrapper.appendChild(switchBtn);
 
-       switchBtn.addEventListener('click', () => {
+       switchBtn.addEventListener('click', (e) => {
+         e.stopPropagation(); // Empêche de fermer la modale si on clique mal
          if (showingAlt) {
            els.modalPoster.src = mainPoster;
-           switchBtn.innerHTML = "➡️";
-           switchBtn.classList.remove("left-2");
-           switchBtn.classList.add("right-2");
+           switchBtn.classList.remove("text-red-400");
          } else {
            els.modalPoster.src = altPoster;
-           switchBtn.innerHTML = "⬅️";
-           switchBtn.classList.remove("right-2");
-           switchBtn.classList.add("left-2");
+           switchBtn.classList.add("text-red-400"); // Indicateur visuel
          }
          showingAlt = !showingAlt;
        });
