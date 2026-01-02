@@ -680,7 +680,7 @@
        upcoming: document.getElementById('tabUpcoming'),
        wishlist: document.getElementById('tabWishlist'),
        stats: tabStatsBtn,
-       bingo: document.getElementById('tabBingo')
+       bingo: document.getElementById('tabBingo'),
      };
 
      // Classes pour l'onglet ACTIF (Blanc, Gras, Curseur par défaut)
@@ -792,6 +792,7 @@
       return arr.map(m=>({
         id: m.id ?? (String(m.title) + String(m.year)).replace(/\s+/g, '_').toLowerCase(),
         title: String(m.title||'Sans titre'),
+        ean: m.ean ? String(m.ean) : '',
         year: Number(m.year)||null,
         genres: Array.isArray(m.genres)?m.genres:[],
         categories: Array.isArray(m.categories)?m.categories:[],
@@ -2025,6 +2026,68 @@
      if (!hasSpecs) {
          els.specsGrid.innerHTML = '<p class="text-slate-400 col-span-full">Aucune information technique ou tarifaire renseignée.</p>';
      }
+
+     // --- DÉBUT DU COMPARATEUR DE PRIX (Version Spéciale Steelbook) ---
+     
+     // 1. On détecte si c'est un Steelbook via les tags
+     const lowerTags = (m.tags || []).map(t => t.toLowerCase());
+     const isSteelbook = lowerTags.some(t => t.includes('steelbook'));
+
+     // 2. Définition de la recherche
+     // Priorité 1 : Code-barres (EAN) si dispo
+     // Priorité 2 : "Titre + Steelbook" si c'est un steelbook
+     // Priorité 3 : "Titre + Blu-ray" par défaut
+     let searchQuery;
+     let searchTypeLabel;
+
+     if (m.ean) {
+         searchQuery = m.ean;
+         searchTypeLabel = `Recherche précise via EAN : ${m.ean}`;
+     } else {
+         const suffix = isSteelbook ? 'steelbook' : 'blu-ray';
+         searchQuery = `${m.title} ${suffix}`;
+         searchTypeLabel = `Recherche via Titre (${isSteelbook ? 'Édition Steelbook' : 'Édition Standard'})`;
+     }
+
+     const q = encodeURIComponent(searchQuery);
+
+     const linksHtml = `
+        <div class="col-span-full mt-4 pt-4 border-t border-white/10 animate-fade-in">
+            <h4 class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-3 flex items-center gap-2">
+                🔎 Trouver ce film ${isSteelbook ? '<span class="text-amber-500 text-[10px] border border-amber-500/30 px-1 rounded">STEELBOOK</span>' : ''}
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                
+                <a href="https://www.fnac.com/SearchResult/ResultList.aspx?Search=${q}" 
+                   target="_blank"
+                   class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#eab308]/10 text-[#eab308] border border-[#eab308]/20 hover:bg-[#eab308] hover:text-black transition-all font-bold text-sm group">
+                   <span>Fnac</span>
+                   <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+
+                <a href="https://www.amazon.fr/s?k=${q}" 
+                   target="_blank"
+                   class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#f97316]/10 text-[#f97316] border border-[#f97316]/20 hover:bg-[#f97316] hover:text-white transition-all font-bold text-sm group">
+                   <span>Amazon</span>
+                   <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+
+                <a href="https://www.vinted.fr/catalog?search_text=${q}" 
+                   target="_blank"
+                   class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/20 hover:bg-[#06b6d4] hover:text-white transition-all font-bold text-sm group">
+                   <span>Vinted</span>
+                   <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+
+            </div>
+            <div class="mt-2 text-[10px] text-slate-500 text-center">
+                ${searchTypeLabel}
+            </div>
+        </div>
+     `;
+     
+     els.specsGrid.innerHTML += linksHtml;
+     // --- FIN DU COMPARATEUR ---
 
      const actionsContainer = document.getElementById('modalActionsContainer');
      actionsContainer.innerHTML = ''; 
