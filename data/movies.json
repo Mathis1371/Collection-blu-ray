@@ -1795,6 +1795,8 @@
       "id": "tt2119532",
       "title": "Tu ne tueras point",
       "year": 2016,
+      "price": 16.99,
+      "marketValue": 30.00,
       "genres": ["Histoire", "Guerre", "Drame"],
       "people": ["Andrew Garfield", "Luke Bracey", "Vince Vaughn", "Teresa Palmer", "Sam Worthington", "Hugo Weaving", "Rachel Griffiths"],
       "directors": ["Mel Gibson"],
@@ -1804,10 +1806,16 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/8omcdpprMWRhWHjfEU2SMnjb8O7.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/wxHmPHDfKSpOxC7Lia5duYGdkov.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/00000_2023/2025/tu-ne-tueras-point-steelbook-bluray-4k-ultra-hd-uhd.jpg",
-      "categories": ["wishlist"],
+      "categories": ["Guerre", "Nouveautés", "Récompensés aux Oscars"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-31"
+      "added": "2026-01-03"
     },
     {
       "id": "tt0078748",
