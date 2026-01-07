@@ -26,6 +26,32 @@
     .poster { object-fit: cover; }
     .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); }
 
+    /* --- Loader animé pour les images --- */
+   .loading-spinner {
+     width: 32px;
+     height: 32px;
+     border: 3px solid rgba(255,255,255,0.1);
+     border-radius: 50%;
+     border-top-color: #dc2626; /* Rouge Netflix */
+     animation: spin 0.8s linear infinite;
+     position: absolute;
+     z-index: 0; /* Derrière l'image */
+   }
+   
+   @keyframes spin {
+     100% { transform: rotate(360deg); }
+   }
+
+   /* Classe utilitaire pour centrer le loader dans la boite noire */
+   .img-loader-container {
+     position: relative;
+     background-color: #1a1a1a; /* Fond gris foncé en attendant */
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     overflow: hidden;
+   }
+
    /* --- Navigation Carrousel style Netflix --- */
    .carousel-wrapper {
      position: relative;
@@ -1011,10 +1037,8 @@
                 const card = document.createElement('div');
                 card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
                 
-                card.innerHTML = `
-                    <img src="${posterSrc}" loading="lazy" alt="${m.title}" 
-                      class="w-full h-auto aspect-video object-cover rounded-md shadow-lg" />
-                `;
+                card.innerHTML = getImageHtml(posterSrc, m.title, "w-full h-auto aspect-video object-cover rounded-md shadow-lg");
+
                 card.addEventListener('click', () => openModal(m));
                 carousel.appendChild(card);
             });
@@ -1710,8 +1734,8 @@
        const card = document.createElement('article');
        card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
-         <div class="aspect-[2/3] bg-black/40">
-           <img src="${posterSrc}" loading="lazy" alt="${m.title}" class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+         <div class="aspect-[2/3]">
+           ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
          </div>
          <div class="p-3 space-y-1">
            <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
@@ -1759,8 +1783,7 @@
        card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
          <div class="aspect-[2/3] bg-black/40">
-           <img src="${posterSrc}" alt="${m.title}" 
-                class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+           ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
          </div>
          <div class="p-3 space-y-1">
            <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
@@ -1803,8 +1826,7 @@
        card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
        card.innerHTML = `
          <div class="aspect-[2/3] bg-black/40">
-           <img src="${posterSrc}" alt="${m.title}" 
-                class="w-full aspect-[2/3] object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"/>
+           ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
          </div>
          <div class="p-3 space-y-1">
            <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
@@ -1846,6 +1868,21 @@
         <rect width='100%' height='100%' fill='${bg}'/>
         <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='${fg}' font-family='system-ui,Segoe UI,Arial' font-size='22'>${(text||'Poster')}</text>
       </svg>`;
+    }
+
+    function getImageHtml(src, title, cssClass = "w-full h-full object-cover") {
+      return `
+        <div class="img-loader-container w-full h-full rounded-md">
+            <div class="loading-spinner"></div>
+            <img src="${src}" 
+                 alt="${escapeHtml(title)}" 
+                 loading="lazy" 
+                 class="${cssClass} relative z-10 opacity-0 transition-opacity duration-500"
+                 onload="this.classList.remove('opacity-0')"
+                 onerror="this.parentElement.innerHTML='<div class=\'text-xs text-slate-500 p-2 text-center\'>Image non dispo</div>'"
+            />
+        </div>
+      `;
     }
 
     function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
@@ -2268,7 +2305,7 @@
         
         overlay.classList.remove('hidden');
         overlay.classList.remove('opacity-0');
-        rPoster.classList.remove('shake-effect'); // Reset effet
+        rPoster.parentElement.classList.remove('shake-effect');
 
         let duration = 0;
         let speed = 50; 
@@ -2302,10 +2339,16 @@
         const finish = (movie) => {
             rTitle.textContent = "🎬 " + movie.title;
             rTitle.classList.remove('animate-pulse');
-            rTitle.classList.add('text-green-400'); // Titre devient vert
-            rPoster.parentElement.classList.add('shake-effect'); // Tremblement
-            rPoster.parentElement.classList.remove('ring-white/5');
-            rPoster.parentElement.classList.add('ring-green-500'); // Bordure verte
+            rTitle.classList.add('text-green-400');
+            
+            const wrapper = rPoster.parentElement;
+            
+            wrapper.classList.remove('shake-effect');
+            void wrapper.offsetWidth; 
+            wrapper.classList.add('shake-effect');
+
+            wrapper.classList.remove('ring-white/5');
+            wrapper.classList.add('ring-green-500');
 
             setTimeout(() => {
                 overlay.classList.add('opacity-0');
@@ -2314,11 +2357,13 @@
                     overlay.classList.add('hidden');
                     rTitle.classList.add('animate-pulse');
                     rTitle.classList.remove('text-green-400');
-                    rPoster.parentElement.classList.remove('ring-green-500');
-                    rPoster.parentElement.classList.add('ring-white/5');
+                    
+                    wrapper.classList.remove('shake-effect'); 
+                    wrapper.classList.remove('ring-green-500');
+                    wrapper.classList.add('ring-white/5');
                     
                     openModal(movie);
-                }, 500); // Temps de la transition CSS opacity
+                }, 500); 
             }, 1200);
         };
 
@@ -2343,16 +2388,28 @@
       const file = e.target.files?.[0];
       if(!file) return;
       try{
-        const text = await file.text();
+        let text = await file.text();
+        
+        text = text.trim();
+        const lastBrace = text.lastIndexOf('}');
+        if (lastBrace !== -1 && lastBrace < text.length - 1) {
+            text = text.substring(0, lastBrace + 1);
+        }
+
         const parsed = JSON.parse(text);
         if(!parsed.movies || !Array.isArray(parsed.movies)) throw new Error('Schéma invalide');
+        
         bannerMovies = [];
         state.all = normalize(parsed.movies);
         initFuse();
         initFilters();
         resetFilters();
-      }catch(err){
-        alert('Impossible de lire ce JSON. Vérifiez le schéma (voir Aide).');
+        
+        alert("Collection importée avec succès : " + state.all.length + " films.");
+        
+      } catch(err){
+        console.error(err);
+        alert('Impossible de lire ce JSON. Vérifiez le format du fichier.');
       }
     });
 
@@ -2397,10 +2454,10 @@
        "Robert Zemeckis": ["À la poursuite du diamant vert", "Retour vers le futur", "Qui veut la peau de Roger Rabbit", "Retour vers le futur 2", "Retour vers le futur 3", "La mort vous va si bien", "Forrest Gump", "Contact", "Apparences", "Seul au monde", "Le Pôle Express", "La légende de Beowulf", "Le drôle de Noël de Scrooge", "Flight", "The Walk", "Alliés", "Bienvenue à Marwen", "Sacrées sorcières", "Pinocchio", "Here"],
        "Sam Mendes": ["American Beauty", "Les sentiers de la perdition", "Jarhead : La fin de l'innocence", "Les noces rebelles", "Away We Go", "Skyfall", "Spectre", "1917", "Empire of Light"],
        "Frank Darabont": ["Les Évadés", "La Ligne verte", "The Majestic", "The Mist"],
-       "Rian Johnson": ["Brick", "Une arnaque presque parfaite", "Looper", "Star Wars, épisode VIII : Les Derniers Jedi", "À couteaux tirés", "Glass Onion", "Wake Up Dead Man"]
+       "Rian Johnson": ["Brick", "Une arnaque presque parfaite", "Looper", "Star Wars, épisode VIII : Les Derniers Jedi", "À couteaux tirés", "Glass Onion", "Wake Up Dead Man"],
+       "Francis Ford Coppola": ["Le Parrain", "Conversation Secrète", "Le Parrain, 2ème partie", "Apocalypse Now", "Outsiders", "Le Parrain, 3ème partie", "Dracula", "Jack", "L'Idéaliste", "Megalopolis"],
+       "Ari Aster": ["Hérédité", "Midsommar", "Beau is Afraid", "Eddington"]
    };
-
-   // --- DÉBUT MODIFICATION : PHOTOS RÉALISATEURS ---
 
    const directorPhotos = {
        "Christopher Nolan": "https://media.themoviedb.org/t/p/w440_and_h660_face/62gmVhxnamAtZkhVWw1t2QHK9dL.jpg",
@@ -2418,20 +2475,18 @@
        "Robert Zemeckis": "https://media.themoviedb.org/t/p/w440_and_h660_face/eB64gT0tY3x7veXLjN6Ea7Bw2Y8.jpg",
        "Sam Mendes": "https://media.themoviedb.org/t/p/w440_and_h660_face/5z89X9rB76JDblqMQ52fviwXxAN.jpg",
        "Frank Darabont": "https://media.themoviedb.org/t/p/w440_and_h660_face/7LqmE3p1XTwCdNCOmBxovq210Qk.jpg",
-       "Rian Johnson": "https://media.themoviedb.org/t/p/w440_and_h660_face/uPWwvdppeZVKPbYcjXKU8zyuAVh.jpg"
+       "Rian Johnson": "https://media.themoviedb.org/t/p/w440_and_h660_face/uPWwvdppeZVKPbYcjXKU8zyuAVh.jpg",
+       "Francis Ford Coppola": "https://media.themoviedb.org/t/p/w440_and_h660_face/oBRuGYppfWGkn3xvr9s0aETqIzh.jpg",
+       "Ari Aster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vVQai1yKGStv4x7TZdZS4X8MEyP.jpg"
    };
 
    function getDirectorAvatar(name) {
-       // 1. Si on a une photo définie dans la liste ci-dessus, on l'utilise
        if (directorPhotos[name]) {
            return directorPhotos[name];
        }
        
-       // 2. Sinon, on garde l'ancien système (initiales générées) pour éviter les images cassées
        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=256&font-size=0.4`;
    }
-
-   // --- FIN MODIFICATION ---
 
    tabBingoBtn.addEventListener('click', () => {
        currentView = 'bingo';
