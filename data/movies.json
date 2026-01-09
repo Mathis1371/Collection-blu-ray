@@ -59,7 +59,7 @@
       "title": "Blade Runner 2049",
       "year": 2017,
       "price": 29.99,
-      "marketValue": 60.00,
+      "marketValue": 50.00,
       "genres": ["Science-fiction", "Action"],
       "people": ["Ryan Gosling", "Harrison Ford", "Ana de Armas", "Dave Bautista", "Robin Wright", "Mark Arnold", "David Dastmalchian", "Jared Leto", "Barkhad Abdi", "Sean Young"],
       "directors": ["Denis Villeneuve"],
@@ -194,7 +194,7 @@
       "title": "2001 : L'Odyssée de l'espace",
       "year": 1968,
       "price": 34.99,
-      "marketValue": 40.00,
+      "marketValue": 50.00,
       "genres": ["Science-fiction", "Aventure"],
       "people": ["Keir Dullea", "Gary Lockwood", "William Sylvester"],
       "directors": ["Stanley Kubrick"],
@@ -248,7 +248,7 @@
       "title": "E.T., l'extra-terrestre",
       "year": 1982,
       "price": 23.40,
-      "marketValue": 35.00,
+      "marketValue": 60.00,
       "genres": ["Science-fiction", "Aventure", "Famille"],
       "people": ["Henry Thomas", "Drew Barrymore", "Peter Coyote"],
       "directors": ["Steven Spielberg"],
@@ -302,7 +302,7 @@
       "title": "Seven",
       "year": 1995,
       "price": 29.99,
-      "marketValue": 40.00,
+      "marketValue": 30.00,
       "genres": ["Drame", "Mystère", "Thriller", "Crime"],
       "people": ["Brad Pitt", "Morgan Freeman", "Kevin Spacey", "Gwyneth Paltrow"],
       "directors": ["David Fincher"],
@@ -608,6 +608,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/djEb0y5ndS9iWuuhkNOX7RA8bea.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/sicario-steelbook-edition-limitee-Blu-ray.jpg",
       "categories": ["Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "33 Mbps"
+  },
       "tags": ["blu-ray", "steelbook"],
       "country": "États-Unis",
       "added": "2024-01-02"
@@ -628,6 +634,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/fmgMq6njYqF0S9DngxJ4HFcPvHi.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/b0/19/f0/15735216/1540-1/tsp20230809165219/Mystic-River-Steelbook-Blu-ray.jpg",
       "categories": ["Récompensés aux Oscars"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "26 Mbps"
+  },
       "tags": ["blu-ray", "steelbook"],
       "country": "États-Unis",
       "added": "2024-05-02"
@@ -664,7 +676,7 @@
       "title": "Ready Player One",
       "year": 2018,
       "price": 24.99,
-      "marketValue": 50.00,
+      "marketValue": 70.00,
       "genres": ["Science-fiction", "Aventure", "Action"],
       "people": ["Tye Sheridan", "Olivia Cooke", "Ben Mendelsohn", "Ralph Ineson", "Kit Connor", "Simon Pegg"],
       "directors": ["Steven Spielberg"],
@@ -717,7 +729,7 @@
       "title": "Les Évadés",
       "year": 1994,
       "price": 34.99,
-      "marketValue": 45.00,
+      "marketValue": 60.00,
       "genres": ["Drame"],
       "people": ["Tim Robbins", "Morgan Freeman", "Bob Gunton", "Willem Sadler", "Clancy Brown"],
       "directors": ["Frank Darabont"],
@@ -744,7 +756,7 @@
       "title": "Babylon",
       "year": 2022,
       "price": 18.92,
-      "marketValue": 30.00,
+      "marketValue": 25.00,
       "genres": ["Drame", "Comédie"],
       "people": ["Brad Pitt", "Margot Robbie", "Jean Smart", "Diego Calva", "Tobey Maguire", "Olivia Wilde", "Samara Weaving", "Phoebe Tonkin", "Li Jun Li", "Eric Roberts"],
       "directors": ["Damien Chazelle"],
@@ -1068,7 +1080,7 @@
       "title": "Batman v Superman: L'aube de la justice",
       "year": 2016,
       "price": 17.19,
-      "marketValue": 40.00,
+      "marketValue": 60.00,
       "genres": ["Science-fiction", "Action", "Aventure", "Super héros"],
       "people": ["Ben Affleck", "Henry Cavill", "Amy Adams", "Jesse Einsenberg", "Gal Gadot", "Laurence Fishburne"],
       "directors": ["Zack Snyder"],
@@ -1161,7 +1173,8 @@
 
       "technicalSpecs": {
       "resolution": "1080p",
-      "audio": "DTS-HD MA 5.1"
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "21 Mbps"
   },
       "tags": ["blu-ray", "amaray"],
       "country": "Danemark",
@@ -1183,6 +1196,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/3f71NAxPTPz9rncvlPSeDIEAFLI.jpg",
       "altPoster": "https://images.epagine.fr/078/5053083146078_vid.jpg",
       "categories": ["Comédie", "Films d'action", "Animation"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "Dolby TrueHD 5.1",
+      "bitrate": "24 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-02-06"
@@ -1203,6 +1222,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/r7qbaZhIpJIIzF6HdKcJGRQCpok.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/04/7f/96/9862916/1507-1/tsp20180516164211/Dragons-2-Blu-ray.jpg",
       "categories": ["Comédie", "Films d'action", "Animation"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 7.1",
+      "bitrate": "23 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-02-06"
@@ -1223,6 +1248,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/pzcAprzrs7JlKJZjmHRMgsYT4vU.jpg",
       "altPoster": "https://fr.shopping.rakuten.com/photo/1252395192_L.jpg",
       "categories": ["Comédie", "Films d'action", "Animation"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "Dolby Atmos",
+      "bitrate": "29 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-02-06"
@@ -1243,6 +1274,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/winnVO9XNqCk20kJNv8A5TEdATF.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81r5ES-eb7L.jpg",
       "categories": ["Films français", "Comédie", "Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTD-HD HR 5.1",
+      "bitrate": "17 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2024-01-19"
@@ -1263,6 +1300,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/tqIE2iW8U7JeOXFF7SFknX9KUIH.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81r5ES-eb7L.jpg",
       "categories": ["Films français", "Comédie", "Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "20 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2024-01-19"
@@ -1283,6 +1326,11 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/lQ2R88Ns5vejnJWMcJNM7s6Sz7i.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81r5ES-eb7L.jpg",
       "categories": ["Films français", "Comédie", "Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2024-01-19"
@@ -1564,7 +1612,7 @@
       "title": "F1",
       "year": 2025,
       "price": 35.99,
-      "marketValue": 45.00,
+      "marketValue": 80.00,
       "genres": ["Sport", "Action", "Drame"],
       "people": ["Brad Pitt", "Damson Idris", "Javier Bardem", "Kerry Condon", "Tobias Menzies", "Kim Bodnia"],
       "directors": ["Joseph Kosinski"],
@@ -1662,6 +1710,8 @@
       "id": "tt0073195",
       "title": "Les Dents de la mer",
       "year": 1975,
+      "price": 60.00,
+      "marketValue": 60.00,
       "genres": ["Thriller", "Horreur", "Aventure", "Catastrophe"],
       "people": ["Roy Scheider", "Robert Shaw", "Richard Dreyfuss", "Lorraine Gary", "Murray Hamilton", "Carl Gottlieb", "Jeffrey Kramer"],
       "directors": ["Steven Spielberg"],
@@ -1855,7 +1905,8 @@
       "technicalSpecs": {
       "resolution": "2K",
       "hdr": "Dolby Vision",
-      "audio": "DTS-HD MA 5.1"
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "69 Mbps"
   },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
@@ -1881,7 +1932,8 @@
       "technicalSpecs": {
       "resolution": "2K",
       "hdr": "Dolby Vision",
-      "audio": "DTS-HD MA 5.1"
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "67 Mbps"
   },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
@@ -2164,6 +2216,12 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/o9r0ghT3c7Cuju6mVi3JZkMRqOb.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/2f/e3/54/5563183/1505-1/tsp20230612080455/La-reine-des-neiges-Blu-Ray.jpg",
       "categories": ["Animation"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 7.1",
+      "bitrate": "28 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-11-02"
@@ -2183,7 +2241,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hbhFnRzzg6ZDmm8YAmxBnQpQIPh.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/pjLdH5VIKirwVUIZ0iDisXoRGo4.jpg",
       "altPoster": "https://www.cdiscount.com/pdt2/6/9/6/1/400x400/8717418175696/rw/blu-ray-wall-e.jpg",
-      "categories": ["Science-fiction", "Nouveautés", "Animation"],
+      "categories": ["Science-fiction", "Animation"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "23 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-11-05"
@@ -2203,7 +2267,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/nv64lOvoBwHQ02GQEbbROJYKwUz.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sGG1XuMlh7O0wzJAJwtQTvLVet4.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/81KxIPRp8dS.jpg",
-      "categories": ["Animation", "Nouveautés", "Années 90"],
+      "categories": ["Animation", "Années 90"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "Dolby TrueHD 7.1",
+      "bitrate": "30 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-11-05"
@@ -2224,6 +2294,11 @@
       "netflixPoster": "https://proxymedia.woopic.com/api/v1/images/331%2FMR73XXXXXXXW0012245_BAN1_2424_NEWTV_HD.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/51a1pRu9wsL.jpg",
       "categories": ["Films français"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2025-11-05"
@@ -2243,7 +2318,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/uvd0fOK5dZsZDMICflMxotedsmC.jpg",
       "netflixPoster": "https://m1.quebecormedia.com/pfu/2023/12/133f6bc8-728c-4f90-9287-6f439f033f77.jpg",
       "altPoster": "https://images.static-bluray.com/movies/covers/7667_large.jpg?t=1407947045",
-      "categories": ["Nouveautés", "Science-fiction"],
+      "categories": ["Science-fiction"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "30 Mbps"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "États-Unis",
       "added": "2025-11-05"
@@ -2264,6 +2345,11 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/lmoaJ3ZmANUMph32zAEn1rwg6k5.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/51YxXBEiVsL._AC_UF894,1000_QL80_.jpg",
       "categories": ["Films français"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2025-11-05"
@@ -2284,6 +2370,11 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/6DFi6FCXx2OBK94b2l44nKIoeIL.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/41ferbr08pS._AC_UF894,1000_QL80_.jpg",
       "categories": ["Films français"],
+
+      "technicalSpecs": {
+      "resolution": "1080p",
+      "audio": "DTS-HD MA 5.1"
+  },
       "tags": ["blu-ray", "amaray"],
       "country": "France",
       "added": "2025-11-05"
@@ -3325,6 +3416,86 @@
       "overview": "Un ancien chasseur aide un agent du FBI à enquêter sur le meurtre d'une jeune femme dans une réserve amérindienne du Wyoming.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/pySivdR845Hom4u4T2WNkJxe6Ad.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/cCc9GdKtgs3fZrqQe6PYbaC38dh.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt1446714",
+      "title": "Prometheus",
+      "year": 2012,
+      "genres": ["Science-fiction", "Aventure", "Mystère"],
+      "people": ["Noomi Rapace", "Michael Fassbender", "Charlize Theron", "Idris Elba", "Guy Pearce", "Logan Marshall-Green", "Kate Dickie", "Sean Harris", "Ian Whyte", "Patrick Wilson", "Benedict Wong"],
+      "directors": ["Ridley Scott"],
+      "runtime": 124,
+      "rating": 7,
+      "overview": "En suivant des indices sur l'origine de l'humanité, une équipe trouve une structure sur une lune lointaine, mais réalise rapidement qu'ils ne sont pas seuls.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/m7nZCtHJyDLncBUarfM5h5mrppx.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/xzJ88yv4F2NLEG9uoT5Y9tEowOJ.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt1853728",
+      "title": "Django Unchained",
+      "year": 2012,
+      "genres": ["Western", "Drame"],
+      "people": ["Jamie Foxx", "Christoph Waltz", "Walton Goggins", "Kerry Washington", "Leonardo DiCaprio", "Samuel L. Jackson", "James Remar", "Quentin Tarantino", "Don Johnson", "Franco Nero", "Jonah Hill"],
+      "directors": ["Quentin Tarantino"],
+      "runtime": 165,
+      "rating": 8.5,
+      "overview": "Avec l'aide d'un chasseur de primes allemand, un esclave affranchi tente de sauver sa femme du violent propriétaire d'une plantation du Mississippi.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/7oWY8VDWW7thTzWh3OKYRkWUlD5.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/snaLkRbHC4Z808QJKvZfNemZSdT.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt6723592",
+      "title": "Tenet",
+      "year": 2020,
+      "genres": ["Thriller", "Science-fiction", "Action"],
+      "people": ["John David Washington", "Robert Pattinson", "Elizabeth Debicki", "Michael Caine", "Kenneth Branagh", "Clémence Poésy", "Louri Kolokolnikov", "Aaron Taylor-Johnson", "Fiona Dourif"],
+      "directors": ["Christopher Nolan"],
+      "runtime": 150,
+      "rating": 7.3,
+      "overview": "Un espion est sélectionné pour déjouer un complot menant à une 3ème guerre mondiale. Aidé de mystérieux objets à entropie inversée dont il doit découvrir la provenance, son enquête commence avec pour seul indice un nom de code : TENET.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/oRkLA2EkXaRLmK63BkvK74G8tC4.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/bImDTzVitwcKZXCF1naWRGI5W0g.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt2267998",
+      "title": "Gone Girl",
+      "year": 2014,
+      "genres": ["Thriller", "Mystère", "Drame"],
+      "people": ["Ben Affleck", "Rosamund Pike", "Carrie Coon", "Emily Ratajkowski", "Kim Dickens", "Neil Patrick Harris", "Lola Kirke", "Patrick Fugit", "Sela Ward"],
+      "directors": ["David Fincher"],
+      "runtime": 149,
+      "rating": 8.1,
+      "overview": "La disparition de sa femme étant devenue le centre d'un intense cirque médiatique, un homme voit les projecteurs se tourner vers lui quand on le soupçonne de ne pas être innocent.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/lv5xShBIDPe7m4ufdlV0IAc7Avk.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/5Tqdk3eezqu945KcBtz3SYQxidN.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt0421715",
+      "title": "L'Étrange Histoire de Benjamin Button",
+      "year": 2008,
+      "genres": ["Romance", "Fantastique", "Drame"],
+      "people": ["Brad Pitt", "Cate Blanchett", "Taraji P. Henson", "Julia Ormond", "Tilda Swinton", "Jason Flemyng", "Mahershala Ali", "Phyllis Somerville", "Elias Koteas", "Faune A. Chambers", "Jared Harris", "Elle Fanning"],
+      "directors": ["David Fincher"],
+      "runtime": 166,
+      "rating": 7.8,
+      "overview": "L'histoire de Benjamin Button, un homme qui se met à vieillir à l'envers avec des conséquences surprenantes.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/17hzD5UG3RLq0BTszufC9mzXynd.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/bkUij4e4Ko56udB9G2vjU2xejDl.jpg",
       "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-06-12"
