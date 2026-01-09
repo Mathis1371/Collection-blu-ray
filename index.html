@@ -398,7 +398,7 @@
              <li><button id="tabUpcoming" class="nav-item text-base transition-all duration-300">Prochainement</button></li>
              <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Wishlist</button></li>
              <li><button id="tabStats" class="nav-item text-base transition-all duration-300">Stats</button></li>
-             <li><button id="tabBingo" class="nav-item text-base transition-all duration-300">Bingo Réal</button></li>
+             <li><button id="tabBingo" class="nav-item text-base transition-all duration-300">Bingo</button></li>
            </ul>
        </nav>
 
@@ -619,8 +619,7 @@
    <div class="mt-4 text-red-500 font-mono text-sm tracking-[0.2em] uppercase">Sélection aléatoire</div>
   </div>
 
-  <button id="backToTopBtn" 
-          class="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 hover:scale-110 transition-all duration-300 opacity-0 translate-y-10 pointer-events-none ring-1 ring-white/20">
+  <button id="backToTopBtn" class="fixed bottom-6 right-6 z-[9999] p-3 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 transition-transform duration-300 scale-0 origin-center">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
     </svg>
@@ -667,16 +666,46 @@
       modalActionsContainer: document.getElementById('modalActionsContainer')
     };
 
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    
+    if(backToTopBtn) {
+        backToTopBtn.style.transition = "all 0.5s ease";
+        backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+        
+        setTimeout(() => {
+            if (window.scrollY < 100) {
+                 backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }
+        }, 2000);
+    }
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY || document.documentElement.scrollTop;
+        
+        if (scrolled > 100) {
+            backToTopBtn.style.opacity = '1';
+            backToTopBtn.style.transform = 'translateY(0)';
+            backToTopBtn.style.pointerEvents = 'auto';
+            backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+        } else {
+            backToTopBtn.style.opacity = '0';
+            backToTopBtn.style.transform = 'translateY(40px)'; // On le pousse vers le bas
+            backToTopBtn.style.pointerEvents = 'none';
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     const filterInputsContainer = document.getElementById('filterInputsContainer');
     const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
     
-    // FIX: Le bouton toggle marche maintenant car les ID existent dans le HTML
     if (toggleFiltersBtn && filterInputsContainer) {
         toggleFiltersBtn.addEventListener('click', () => {
             const isHidden = filterInputsContainer.classList.contains('hidden');
             if (isHidden) {
                 filterInputsContainer.classList.remove('hidden');
-                // filterInputsContainer.classList.add('grid'); // Déjà géré par sm:grid mais on force l'affichage
                 toggleFiltersBtn.textContent = "Masquer les filtres & tri";
             } else {
                 filterInputsContainer.classList.add('hidden');
@@ -709,14 +738,11 @@
        bingo: document.getElementById('tabBingo'),
      };
 
-     // Classes pour l'onglet ACTIF (Blanc, Gras, Curseur par défaut)
      const activeClasses = ["text-white", "font-bold", "cursor-default", "scale-105"];
-     // Classes pour l'onglet INACTIF (Gris, Normal, Hover effet)
      const inactiveClasses = ["text-slate-400", "font-medium", "hover:text-slate-200", "cursor-pointer"];
 
      for (const key in tabs) {
          const btn = tabs[key];
-         // On retire toutes les classes de style pour éviter les conflits
          btn.classList.remove(...activeClasses, ...inactiveClasses, "bg-red-600", "bg-white/10", "px-3", "py-1", "rounded"); // Nettoyage des anciennes classes
 
          if (key === view) {
@@ -725,7 +751,6 @@
              btn.classList.add(...inactiveClasses);
          }
         
-         // Si on change de vue Grid vers autre chose, on reset les filtres
          if (currentView === "grid" && view !== "grid") {
              resetFilters();
          }
@@ -781,25 +806,18 @@
         
         if (!res.ok) throw new Error(`Erreur HTTP: ${res.status}`);
         
-        // --- MODIFICATION DE SECURITÉ ---
-        // On lit le fichier comme du texte brut d'abord
         let textData = await res.text();
         
-        // On nettoie les espaces vides au début et à la fin
         textData = textData.trim();
         
-        // ASTUCE : Si le fichier finit par une accolade en trop, on cherche la dernière fermeture valide
-        // On cherche la position du dernier '}' qui ferme l'objet principal
         const lastBrace = textData.lastIndexOf('}');
         
-        // Si on trouve du texte après le dernier '}', on coupe !
         if (lastBrace !== -1 && lastBrace < textData.length - 1) {
             console.warn("Correction automatique : Suppression de caractères en trop à la fin du JSON");
             textData = textData.substring(0, lastBrace + 1);
         }
 
         const data = JSON.parse(textData);
-        // -------------------------------
         
         if (!data.movies) throw new Error('Pas de clé "movies" dans le JSON');
         state.all = normalize(data.movies);
@@ -964,15 +982,12 @@
         container.innerHTML = '';
         container.className = "w-full px-4 py-6 relative";
 
-        // --- CORRECTION: On filtre state.all pour ne garder que les films dispos (pas de wishlist, pas de futur)
-        // On ignore les filtres de recherche/genre ici.
         const today = new Date();
         const netflixMovies = state.all.filter(m => {
             const isWishlist = (m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'));
             const isUpcoming = (m.added && new Date(m.added) > today);
             return !isWishlist && !isUpcoming;
         });
-        // --- FIN CORRECTION
 
         if (netflixMovies.length === 0) {
             container.innerHTML = `
@@ -989,7 +1004,6 @@
         }
 
         const banner = document.getElementById('netflixBanner');
-        // On affiche la bannière si on est sur la vue netflix et qu'il y a des films
         if (currentView === 'netflix' && netflixMovies.length > 0) {
             banner.classList.remove('hidden');
         } else {
@@ -997,7 +1011,6 @@
         }
 
         const categoriesMap = {};
-        // On utilise netflixMovies au lieu de state.filtered
         netflixMovies.forEach(movie => {
             (movie.categories || []).forEach(cat => {
                 if (!categoriesMap[cat]) categoriesMap[cat] = [];
@@ -1043,7 +1056,6 @@
                 carousel.appendChild(card);
             });
 
-            // Logique de scroll (inchangée)
             btnLeft.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft -= carousel.clientWidth * 0.90; };
             btnRight.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft += carousel.clientWidth * 0.90; };
             const updateArrows = () => {
@@ -1063,17 +1075,14 @@
             container.appendChild(section);
         }
 
-        // Gestion de la bannière (utilise netflixMovies maintenant pour la sélection initiale)
         if (bannerMovies.length === 0) {
             let candidates = netflixMovies.filter(m => m.netflixPoster || m.poster);
             candidates.sort(() => 0.5 - Math.random());
             bannerMovies = candidates.slice(0, 10);
         }
         
-        // La fonction startBannerAutoScroll reste inchangée, elle utilise bannerMovies qui est global
         startBannerAutoScroll(); 
         
-        // ... (fonction interne startBannerAutoScroll inchangée) ...
          function startBannerAutoScroll() {
           if (bannerInterval) clearInterval(bannerInterval);
           const viewport = document.getElementById('netflixBanner');
@@ -1262,7 +1271,6 @@
             decadesCount[decade] = (decadesCount[decade] || 0) + 1;
         }
      });
-     // const topYear = Object.entries(yearCounts).sort((a,b)=>b[1]-a[1])[0]; // Inutilisé
      const decadesArr = Object.entries(decadesCount).sort((a, b) => a[0] - b[0]);
 
      const ratingCounts = {};
@@ -1282,9 +1290,6 @@
          else if(m.runtime <= 140) mediumM++;
          else longM++;
      });
-
-
-     /* ... Intérieur de la fonction renderStats() ... */
 
      const headerCards = document.createElement('div');
      headerCards.className = 'stats-grid mb-6'; 
@@ -1581,7 +1586,6 @@
      seasonCard.appendChild(seasonChart);
      detailsGrid.appendChild(seasonCard);
 
-     // --- DÉBUT AJOUT TIMELINE (LIGNE SEGMENTÉE PARFAITE) ---
      const validMovies = movies.filter(m => m.added);
 
      const moviesByDate = {};
@@ -1600,9 +1604,6 @@
 
         const scrollArea = document.createElement('div');
         scrollArea.className = 'relative w-full overflow-x-auto h-[450px] no-scrollbar flex items-center px-10';
-        
-        // NOTE : On a supprimé la "centerLine" globale ici. 
-        // La ligne est maintenant construite morceau par morceau dans la boucle ci-dessous.
 
         sortedDates.forEach((dateKey, index) => {
              const groupMovies = moviesByDate[dateKey];
@@ -1613,11 +1614,9 @@
              const isFirst = index === 0;
              const isLast = index === sortedDates.length - 1;
 
-             // Calcul de la largeur du conteneur
              const count = groupMovies.length;
              const widthPx = (count * 96) + ((count - 1) * 12) + 32;
 
-             // Génération HTML des posters
              let postersHtml = `<div class="flex items-center gap-3 justify-center">`; 
              groupMovies.forEach(m => {
                  const posterSrc = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
@@ -1637,35 +1636,27 @@
              item.className = 'relative h-full flex-shrink-0 snap-center flex justify-center px-4';
              item.style.width = `${widthPx}px`;
 
-             // --- CRÉATION DE LA LIGNE HORIZONTALE (CONNECTOR) ---
              const hLine = document.createElement('div');
-             // CORRECTION ICI : on remplace '-z-10' par 'z-0' pour qu'elle ne passe pas sous le fond de page
              let hLineClasses = 'absolute top-1/2 h-0.5 bg-white/30 z-0';
              
              if (sortedDates.length > 1) { 
                  if (isFirst) {
-                     // PREMIER : La ligne part du milieu et va vers la droite
                      hLineClasses += ' left-1/2 w-1/2'; 
                  } else if (isLast) {
-                     // DERNIER : La ligne part de gauche et s'arrête au milieu
                      hLineClasses += ' left-0 w-1/2';
                  } else {
-                     // MILIEU : La ligne traverse tout le conteneur
                      hLineClasses += ' left-0 w-full';
                  }
                  hLine.className = hLineClasses;
                  item.appendChild(hLine);
              }
 
-             // Point central
              const dot = document.createElement('div');
              dot.className = `absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-slate-200 border-2 border-[#1a1a1a] z-20 shadow-lg`;
              
-             // Tige verticale
              const stem = document.createElement('div');
              stem.className = `absolute left-1/2 -translate-x-1/2 w-0.5 bg-white/30 h-10 z-0 ${isTop ? 'bottom-1/2' : 'top-1/2'}`;
 
-             // Contenu (Posters + Date)
              const contentBox = document.createElement('div');
              contentBox.className = `absolute left-1/2 -translate-x-1/2 flex flex-col items-center w-max ${isTop ? 'bottom-[calc(50%+2.5rem)]' : 'top-[calc(50%+2.5rem)]'}`;
              
@@ -1706,7 +1697,6 @@
             scrollArea.scrollLeft = scrollArea.scrollWidth; 
         }, 300);
      }
-     // --- FIN AJOUT TIMELINE ---
    }
 
    function initFuse() {
@@ -1898,7 +1888,6 @@
      els.modalPoster.src = mainPoster;
      els.modalTitle.textContent = m.title;
 
-     // 1. Métadonnées (Année, Durée, Note, Date ajout)
      const metaHtml = [
        m.year ? `<span>${m.year}</span>` : '',
        m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : '',
@@ -1910,22 +1899,17 @@
      }
      els.modalMeta.innerHTML = metaHtml.join(' ');
 
-     // ... (votre code existant au dessus) ...
-
-     // --- DEBUT LOGOS OFFICIELS (IMAGES) ---
      const specs = m.technicalSpecs || {};
      const audioStr = (specs.audio || '').toLowerCase();
      const hdrStr = (specs.hdr || '').toLowerCase();
      let badgesHtml = '';
 
-     // URL des logos officiels (Wikimedia Commons)
      const urlDolbyVision = "https://upload.wikimedia.org/wikipedia/commons/0/03/Dolby_Vision_2021_logo.svg";
      const urlDolbyAtmos = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Logo_Dolby_Atmos.svg/2560px-Logo_Dolby_Atmos.svg.png";
      const urlDtsHd = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/DTS-HD-MA.svg/2560px-DTS-HD-MA.svg.png";
      const urlDtsX = "https://leclaireur.fnac.com/wp-content/uploads/2022/12/dts-x-logo-1024x298.png";
      const urlHdr10 = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/HDR_10_logo_%28black%29.svg/1280px-HDR_10_logo_%28black%29.svg.png";
 
-     // Logo Dolby Vision
      if (hdrStr.includes('vision') || hdrStr.includes('dv')) {
          badgesHtml += `
            <img src="${urlDolbyVision}" 
@@ -1943,7 +1927,6 @@
          `;
      }
 
-     // Logo Dolby Atmos
      if (audioStr.includes('atmos')) {
          badgesHtml += `
            <img src="${urlDolbyAtmos}" 
@@ -2064,16 +2047,9 @@
          els.specsGrid.innerHTML = '<p class="text-slate-400 col-span-full">Aucune information technique ou tarifaire renseignée.</p>';
      }
 
-     // --- DÉBUT DU COMPARATEUR DE PRIX (Version Spéciale Steelbook) ---
-     
-     // 1. On détecte si c'est un Steelbook via les tags
      const lowerTags = (m.tags || []).map(t => t.toLowerCase());
      const isSteelbook = lowerTags.some(t => t.includes('steelbook'));
 
-     // 2. Définition de la recherche
-     // Priorité 1 : Code-barres (EAN) si dispo
-     // Priorité 2 : "Titre + Steelbook" si c'est un steelbook
-     // Priorité 3 : "Titre + Blu-ray" par défaut
      let searchQuery;
      let searchTypeLabel;
 
@@ -2198,17 +2174,13 @@
      els.modalActors.querySelectorAll('.actor-link').forEach(el => el.addEventListener('click', navigateToSearch));
      els.modalTags.querySelectorAll('.tag-link').forEach(el => el.addEventListener('click', navigateToSearch));
 
-     // Gestion du bouton pour changer de poster (Alt Poster)
-     // On cherche le parent direct de l'image
      const posterWrapper = els.modalPoster.parentElement; 
      
-     // On supprime l'ancien bouton s'il existe (pour éviter les doublons)
      const oldBtn = posterWrapper.querySelector('.switchPosterBtn');
      if (oldBtn) oldBtn.remove();
 
      if (altPoster) {
        const switchBtn = document.createElement('button');
-       // Ajustement des classes pour le nouveau design
        switchBtn.className = "switchPosterBtn absolute bottom-2 right-2 bg-black/70 backdrop-blur-md text-white w-8 h-8 flex items-center justify-center rounded-full z-20 hover:bg-red-600 transition shadow-lg border border-white/20";
        switchBtn.innerHTML = '<span class="text-xs">↻</span>'; // Icone de rotation simple
        
@@ -2480,6 +2452,57 @@
        "Ari Aster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vVQai1yKGStv4x7TZdZS4X8MEyP.jpg"
    };
 
+   const referenceSagas = {
+       "Star Wars": ["Star Wars, épisode I : La Menace fantôme", "Star Wars, épisode II : L'Attaque des clones", "Star Wars, épisode III : La Revanche des Sith", "Star Wars, épisode IV : Un nouvel espoir", "Star Wars, épisode V : L'Empire contre-attaque", "Star Wars, épisode VI : Le Retour du Jedi", "Star Wars, épisode VII : Le Réveil de la Force", "Star Wars, épisode VIII : Les Derniers Jedi", "Star Wars, épisode IX : L'Ascension de Skywalker", "Rogue One"],
+       "Terre du Milieu": ["Le Seigneur des anneaux : La Communauté de l'anneau", "Le Seigneur des anneaux : Les Deux Tours", "Le Seigneur des anneaux : Le Retour du roi", "Le Hobbit : Un voyage inattendu", "Le Hobbit : La Désolation de Smaug", "Le Hobbit : La Bataille des Cinq Armées"],
+       "Harry Potter": ["Harry Potter à l'école des sorciers", "Harry Potter et la Chambre des secrets", "Harry Potter et le Prisonnier d'Azkaban", "Harry Potter et la Coupe de feu", "Harry Potter et l'Ordre du Phénix", "Harry Potter et le Prince de sang-mêlé", "Harry Potter et les Reliques de la Mort - 1ère partie", "Harry Potter et les Reliques de la Mort - 2ème partie"],
+       "Dark Knight": ["Batman Begins", "The Dark Knight", "The Dark Knight Rises"],
+       "Dune": ["Dune : Première Partie", "Dune : Deuxième Partie"],
+       "Jurassic Park": ["Jurassic Park", "Le Monde perdu : Jurassic Park", "Jurassic Park III", "Jurassic World", "Jurassic World: Fallen Kingdom", "Jurassic World : Le Monde d'après", "Jurassic World: Renaissance"],
+       "Mission: Impossible": ["Mission: Impossible", "Mission: Impossible 2", "Mission: Impossible 3", "Mission: Impossible - Protocole Fantôme", "Mission: Impossible - Rogue Nation", "Mission: Impossible - Fallout", "Mission: Impossible - Dead Reckoning", "Mission: Impossible - The Final Reckoning"],
+       "Retour vers le futur": ["Retour vers le futur", "Retour vers le futur II", "Retour vers le futur III"],
+       "28 jours plus tard": ["28 jours plus tard", "28 semaines plus tard", "28 ans plus tard", "28 ans plus tard: Le temple des morts"],
+       "DCEU": ["Man of Steel", "Batman v Superman: L'aube de la justice", "Suicide Squad", "Wonder Woman", "Aquaman", "Shazam!", "Birds of Prey", "Wonder Woman 1984", "Zack Snyder's Justice League", "The Suicide Squad", "Black Adam", "Shazam! La Rage des Dieux", "The Flash", "Blue Beetle", "Aquaman et le Royaume perdu"],
+       "DCU": ["Superman", "Supergirl"],
+       "Alien": ["Alien", "Aliens : Le Retour", "Alien 3", "Alien : La Résurrection", "Prometheus", "Alien : Covenant", "Alien : Romulus"],
+       "Spider-Man": ["Spider-Man", "Spider-Man 2", "Spider-Man 3", "The Amazing Spider-Man", "The Amazing Spider-Man : Le Destin d'un héros", "Spider-Man: Homecoming", "Spider-Man: New Generation", "Spider-Man: Far From Home", "Spider-Man: No Way Home", "Spider-Man: Across the Spider-Verse"],
+       "MCU": ["Iron Man", "L'Incroyable Hulk", "Iron Man 2", "Thor", "Captain America : First Avenger", "Avengers", "Iron Man 3", "Thor : Le Monde des ténèbres", "Captain America : Le Soldat de l'hiver", "Les Gardiens de la Galaxie", "Avengers : L'Ère d'Ultron", "Ant-Man", "Captain America : Civil War", "Doctor Strange", "Les Gardiens de la Galaxie Vol.2", "Spider-Man : Homecoming", "Thor : Ragnarok", "Black Panther", "Avengers : Infinity War", "Ant-Man et la Guêpe", "Captain Marvel", "Avengers : Endgame", "Spider-Man : Far From Home", "Black Widow", "Shang-Chi et la Légende des Dix Anneaux", "Les Éternels", "Spider-Man : No Way Home", "Doctor Strange in the Multiverse of Madness", "Thor : Love and Thunder", "Black Panther : Wakanda Forever", "Ant-Man et la Guêpe : Quantumania", "Les Gardiens de la Galaxie Vol.3", "The Marvels", "Deadpool et Wolverine", "Captain America : Brave New World", "Thunderbolts*", "Les Quatre Fantastiques : Premiers pas"],
+       "Dragons": ["Dragons", "Dragons 2", "Dragons 3 : Le Monde caché", "Dragons (2025)"]
+   };
+
+   const sagaPhotos = {
+       "Star Wars": "https://www.webstickersmuraux.com/fr/img/as555-jpg/folder/products-listado-merchanthover/stickers-muraux-star-wars-logo.jpg",
+       "Harry Potter": "https://i.pinimg.com/1200x/04/de/6c/04de6c54756002cfc7ada5dbd6722629.jpg",
+       "Terre du Milieu": "https://sw6.elbenwald.de/media/ee/74/75/1701733729/E1059099_6.jpg",
+       "Dark Knight": "https://i.ebayimg.com/images/g/f0YAAOSwCU1Y1IgY/s-l1200.jpg",
+       "Dune": "https://images.seeklogo.com/logo-png/41/1/dune-2021-logo-png_seeklogo-411365.png",
+       "Jurassic Park": "https://sw6.elbenwald.de/media/8c/68/07/1629826122/E1052717_6.jpg",
+       "Mission: Impossible": "https://images.seeklogo.com/logo-png/9/1/mission-impossible-logo-png_seeklogo-93407.png",
+       "Retour vers le futur": "https://passion-stickers.com/2573-home_default/stickers-retour-vers-le-futur.jpg",
+       "28 jours plus tard": "https://i.redd.it/do-you-prefer-the-squared-or-rounded-28-logo-v0-tij8fo8zvx5f1.png?width=740&format=png&auto=webp&s=22e999d5745b2d02b6637a0e3e16540d8945a785",
+       "DCEU": "https://upload.wikimedia.org/wikipedia/commons/3/3d/DC_Comics_logo.svg",
+       "DCU": "https://cdn.worldvectorlogo.com/logos/dc.svg",
+       "Alien": "https://i.ebayimg.com/images/g/0NkAAOSwLyJdniLX/s-l1200.jpg",
+       "Spider-Man": "https://i.ebayimg.com/images/g/ypIAAOSw8gpdioNl/s-l400.png",
+       "MCU": "https://thumbs.dreamstime.com/b/logo-merisier-conception-de-mervel-marvel-est-une-compagnie-am%C3%A9ricaine-divertissement-179548774.jpg",
+       "Dragons": "https://comptoirdugeek.com/cdn/shop/files/Dragons_Dreamworks.png?v=1683806082&width=1500"
+   };
+
+   function getSagaAvatar(name, ownedMovies) {
+       if (sagaPhotos[name] && sagaPhotos[name].length > 0) {
+           return sagaPhotos[name];
+       }
+       
+       if (ownedMovies && ownedMovies.length > 0) {
+           const first = ownedMovies[0];
+           if (first.poster || first.netflixPoster) {
+               return first.poster || first.netflixPoster;
+           }
+       }
+
+       return "https://ui-avatars.com/api/?name=" + encodeURIComponent(name) + "&background=random&size=128";
+   }
+
    function getDirectorAvatar(name) {
        if (directorPhotos[name]) {
            return directorPhotos[name];
@@ -2490,38 +2513,88 @@
 
    tabBingoBtn.addEventListener('click', () => {
        currentView = 'bingo';
-       setActiveTab('bingo'); // Il faudra mettre à jour setActiveTab plus bas
+       setActiveTab('bingo');
        hideAllViews();
        bingoView.classList.remove('hidden');
-       renderBingo();
+       renderBingoHub(); // On affiche d'abord le menu de choix
    });
 
-   function renderBingo() {
+   function renderBingoHub() {
        bingoView.innerHTML = `
-        <div class="mb-8 text-center">
-            <h2 class="text-4xl font-black text-white mb-2">🎬 Bingo des Réalisateurs</h2>
-            <p class="text-slate-400">Complétez les filmographies (basé sur votre catalogue actuel).</p>
+        <div class="flex flex-col items-center justify-center min-h-[50vh] animate-fade-in">
+            <div class="mb-10 text-center">
+                <h2 class="text-5xl font-black text-white mb-4 drop-shadow-lg">🎯 Espace Bingo</h2>
+                <p class="text-slate-400 text-lg">Choisissez votre défi de collectionneur</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl px-4">
+                <div id="btnBingoDirectors" class="group relative h-64 bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-white/30 transition-all hover:scale-[1.02] shadow-2xl">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:opacity-60 transition duration-500 group-hover:scale-110"></div>
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                        <div class="text-6xl mb-4 group-hover:-translate-y-2 transition duration-300">🎬</div>
+                        <h3 class="text-3xl font-black text-white uppercase tracking-wider">Réalisateurs</h3>
+                        <p class="text-slate-300 mt-2 text-sm font-medium">Complétez les filmographies des maîtres du cinéma.</p>
+                    </div>
+                </div>
+
+                <div id="btnBingoSagas" class="group relative h-64 bg-gradient-to-br from-red-900/40 to-orange-900/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-white/30 transition-all hover:scale-[1.02] shadow-2xl">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:opacity-60 transition duration-500 group-hover:scale-110"></div>
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                        <div class="text-6xl mb-4 group-hover:-translate-y-2 transition duration-300">🍿</div>
+                        <h3 class="text-3xl font-black text-white uppercase tracking-wider">Sagas</h3>
+                        <p class="text-slate-300 mt-2 text-sm font-medium">Rassemblez les franchises légendaires.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="directorsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
        `;
 
-       const grid = document.getElementById('directorsGrid');
-       const today = new Date(); // <--- AJOUT : Date du jour pour comparer
+       document.getElementById('btnBingoDirectors').onclick = () => renderBingoList('directors');
+       document.getElementById('btnBingoSagas').onclick = () => renderBingoList('sagas');
+   }
 
-       const targetDirectors = Object.keys(referenceFilmographies);
+   function renderBingoList(type) {
+       const isSaga = type === 'sagas';
+       const title = isSaga ? "🍿 Bingo Sagas" : "🎬 Bingo Réalisateurs";
+       const subTitle = isSaga ? "Complétez les grandes franchises" : "Complétez les filmographies cultes";
+       const dataObj = isSaga ? referenceSagas : referenceFilmographies;
+       
+       bingoView.innerHTML = `
+        <div class="animate-fade-in">
+            <div class="flex items-center gap-4 mb-8">
+                <button id="backToBingoHub" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition border border-white/10">
+                    ⬅
+                </button>
+                <div>
+                    <h2 class="text-3xl font-black text-white">${title}</h2>
+                    <p class="text-slate-400 text-sm">${subTitle}</p>
+                </div>
+            </div>
+            <div id="bingoGridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        </div>
+       `;
 
-       targetDirectors.forEach(dirName => {
-           const refList = referenceFilmographies[dirName];
+       document.getElementById('backToBingoHub').onclick = renderBingoHub;
+       
+       const grid = document.getElementById('bingoGridContainer');
+       const today = new Date();
+       const targetKeys = Object.keys(dataObj);
+
+       targetKeys.forEach(keyName => {
+           const refList = dataObj[keyName];
            
            const ownedMovies = state.all.filter(m => {
-               const matchDir = m.directors && m.directors.includes(dirName);
+               const matchContext = isSaga ? true : (m.directors && m.directors.includes(keyName));
+               
                const matchTitle = refList.some(refTitle => refTitle.toLowerCase() === m.title.toLowerCase());
                
                const isWishlist = (m.tags && m.tags.includes('wishlist')) || 
                                   (m.categories && m.categories.includes('wishlist'));
                const isUpcoming = (m.added && new Date(m.added) > today);
 
-               return matchDir && matchTitle && !isWishlist && !isUpcoming;
+               return matchContext && matchTitle && !isWishlist && !isUpcoming;
            });
            
            const totalMovies = refList.length;
@@ -2534,51 +2607,70 @@
            else if(progress >= 50) barColor = "bg-blue-500";
            else if(progress >= 25) barColor = "bg-orange-500";
 
+           let avatarHtml = '';
+           if (!isSaga) {
+                avatarHtml = `<img src="${getDirectorAvatar(keyName)}" class="w-16 h-16 rounded-full object-cover object-top border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />`;
+           } else {
+                const sagaIconSrc = getSagaAvatar(keyName, ownedMovies);
+                avatarHtml = `<img src="${sagaIconSrc}" class="w-16 h-16 rounded-lg object-cover border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />`;
+           }
+
            const card = document.createElement('div');
-           card.className = "bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition cursor-pointer group relative overflow-hidden";
+           card.className = "bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition cursor-pointer group relative overflow-hidden flex flex-col justify-between h-full";
            
            card.innerHTML = `
-                <div class="flex items-center gap-4 mb-4 relative z-10">
-                    <img src="${getDirectorAvatar(dirName)}" class="w-16 h-16 rounded-full object-cover object-top border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />
-                    <div>
-                        <h3 class="font-bold text-lg text-white leading-tight group-hover:text-red-400 transition-colors">${dirName}</h3>
+                <div class="flex items-start gap-4 mb-4 relative z-10">
+                    ${avatarHtml}
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-white leading-tight group-hover:text-red-400 transition-colors line-clamp-2">${keyName}</h3>
                         <div class="text-xs text-slate-400 mt-1">${ownedCount} / ${totalMovies} films</div>
                     </div>
                 </div>
                 
-                <div class="relative w-full h-3 bg-black/50 rounded-full overflow-hidden z-10">
+                <div class="mt-auto relative w-full h-3 bg-black/50 rounded-full overflow-hidden z-10">
                     <div class="absolute top-0 left-0 h-full ${barColor} transition-all duration-1000" style="width: ${progress}%"></div>
                 </div>
                 <div class="text-right text-xs font-bold mt-1 ${progress === 100 ? 'text-yellow-500' : 'text-slate-500'}">${progress}%</div>
 
-                <div class="absolute -bottom-10 -right-10 text-[150px] opacity-[0.03] rotate-12 pointer-events-none select-none">🎬</div>
+                <div class="absolute -bottom-6 -right-6 text-[120px] opacity-[0.03] rotate-12 pointer-events-none select-none grayscale">
+                    ${isSaga ? '🍿' : '🎬'}
+                </div>
            `;
 
-           card.addEventListener('click', () => openBingoCard(dirName, refList));
+           card.addEventListener('click', () => openBingoCard(keyName, refList, isSaga));
            grid.appendChild(card);
        });
    }
 
-   function openBingoCard(directorName, refList) {
+   function openBingoCard(name, refList, isSaga = false) {
         const modal = document.getElementById('bingoModal');
         const content = document.getElementById('bingoContent');
         const grid = document.getElementById('bingoGrid');
         
-        document.getElementById('bingoDirectorName').textContent = directorName;
-        document.getElementById('bingoAvatar').src = getDirectorAvatar(directorName);
+        document.getElementById('bingoDirectorName').textContent = name;
+        
+        const headerAvatar = document.getElementById('bingoAvatar');
+        if(!isSaga) {
+             headerAvatar.className = "w-full h-full object-cover";
+             headerAvatar.parentElement.className = "w-24 h-24 rounded-full border-4 border-[#1a1a1a] overflow-hidden shadow-xl shrink-0 bg-slate-700";
+             headerAvatar.src = getDirectorAvatar(name);
+        } else {
+             headerAvatar.className = "w-full h-full object-cover";
+             headerAvatar.parentElement.className = "w-24 h-24 rounded-xl border-4 border-[#1a1a1a] overflow-hidden shadow-xl shrink-0 bg-slate-700";
+             headerAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=333&color=fff`; 
+        }
         
         const ownedMap = new Map();
         const today = new Date(); 
 
-        // 1. On identifie les films "Vraiment possédés" (hors wishlist/futur)
         state.all.forEach(m => {
             const isWishlist = (m.tags && m.tags.includes('wishlist')) || 
                                (m.categories && m.categories.includes('wishlist'));
             const isUpcoming = (m.added && new Date(m.added) > today);
 
-            // On stocke TOUS les films dans une map temporaire pour recherche globale
-            // mais on ne met dans ownedMap que ceux qui sont vraiment acquis
-            if (m.directors && m.directors.includes(directorName) && !isWishlist && !isUpcoming) {
+            const matchContext = isSaga ? true : (m.directors && m.directors.includes(name));
+
+            if (matchContext && !isWishlist && !isUpcoming) {
                 ownedMap.set(m.title.toLowerCase(), m);
             }
         });
@@ -2590,11 +2682,16 @@
         const pct = Math.round((ownedCount / refList.length) * 100);
         document.getElementById('bingoScore').textContent = `${pct}%`;
 
-        // Image de fond (premier film possédé trouvé)
         const firstOwnedKey = Array.from(ownedMap.keys())[0]; 
         const firstOwned = firstOwnedKey ? ownedMap.get(firstOwnedKey) : null;
         const bgImg = firstOwned ? (firstOwned.poster || firstOwned.netflixPoster) : '';
         document.getElementById('bingoHeaderImg').src = bgImg;
+
+        if(isSaga) {
+            const sagaMovies = Array.from(ownedMap.values());
+            headerAvatar.src = getSagaAvatar(name, sagaMovies);
+        } else if (bgImg && !isSaga) {
+        }
 
         grid.innerHTML = '';
 
@@ -2605,7 +2702,6 @@
             const card = document.createElement('div');
             
             if (isOwned) {
-                 // --- CAS 1 : FILM POSSÉDÉ (Affiche le poster) ---
                  const m = ownedMap.get(lowerTitle);
                  const poster = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
                 
@@ -2623,13 +2719,9 @@
                     openModal(m); 
                 };
             } else {
-                // --- CAS 2 : NON POSSÉDÉ (Vérification Wishlist / Prochainement) ---
-                
-                // On cherche si le film existe ailleurs dans la collection (Wishlist ou Futur)
                 const foundInOtherLists = state.all.find(m => m.title.toLowerCase() === lowerTitle);
 
                 if (foundInOtherLists) {
-                    // C'est dans la Wishlist ou Prochainement !
                     let label = "En attente";
                     let colorClass = "text-blue-400";
                     let borderClass = "border-blue-500/50";
@@ -2650,21 +2742,19 @@
                     card.className = `relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed ${borderClass} flex flex-col items-center justify-center p-4 text-center hover:bg-white/10 transition cursor-pointer`;
                     card.innerHTML = `
                         <div class="text-4xl mb-2">${icon}</div>
-                        <div class="text-sm font-semibold text-slate-300 leading-tight">${refTitle}</div>
+                        <div class="text-sm font-semibold text-slate-300 leading-tight line-clamp-3">${refTitle}</div>
                         <div class="mt-2 text-[10px] uppercase tracking-widest ${colorClass} font-bold">${label}</div>
                     `;
-                    // Au clic, on ferme le bingo et on ouvre la fiche du film
                     card.onclick = () => {
                         closeBingoModal();
                         openModal(foundInOtherLists);
                     };
 
                 } else {
-                    // --- CAS 3 : VRAIMENT MANQUANT (Lien IMDb) ---
                     card.className = "relative aspect-[2/3] rounded-xl overflow-hidden bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center p-4 text-center grayscale opacity-60 hover:opacity-100 transition hover:bg-white/10 cursor-pointer";
                     card.innerHTML = `
                         <div class="text-4xl mb-2 opacity-20">📼</div>
-                        <div class="text-sm font-semibold text-slate-400 leading-tight">${refTitle}</div>
+                        <div class="text-sm font-semibold text-slate-400 leading-tight line-clamp-3">${refTitle}</div>
                         <div class="mt-2 text-[10px] uppercase tracking-widest text-red-400 font-bold">Manquant</div>
                     `;
                     card.onclick = () => {
@@ -2692,26 +2782,7 @@
    document.getElementById('closeBingo').onclick = closeBingoModal;
    document.getElementById('bingoBackdrop').onclick = closeBingoModal;
 
-   // --- LOGIQUE RETOUR EN HAUT ---
-   const backToTopBtn = document.getElementById('backToTopBtn');
-
-   // On écoute le scroll de la fenêtre
-   window.addEventListener('scroll', () => {
-       // Si on a scrollé plus de 300px, on affiche le bouton
-       if (window.scrollY > 300) {
-           backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-           backToTopBtn.classList.add('opacity-100', 'translate-y-0');
-       } else {
-           // Sinon on le cache
-           backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-           backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
-       }
-   });
-
-   // Au clic, on remonte doucement
-   backToTopBtn.addEventListener('click', () => {
-       window.scrollTo({ top: 0, behavior: 'smooth' });
-   });
+   
 
    loadInitial();
   </script>
