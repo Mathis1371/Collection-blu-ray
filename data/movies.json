@@ -3499,6 +3499,38 @@
       "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-06-12"
+    },
+    {
+      "id": "tt4263482",
+      "title": "The Witch",
+      "year": 2015,
+      "genres": ["Horreur", "Thriller", "Drame"],
+      "people": ["Anya Taylor-Joy", "Ralph Ineson", "Harvey Scrimshaw", "Kate Dickie", "Sarah Stephens", "Ellie Grainger", "Daniel Malik", "Lucas Dawson", "Bathsheba Garnett", "Julian Richings"],
+      "directors": ["Robert Eggers"],
+      "runtime": 92,
+      "rating": 7,
+      "overview": "Dans les années 1630, la magie noire et les forces de la sorcellerie s'acharne sur une famille de La Nouvelle-Angleterre.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/o384OC1tCV8nCnozkM6y4MiSqsw.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gDv7TmCZK3BM5R1Gc0Q1KkUvZ6l.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
+    },
+    {
+      "id": "tt0206634",
+      "title": "Les Fils de l'homme",
+      "year": 2006,
+      "genres": ["Science-fiction", "Thriller", "Drame"],
+      "people": ["Clive Owen", "Julianne Moore", "Michael Caine", "Chiwetel Ejiofor", "Charlie Hunnam", "Clare-Hope Ashitey", "Danny Huston", "Peter Mullan", "Pam Ferris", "Oana Pelles"],
+      "directors": ["Alfonso Cuarón"],
+      "runtime": 109,
+      "rating": 7.9,
+      "overview": "En 2027, dans un monde chaotique dans lequel les femmes sont étrangement devenues stériles, une ancienne militante accepte d'aider à transporter une femme miraculeusement enceinte vers un refuge en mer.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vw687ar3xOxs6fAXw8907985eqq.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/nR19Cu1pFB1N93aFohQdb8LJpgP.jpg",
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-06-12"
     }
   ]
 }
