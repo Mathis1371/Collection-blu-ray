@@ -619,12 +619,6 @@
    <div class="mt-4 text-red-500 font-mono text-sm tracking-[0.2em] uppercase">Sélection aléatoire</div>
   </div>
 
-  <button id="backToTopBtn" class="fixed bottom-6 right-6 z-[9999] p-3 rounded-full bg-red-600 text-white shadow-lg hover:bg-red-700 transition-transform duration-300 scale-0 origin-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-    </svg>
-  </button>
-
   <script>
 
     let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: ""};
@@ -665,38 +659,6 @@
       specsNote: document.getElementById('specsNote'),
       modalActionsContainer: document.getElementById('modalActionsContainer')
     };
-
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    
-    if(backToTopBtn) {
-        backToTopBtn.style.transition = "all 0.5s ease";
-        backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-        
-        setTimeout(() => {
-            if (window.scrollY < 100) {
-                 backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-            }
-        }, 2000);
-    }
-
-    window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY || document.documentElement.scrollTop;
-        
-        if (scrolled > 100) {
-            backToTopBtn.style.opacity = '1';
-            backToTopBtn.style.transform = 'translateY(0)';
-            backToTopBtn.style.pointerEvents = 'auto';
-            backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-        } else {
-            backToTopBtn.style.opacity = '0';
-            backToTopBtn.style.transform = 'translateY(40px)'; // On le pousse vers le bas
-            backToTopBtn.style.pointerEvents = 'none';
-        }
-    });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 
     const filterInputsContainer = document.getElementById('filterInputsContainer');
     const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
@@ -2428,7 +2390,10 @@
        "Frank Darabont": ["Les Évadés", "La Ligne verte", "The Majestic", "The Mist"],
        "Rian Johnson": ["Brick", "Une arnaque presque parfaite", "Looper", "Star Wars, épisode VIII : Les Derniers Jedi", "À couteaux tirés", "Glass Onion", "Wake Up Dead Man"],
        "Francis Ford Coppola": ["Le Parrain", "Conversation Secrète", "Le Parrain, 2ème partie", "Apocalypse Now", "Outsiders", "Le Parrain, 3ème partie", "Dracula", "Jack", "L'Idéaliste", "Megalopolis"],
-       "Ari Aster": ["Hérédité", "Midsommar", "Beau is Afraid", "Eddington"]
+       "Ari Aster": ["Hérédité", "Midsommar", "Beau is Afraid", "Eddington"],
+       "Robert Eggers": ["The Witch", "The Lighthouse", "The Northman", "Nosferatu"],
+       "Alejandro G. Iñárritu": ["Amours chiennes", "21 grammes", "Babel", "Biutiful", "Birdman ou (La Surprenante vertu de l'ignorance)", "The Revenant", "Bardo, Fausse chronique de quelques vérités"],
+       "Alfonso Cuarón": ["La petite princesse", "De grandes espérances", "Et... ta mère aussi!", "Harry Potter et le Prisonnier d'Azkaban", "Les Fils de l'homme", "Gravity", "Roma"]
    };
 
    const directorPhotos = {
@@ -2449,7 +2414,10 @@
        "Frank Darabont": "https://media.themoviedb.org/t/p/w440_and_h660_face/7LqmE3p1XTwCdNCOmBxovq210Qk.jpg",
        "Rian Johnson": "https://media.themoviedb.org/t/p/w440_and_h660_face/uPWwvdppeZVKPbYcjXKU8zyuAVh.jpg",
        "Francis Ford Coppola": "https://media.themoviedb.org/t/p/w440_and_h660_face/oBRuGYppfWGkn3xvr9s0aETqIzh.jpg",
-       "Ari Aster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vVQai1yKGStv4x7TZdZS4X8MEyP.jpg"
+       "Ari Aster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vVQai1yKGStv4x7TZdZS4X8MEyP.jpg",
+       "Robert Eggers": "https://media.themoviedb.org/t/p/w440_and_h660_face/mLszN6cra7KZomzZI3CU6k8X0Zl.jpg",
+       "Alejandro G. Iñárritu": "https://media.themoviedb.org/t/p/w440_and_h660_face/5Mx0RilUcVjXzmeKYAZJJ0WXZMQ.jpg",
+       "Alfonso Cuarón": "https://media.themoviedb.org/t/p/w440_and_h660_face/eoCHiXaQzGgx9RiwXnt3k239FLc.jpg"
    };
 
    const referenceSagas = {
@@ -2464,10 +2432,12 @@
        "28 jours plus tard": ["28 jours plus tard", "28 semaines plus tard", "28 ans plus tard", "28 ans plus tard: Le temple des morts"],
        "DCEU": ["Man of Steel", "Batman v Superman: L'aube de la justice", "Suicide Squad", "Wonder Woman", "Aquaman", "Shazam!", "Birds of Prey", "Wonder Woman 1984", "Zack Snyder's Justice League", "The Suicide Squad", "Black Adam", "Shazam! La Rage des Dieux", "The Flash", "Blue Beetle", "Aquaman et le Royaume perdu"],
        "DCU": ["Superman", "Supergirl"],
-       "Alien": ["Alien", "Aliens : Le Retour", "Alien 3", "Alien : La Résurrection", "Prometheus", "Alien : Covenant", "Alien : Romulus"],
+       "Alien": ["Alien", "Aliens, Le Retour", "Alien 3", "Alien : La Résurrection", "Prometheus", "Alien : Covenant", "Alien : Romulus"],
        "Spider-Man": ["Spider-Man", "Spider-Man 2", "Spider-Man 3", "The Amazing Spider-Man", "The Amazing Spider-Man : Le Destin d'un héros", "Spider-Man: Homecoming", "Spider-Man: New Generation", "Spider-Man: Far From Home", "Spider-Man: No Way Home", "Spider-Man: Across the Spider-Verse"],
        "MCU": ["Iron Man", "L'Incroyable Hulk", "Iron Man 2", "Thor", "Captain America : First Avenger", "Avengers", "Iron Man 3", "Thor : Le Monde des ténèbres", "Captain America : Le Soldat de l'hiver", "Les Gardiens de la Galaxie", "Avengers : L'Ère d'Ultron", "Ant-Man", "Captain America : Civil War", "Doctor Strange", "Les Gardiens de la Galaxie Vol.2", "Spider-Man : Homecoming", "Thor : Ragnarok", "Black Panther", "Avengers : Infinity War", "Ant-Man et la Guêpe", "Captain Marvel", "Avengers : Endgame", "Spider-Man : Far From Home", "Black Widow", "Shang-Chi et la Légende des Dix Anneaux", "Les Éternels", "Spider-Man : No Way Home", "Doctor Strange in the Multiverse of Madness", "Thor : Love and Thunder", "Black Panther : Wakanda Forever", "Ant-Man et la Guêpe : Quantumania", "Les Gardiens de la Galaxie Vol.3", "The Marvels", "Deadpool et Wolverine", "Captain America : Brave New World", "Thunderbolts*", "Les Quatre Fantastiques : Premiers pas"],
-       "Dragons": ["Dragons", "Dragons 2", "Dragons 3 : Le Monde caché", "Dragons (2025)"]
+       "Dragons": ["Dragons", "Dragons 2", "Dragons 3 : Le Monde caché", "Dragons (2025)"],
+       "007 Daniel Craig": ["Casino Royale", "Quantum of Solace", "Skyfall", "Spectre", "Mourir peut attendre"],
+       "Pixar": ["Toy Story", "1001 pattes", "Toy Story 2", "Monstres & Cie", "Le Monde de Nemo", "Les Indestructibles", "Cars", "Ratatouille", "WALL·E", "Là-haut", "Toy Story 3", "Cars 2", "Rebelle", "Monstres Academy", "Vice-versa", "Le Voyage d'Arlo", "Le Monde de Dory", "Cars 3", "Coco", "Les Indestructibles 2", "Toy Story 4", "En avant", "Soul", "Luca", "Alerte Rouge", "Buzz l'Éclair", "Élémentaire", "Vice-versa 2", "Elio"]
    };
 
    const sagaPhotos = {
@@ -2485,7 +2455,9 @@
        "Alien": "https://i.ebayimg.com/images/g/0NkAAOSwLyJdniLX/s-l1200.jpg",
        "Spider-Man": "https://i.ebayimg.com/images/g/ypIAAOSw8gpdioNl/s-l400.png",
        "MCU": "https://thumbs.dreamstime.com/b/logo-merisier-conception-de-mervel-marvel-est-une-compagnie-am%C3%A9ricaine-divertissement-179548774.jpg",
-       "Dragons": "https://comptoirdugeek.com/cdn/shop/files/Dragons_Dreamworks.png?v=1683806082&width=1500"
+       "Dragons": "https://comptoirdugeek.com/cdn/shop/files/Dragons_Dreamworks.png?v=1683806082&width=1500",
+       "007 Daniel Craig": "https://i.pinimg.com/736x/40/96/0c/40960ca230dc29c2ca8c38c3ac7cf233.jpg",
+       "Pixar": "https://img.icons8.com/androidL/1200/pixar.jpg"
    };
 
    function getSagaAvatar(name, ownedMovies) {
@@ -2788,8 +2760,8 @@
   </script>
 
   <script>
-    const GITHUB_USERNAME = "Mathis1371"; // Ex: jean-dupont
-    const GITHUB_REPO = "Collection-blu-ray";         // Ex: ma-collection-bluray
+    const GITHUB_USERNAME = "Mathis1371"; 
+    const GITHUB_REPO = "Collection-blu-ray";
 
     const btn = document.getElementById('bugReportBtn');
     
@@ -2812,8 +2784,9 @@
   *Résolution : ${screenRes}*`
     );
 
-    btn.href = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${title}&body=${body}`;
+    if(btn) {
+        btn.href = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${title}&body=${body}`;
+    }
   </script>
-
 </body>
 </html>
