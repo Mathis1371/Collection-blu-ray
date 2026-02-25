@@ -820,7 +820,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hr0L2aueqlP2BYUblTTjmtn0hw4.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/73lKeIl7MOQsFK74shmoSAhitg6.jpg",
       "altPoster": "https://cdn.ozone.ro/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/t/h/07c2436dba67292656886d319b33a784/the-dark-knight-rises-2012-limited-edition-steelbook-4k-ultra-hd--blu-ray-30.jpg",
-      "categories": ["Univers DC Comics", "Films d'action", "Blockbusters", "Top 10"],
+      "categories": ["Univers DC Comics", "Films d'action", "Blockbusters"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1377,7 +1377,6 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/9uGHEgsiUXjCNq8wdq4r49YL8A1.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/n1YlAvSRlyzCCy85y32aTSlJ18J.jpg",
       "altPoster": "https://www.edition-limitee.fr/images/00_2020/0_noel_20th/kill_bill/American-Psycho-Steelbook-Blu-ray-4K-Ultra-HD-edition-collector-2025.jpg",
-      "categories": ["Nouveautés"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1456,7 +1455,7 @@
       "audio": "Dolby Atmos"
   },
       "tags": ["4K", "steelbook"],
-      "country": "Royaume-Uni",
+      "country": ["Royaume-Uni", "États-Unis"],
       "added": "2025-10-22"
     },
     {
@@ -1474,7 +1473,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/lJtkc0XiflzcSxuc8hT7YqyvUOZ.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/HQorbRuFTBlTbV6stD8FrvERso.jpg",
       "altPoster": "https://steelbookpro.fr/wp-content/uploads/2025/07/912xd5HnNaL._AC_SL1500_.jpg",
-      "categories": ["Nouveautés", "Films d'action", "Blockbusters", "Univers DC Comics"],
+      "categories": ["Films d'action", "Blockbusters", "Univers DC Comics"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1500,7 +1499,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/sSQDxwm4r28YpJSQVyVOtpYVs0E.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dwFgqr0Qfa8KhV2UyrA8YS7khTS.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/cd/93/26/19305421/1507-1/tsp20250904085043/Le-Silence-des-agneaux-Edition-Collector-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
-      "categories": ["Classiques"],
+      "categories": ["Classiques", "Nouveautés", "Années 90", "Top 10", "Récompensés aux Oscars"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1624,7 +1623,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/9PXZIUsSDh4alB80jheWX4fhZmy.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/lOazFGJEnvDEiCIv7PzuEQH4EAM.jpg",
       "altPoster": "https://static.blog4ever.com/2018/09/848202/big_928x1200_10559914.jpg",
-      "categories": ["Nouveautés", "Films d'action", "Blockbusters"],
+      "categories": ["Films d'action", "Blockbusters"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -2394,11 +2393,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/91dfWOkpjlqPkbZDjAjrReFqXQP.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/msCp5ueA6jITbJmctTAToHLyPUd.jpg",
       "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzReWJ3OLJ3hfY0gW0t46mtFU_ICidwouK6w&s",
+      "categories": ["Nouveautés", "Science-fiction"],
 
       "technicalSpecs": {
       "resolution": "4K",
       "hdr": "Dolby Vision",
-      "audio": "DTS-HD MA 5.1"
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "71 Mbps"
   },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
@@ -3222,9 +3223,10 @@
       "overview": "Un employé de bureau insomniaque et un fabriquant de savons forment un club de combat clandestin qui devient beaucoup plus que ça.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/b9HyPoxwxjxkWEUL5ErZdhApQe2.jpg",
-      "categories": ["wishlist"],
+      "altPoster": "https://edition-collector-production.s3.amazonaws.com/uploads/image/file/82271/Fight-Club-steelbook-4K.jpg",
+      "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-12"
+      "added": "2026-05-20"
     },
     {
       "id": "tt0407887",
@@ -3676,7 +3678,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sVy9ti5AnS3aNvpkAKr8umUB9NU.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17691297-3975304890180775.png",
       "tags": ["4K", "steelbook"],
-      "country": "États-Unis",
+      "country": ["États-Unis", "Royaume-Uni"],
       "added": "2026-06-10"
     },
     {
@@ -3799,6 +3801,38 @@
       "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-6-10"
+    },
+    {
+      "id": "tt32916440",
+      "title": "Marty Supreme",
+      "year": 2026,
+      "rating": 7.9,
+      "genres": ["Drame", "Sport"],
+      "people": ["Timothée Chalamet", "Odessa A'zion", "Gwyneth Paltrow", "Fran Drescher", "Luke Manley", "Tyler the Creator", "Ralph Colucci", "Kevin O'Leary", "Abel Ferrara", "Koto Kawaguchi"],
+      "directors": ["Josh Safdie"],
+      "runtime": 149,
+      "overview": "Marty Reisman, un tricheur devenu champion de ping-pong, qui a joué pour les paris à Manhattan en remportant 22 titres majeurs et est devenu le plus âgé à gagner une compétition nationale de raquette à 67 ans.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/n0fnflUWcwzbQ5x32G8zx0INs3G.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gZRVtEWGdBSa1Sx9yH2OXXX6pyp.jpg",
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-06-19"
+    },
+    {
+      "id": "tt12042730",
+      "title": "Projet dernière chance",
+      "year": 2026,
+      "genres": ["Drame", "Science-fiction", "Thriller"],
+      "people": ["Ryan Gosling", "Sandra Hüller", "Milana Vayntrub", "James Ortiz", "Liz Kingsman", "Lionel Boyce"],
+      "directors": ["Phil Lord", "Christopher Miller"],
+      "runtime": 156,
+      "overview": "Un astronaute tente de sauver la Terre alors qu'il est seul dans l'espace.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/h5FcFJzoeIjimuGhQ5Dw598T2Vu.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/RQqSXCtSxP1tUH9plhW06gNdHy.jpg",
+      "categories": ["wishlist"],
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-06-19"
     }
   ]
 }
