@@ -167,7 +167,7 @@
       "title": "Dune : Deuxième Partie",
       "year": 2024,
       "price": 34.99,
-      "marketValue": 25.00,
+      "marketValue": 30.00,
       "genres": ["Science-fiction", "Action", "Drame"],
       "people": ["Timothée Chalamet", "Rebecca Ferguson", "Zendaya", "Javier Bardem", "Josh Brolin", "Austin Butler", "Florence Pugh", "Dave Bautista", "Christopher Walken", "Léa Seydoux", "Stellan Skarsgard", "Souheila Yacoub"],
       "directors": ["Denis Villeneuve"],
@@ -177,7 +177,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/rBrJl1vUtaM6NU0EwxKSnc3nBxE.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/rmqiV9OperdByzpmCbhQ5DrImXu.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/710YRqqlcOL._UF350,350_QL50_.jpg",
-      "categories": ["Récompensés aux Oscars", "Science-fiction", "Films d'action", "Blockbusters", "Top 10"],
+      "categories": ["Récompensés aux Oscars", "Science-fiction", "Films d'action", "Blockbusters"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -194,7 +194,7 @@
       "title": "2001 : L'Odyssée de l'espace",
       "year": 1968,
       "price": 34.99,
-      "marketValue": 50.00,
+      "marketValue": 70.00,
       "genres": ["Science-fiction", "Aventure"],
       "people": ["Keir Dullea", "Gary Lockwood", "William Sylvester"],
       "directors": ["Stanley Kubrick"],
@@ -302,7 +302,7 @@
       "title": "Seven",
       "year": 1995,
       "price": 29.99,
-      "marketValue": 30.00,
+      "marketValue": 35.00,
       "genres": ["Drame", "Mystère", "Thriller", "Crime"],
       "people": ["Brad Pitt", "Morgan Freeman", "Kevin Spacey", "Gwyneth Paltrow"],
       "directors": ["David Fincher"],
@@ -329,7 +329,7 @@
       "title": "American Sniper",
       "year": 2014,
       "price": 23.75,
-      "marketValue": 25.00,
+      "marketValue": 30.00,
       "genres": ["Guerre", "Drame", "Biopic", "Action"],
       "people": ["Bradley Cooper", "Sienna Miller", "Luke Grimes", "Jake McDorman", "Marnette Patterson", "Jonathan Groff"],
       "directors": ["Clint Eastwood"],
@@ -649,7 +649,7 @@
       "title": "Taxi Driver",
       "year": 1976,
       "price": 19.99,
-      "marketValue": 25.00,
+      "marketValue": 40.00,
       "genres": ["Drame", "Crime"],
       "people": ["Robert De Niro", "Jodie Foster", "Cybill Shepherd", "Harvey Keitel", "Cybill Shepherd", "Albert Brooks"],
       "directors": ["Martin Scorsese"],
@@ -864,7 +864,7 @@
       "title": "Pulp Fiction",
       "year": 1994,
       "price": 29.99,
-      "marketValue": 50.00,
+      "marketValue": 40.00,
       "genres": ["Drame", "Gangster", "Crime"],
       "people": ["John Travolta", "Uma Thurman", "Bruce Willis", "Samuel L. Jackson", "Christopher Walken"],
       "directors": ["Quentin Tarantino"],
@@ -891,7 +891,7 @@
       "title": "Astérix et Obélix : Mission Cléopâtre",
       "year": 2002,
       "price": 34.99,
-      "marketValue": 60.00,
+      "marketValue": 70.00,
       "genres": ["Fantaisie", "Comédie", "Famille", "Aventure"],
       "people": ["Christian Clavier", "Jamel Debbouze", "Monica Bellucci", "Gérard Depardieu", "Gérard Darmon", "Edouard Baer"],
       "directors": ["Alain Chabat"],
@@ -918,7 +918,7 @@
       "title": "Terminator",
       "year": 1984,
       "price": 29.99,
-      "marketValue": 35.00,
+      "marketValue": 30.00,
       "genres": ["Science-fiction", "Aventure", "Action"],
       "people": ["Arnold Schwartzenegger", "Linda Hamilton", "Michael Biehn", "Earl Boen", "Bill Paxton"],
       "directors": ["James Cameron"],
@@ -1107,7 +1107,7 @@
       "title": "Chernobyl",
       "year": 2019,
       "price": 47.49,
-      "marketValue": 80.00,
+      "marketValue": 70.00,
       "genres": ["Thriller", "Drame", "Histoire"],
       "people": ["Jared Harris", "Stellan Skarsgard", "Jessie Buckley", "Adam Nagaitis", "Paul Ritter", "Robert Emms"],
       "directors": ["Johan Renck"],
@@ -1340,7 +1340,7 @@
       "title": "Wonka",
       "year": 2023,
       "price": 7.00,
-      "marketValue": 20.00,
+      "marketValue": 15.00,
       "genres": ["Fantaisie", "Famille", "Comédie musicale", "Comédie", "Aventure"],
       "people": ["Timothée Chalamet", "Hugh Grant", "Rowan Atkinson", "Olivia Colman", "Sally Hawkins", "Natasha Rothwell", "Calah Lane", "Keegan-Michael Key", "Tom Davis"],
       "directors": ["Paul King"],
@@ -1367,7 +1367,7 @@
       "title": "American Psycho",
       "year": 2000,
       "price": 34.99,
-      "marketValue": 40.00,
+      "marketValue": 55.00,
       "genres": ["Horreur", "Drame", "Crime"],
       "people": ["Christian Bale", "Justin Theroux", "Josh Lucas", "Bill Sage", "Chloë Sevigny", "Reese Witherspoon", "Samantha Mathis", "Matt Ross", "Jared Leto", "Willem Dafoe"],
       "directors": ["Mary Harron"],
@@ -1392,7 +1392,7 @@
       "title": "Tron : L'Héritage",
       "year": 2010,
       "price": 29.99,
-      "marketValue": 45.00,
+      "marketValue": 55.00,
       "genres": ["Science-fiction", "Aventure", "Action"],
       "people": ["Jeff Bridges", "Garrett Hedlund", "Olivia Wilde", "Bruce Boxleitner", "James Frain", "Beau Garrett", "Michael Sheen", "Cillian Murphy"],
       "directors": ["Joseph Kosinski"],
@@ -1437,7 +1437,7 @@
       "title": "28 ans plus tard",
       "year": 2025,
       "price": 34.99,
-      "marketValue": 30.00,
+      "marketValue": 35.00,
       "genres": ["Thriller", "Science-fiction", "Horreur", "Zombies"],
       "people": ["Jodie Comer", "Aaron Taylor-Johnson", "Ralph Fiennes", "Alfie Williams", "Jack O'Connell", "Erin Kellyman", "Robert Rhodes", "Emma Laird"],
       "directors": ["Danny Boyle"],
@@ -1515,7 +1515,7 @@
       "title": "Jarhead : La fin de l'innocence",
       "year": 2005,
       "price": 29.99,
-      "marketValue": 30.00,
+      "marketValue": 25.00,
       "genres": ["Guerre", "Drame", "Histoire"],
       "people": ["Jake Gyllenhaal", "Jamie Foxx", "Lucas Black", "Peter Sarsgaard", "Ming Lo", "Kevin Foster", "Brian Geraghty", "Damion Poitier"],
       "directors": ["Sam Mendes"],
@@ -1549,10 +1549,10 @@
       "overview": "Lorsque leur ennemi juré refait surface après 16 ans, une bande d'anciens révolutionnaires se réunit pour sauver la fille de l'un des leurs.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/v4VDKxKt4LYwLbAxFw3CIWiLbWX.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sne5EKjPOl9Ei2ISpf8hdvDBpC1.jpg",
-      "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2025/09/une-bataille-apres-lautre-4k-steelbook-p3.jpg.webp",
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/05/2c/19/18426885/1507-1/tsp20260320095130/Une-bataille-apres-l-autre-SteelBook-Blu-ray-4K-Ultra-HD.jpg",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-03-28"
+      "added": "2026-06-02"
     },
     {
       "id": "tt26581740",
@@ -1847,7 +1847,7 @@
       "title": "Tu ne tueras point",
       "year": 2016,
       "price": 16.99,
-      "marketValue": 25.00,
+      "marketValue": 30.00,
       "genres": ["Histoire", "Guerre", "Drame"],
       "people": ["Andrew Garfield", "Luke Bracey", "Vince Vaughn", "Teresa Palmer", "Sam Worthington", "Hugo Weaving", "Rachel Griffiths"],
       "directors": ["Mel Gibson"],
@@ -1891,7 +1891,7 @@
       "title": "Kill Bill: Volume I",
       "year": 2003,
       "price": 29.99,
-      "marketValue": 30.00,
+      "marketValue": 40.00,
       "genres": ["Thriller", "Crime", "Action"],
       "people": ["Uma Thurman", "Lucy Liu", "Vivica A. Fox", "Daryl Hannah", "David Carradine", "Michael Madsen", "Julie Dreyfus", "Helen Horton"],
       "directors": ["Quentin Tarantino"],
@@ -1918,7 +1918,7 @@
       "title": "Kill Bill: Volume II",
       "year": 2004,
       "price": 29.99,
-      "marketValue": 30.00,
+      "marketValue": 40.00,
       "genres": ["Thriller", "Crime", "Action"],
       "people": ["Uma Thurman", "Darryl Hannah", "Vivica A. Fox", "Michael Parks", "Gordon Liu", "David Carradine", "Michael Madsen", "Sonny Chiba", "Lucy Liu", "Samuel L. Jackson"],
       "directors": ["Quentin Tarantino"],
@@ -1946,7 +1946,7 @@
       "year": 1997,
       "genres": ["Drame"],
       "price": 29.99,
-      "marketValue": 30.00,
+      "marketValue": 45.00,
       "people": ["Mark Wahlberg", "Burt Reynolds", "Julianne Moore", "Heather Graham", "John C. Reilly", "Don Cheadle", "Philip Seymour Hoffman", "William H. Macy", "Luis Guzman"],
       "directors": ["Paul Thomas Anderson"],
       "runtime": 155,
@@ -2384,6 +2384,8 @@
       "id": "tt0181689",
       "title": "Minority Report",
       "year": 2002,
+      "price": 34.99,
+      "marketValue": 40.00,
       "genres": ["Science-fiction", "Mystère", "Crime", "Action", "Thriller"],
       "people": ["Tom Cruise", "Colin Farrell", "Samantha Morton", "Kathryn Morris", "Neal McDonough", "Max von Sydow", "Lois Smith", "Peter Stormare", "Jessica Capshaw", "Frank Grillo"],
       "directors": ["Steven Spielberg"],
@@ -2769,10 +2771,9 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/c4BEWLbXyPiXNFaDt57HAgekCqw.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/2CjKjAz26M40IJUwfvQV16qgCCk.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/14000949-5704994887379541.jpg",
-      "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-11-11"
+      "added": "2026-05-20"
     },
     {
       "id": "tt1457767",
@@ -3033,7 +3034,6 @@
       "overview": "Bill et Alice formaient le couple parfait jusqu'au jour où elle lui avoua son fantasme inassouvi. Troublé, imaginant cette aventure extraconjugale, il déambule seul dans les rues de New York, attiré par de nouvelles expériences charnelles.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/knEIz1eNGl5MQDbrEAVWA7iRqF9.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/eAuS9UpWi44tyI7PdOLrcgLpZuV.jpg",
-      "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-11-11"
     },
@@ -3051,7 +3051,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/bXs9LZaRjzqVaY2idcg5NcqJdMc.jpg",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-11"
+      "added": "2026-05-11"
     },
     {
       "id": "tt1454468",
@@ -3067,7 +3067,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/nXO8VtAuzfm6lpoR2mhzLnlv4g4.jpg",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-12"
+      "added": "2026-12-12"
     },
     {
       "id": "tt0246578",
@@ -3226,7 +3226,7 @@
       "altPoster": "https://edition-collector-production.s3.amazonaws.com/uploads/image/file/82271/Fight-Club-steelbook-4K.jpg",
       "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-05-20"
+      "added": "2026-06-17"
     },
     {
       "id": "tt0407887",
@@ -3679,7 +3679,7 @@
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17691297-3975304890180775.png",
       "tags": ["4K", "steelbook"],
       "country": ["États-Unis", "Royaume-Uni"],
-      "added": "2026-06-10"
+      "added": "2026-05-20"
     },
     {
       "id": "tt0090605",
@@ -3757,6 +3757,8 @@
       "id": "tt0482571",
       "title": "Le Prestige",
       "year": 2006,
+      "price": 34.99,
+      "marketValue": 30.00,
       "rating": 8.5,
       "genres": ["Thriller", "Science-fiction", "Drame", "Mystère"],
       "people": ["Christian Bale", "Hugh Jackman", "Michael Caine", "Scarlett Johansson", "Rebecca Hall", "Piper Perabo", "David Bowie", "Andy Serkis", "Samantha Mahurin", "Ricky Jay", "Daniel Davis", "Roger Rees"],
@@ -3766,6 +3768,14 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/9pJJXtw7j0nSs1TvBGPKYwQuId0.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gN83NdMguoz7Lhlx0jaX4XouhAf.jpg",
       "altPoster": "https://collectors-junkies.com/wp-content/uploads/2025/11/The-Prestige-Limited-Edition-4K-UHD-Steelbook.jpg",
+      "categories": ["Nouveautés", "Science-fiction", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "55 Mbps"
+  },
       "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
       "added": "2026-03-25"
@@ -3829,10 +3839,9 @@
       "overview": "Un astronaute tente de sauver la Terre alors qu'il est seul dans l'espace.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/h5FcFJzoeIjimuGhQ5Dw598T2Vu.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/RQqSXCtSxP1tUH9plhW06gNdHy.jpg",
-      "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-19"
+      "added": "2026-07-19"
     }
   ]
 }
