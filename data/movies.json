@@ -3842,6 +3842,49 @@
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-07-19"
+    },
+    {
+      "id": "tt1650062",
+      "title": "Super 8",
+      "year": 2011,
+      "genres": ["Thriller", "Science-fiction", "Action"],
+      "people": ["Elle Fanning", "Joel Courtney", "Riley Griffiths", "Ryan Lee", "Gabriel Basso", "Zach Mills", "Kyle Chandler", "Ron Eldard", "Noah Emmerich", "Amanda Michalka"],
+      "directors": ["J.J. Abrams"],
+      "runtime": 112,
+      "overview": "Au cours de l'été 1979, un groupe d'amis est témoin d'un accident de train et enquête sur les événements inexpliqués qui s'en suivent dans leur petite ville.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/pUWIjaMMYJjeBm5bJyE3mIXdQ62.jpgf",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mQR7lG4Xf1fPyKlI3XHhKbVUybV.jpg",
+      "tags": ["4K", "steelbook"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-07-15"
+    },
+    {
+      "id": "tt1392190",
+      "title": "Mad Max: Fury Road",
+      "year": 2015,
+      "price": 19.99,
+      "marketValue": 35.00,
+      "genres": ["Action", "Science-fiction", "Aventure", "Drame"],
+      "people": ["Tom Hardy", "Charlize Theron", "Nicholas Hoult", "Hugh Keats-Byrne", "Zoë Kravitz", "Courtney Eaton", "Riley Keough", "Rosie Huntington-Whiteley", "Nathan Jones", "Megan Gales"],
+      "directors": ["George Miller"],
+      "runtime": 120,
+      "rating": 8.1,
+      "overview": "Dans un désert post-apocalyptique, une femme se rebelle contre un dirigeant tyrannique à la recherche de sa patrie avec l'aide d'un groupe de prisonnières, une adoratrice psychotique et un vagabond nommé Max.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hA2ple9q4qnwxp3hKVNhroipsir.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kHOOnAj1X5lTfpsuBT3B5VjkpFL.jpg",
+      "altPoster": "https://www.son-video.com/images/article/warner-bros-pictures/WAR5051888271032/mad-max-fury-road-edition-steelbook-66460656c505c1.90532435.jpg?p=1200",
+      "categories": ["Films d'action", "Blockbusters"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "HDR 10",
+      "audio": "Dolby Atmos",
+      "bitrate": "56 Mbps"
+  },
+      "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-04-04"
     }
   ]
 }
