@@ -399,7 +399,7 @@
              <li><button id="tabWishlist" class="nav-item text-base transition-all duration-300">Wishlist</button></li>
              <li><button id="tabStats" class="nav-item text-base transition-all duration-300">Stats</button></li>
              <li><button id="tabBingo" class="nav-item text-base transition-all duration-300">Bingo</button></li>
-           </ul>
+             <li><button id="tabSteelbook" class="nav-item text-base transition-all duration-300">Steelbooks</button></li>           </ul>
        </nav>
 
        <div class="flex items-center gap-3 shrink-0">
@@ -415,6 +415,10 @@
              <span class="text-lg group-hover:scale-110 transition-transform">📂</span>
              <span class="text-sm font-medium text-slate-300 group-hover:text-white">Importer JSON</span>
            </label>
+           <button type="button" id="btnOpenAddModal" class="cursor-pointer group flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/40 bg-red-600/20 hover:bg-red-600 transition-all duration-300">
+             <span class="text-lg group-hover:scale-110 transition-transform">➕</span>
+             <span class="text-sm font-bold text-red-100 group-hover:text-white">Créer JSON</span>
+           </button>
        </div>
 
      </div>
@@ -426,7 +430,7 @@
 
   <section id="controlsSection" class="mx-auto max-w-7xl px-4 py-6 hidden">
     
-    <div class="sm:hidden mb-4">
+    <div id="toggleFiltersWrapper" class="sm:hidden mb-4">
         <button id="toggleFiltersBtn" class="w-full py-2 bg-white/10 rounded-xl text-sm font-bold uppercase tracking-wide hover:bg-white/20 transition">
             Afficher les filtres & tri
         </button>
@@ -517,6 +521,7 @@
   <main id="upcomingView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="wishlistView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="statsView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+  <main id="steelbookView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
 
   <main id="bingoView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
 
@@ -619,6 +624,91 @@
    <div class="mt-4 text-red-500 font-mono text-sm tracking-[0.2em] uppercase">Sélection aléatoire</div>
   </div>
 
+  <div id="addJsonModal" class="hidden fixed inset-0 z-50 flex items-center justify-center" style="z-index: 100;">
+    <div id="addJsonBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
+    <div class="relative w-full max-w-4xl max-h-[90vh] bg-[#1a1a1a] rounded-3xl border border-white/10 shadow-2xl flex flex-col overflow-hidden transform transition-all scale-95 opacity-0" id="addJsonContent">
+        
+        <div class="flex items-center justify-between p-5 border-b border-white/10 bg-black/40">
+            <h2 class="text-2xl font-black text-white flex items-center gap-2"><span>🛠️</span> Générateur de Film</h2>
+            <button id="closeAddJsonModal" class="p-2 rounded-full hover:bg-red-600 transition text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col lg:flex-row gap-6">
+            <form id="movieForm" class="flex-1 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Titre *</label>
+                        <input type="text" id="fm_title" required class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none text-white">
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">EAN (Code barre)</label>
+                        <input type="text" id="fm_ean" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Année</label>
+                        <input type="number" id="fm_year" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Durée (min)</label>
+                        <input type="number" id="fm_runtime" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Synopsis</label>
+                        <textarea id="fm_overview" rows="2" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white"></textarea>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Genres (séparés par une virgule)</label>
+                        <input type="text" id="fm_genres" placeholder="Action, Sci-Fi, Horreur..." class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Réalisateurs (séparés par une virgule)</label>
+                        <input type="text" id="fm_directors" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white">
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Tags (ex: 4K, Steelbook, Wishlist)</label>
+                        <input type="text" id="fm_tags" class="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-red-500 outline-none text-white">
+                    </div>
+
+                    <div class="col-span-2 border-t border-white/10 pt-4 mt-2">
+                        <h3 class="text-sm font-bold text-red-400 mb-3">Spécifications Techniques</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" id="fm_tech_res" placeholder="Résolution (ex: 4K Native)" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500">
+                            <input type="text" id="fm_tech_hdr" placeholder="HDR (ex: Dolby Vision, HDR10)" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500">
+                            <input type="text" id="fm_tech_audio" placeholder="Audio (ex: Dolby Atmos, DTS-HD)" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500">
+                            <input type="text" id="fm_tech_disk" placeholder="Type Disque (ex: BD-100)" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500">
+                        </div>
+                    </div>
+
+                    <div class="col-span-2 border-t border-white/10 pt-4 mt-2">
+                        <h3 class="text-sm font-bold text-red-400 mb-3">Affiches (URL)</h3>
+                        <input type="text" id="fm_poster" placeholder="URL Affiche Principale" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500 mb-2">
+                        <input type="text" id="fm_netflixPoster" placeholder="URL Affiche Paysage (Netflix)" class="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-white outline-none focus:border-red-500">
+                    </div>
+                </div>
+                <button type="button" id="btnGenerateJson" class="w-full mt-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white shadow-lg transition-transform hover:scale-[1.02]">
+                    Générer le code JSON ⬇️
+                </button>
+            </form>
+
+            <div class="w-full lg:w-1/3 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <label class="block text-xs font-bold text-slate-400 uppercase">Code Résultat</label>
+                    <button id="btnCopyJson" class="text-xs bg-white/10 hover:bg-green-600 px-3 py-1 rounded text-white transition">Copier</button>
+                </div>
+                <textarea id="jsonOutput" readonly class="flex-1 w-full p-4 rounded-xl bg-black border border-white/10 text-green-400 font-mono text-xs whitespace-pre outline-none resize-none"></textarea>
+                <p class="text-[10px] text-slate-500 text-center">N'oubliez pas de coller ce bloc dans le tableau "movies" de votre fichier movies.json</p>
+            </div>
+        </div>
+    </div>
+  </div>
+
   <script>
 
     let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: ""};
@@ -668,9 +758,11 @@
             const isHidden = filterInputsContainer.classList.contains('hidden');
             if (isHidden) {
                 filterInputsContainer.classList.remove('hidden');
+                filterInputsContainer.classList.add('grid');
                 toggleFiltersBtn.textContent = "Masquer les filtres & tri";
             } else {
                 filterInputsContainer.classList.add('hidden');
+                filterInputsContainer.classList.remove('grid');
                 toggleFiltersBtn.textContent = "Afficher les filtres & tri";
             }
         });
@@ -698,6 +790,7 @@
        wishlist: document.getElementById('tabWishlist'),
        stats: tabStatsBtn,
        bingo: document.getElementById('tabBingo'),
+       steelbook: document.getElementById('tabSteelbook'),
      };
 
      const activeClasses = ["text-white", "font-bold", "cursor-default", "scale-105"];
@@ -750,8 +843,23 @@
      }
      
      if (controlsSection) {
-        if (view === 'grid') {
+        const toggleWrapper = document.getElementById('toggleFiltersWrapper');
+        if (view === 'grid' || view === 'wishlist') {
             controlsSection.classList.remove('hidden');
+            
+            if (view === 'wishlist') {
+                // Sur la wishlist, on force l'interface de tri à être masquée par défaut (sur tous les écrans)
+                if (toggleWrapper) toggleWrapper.classList.remove('sm:hidden');
+                filterInputsContainer.classList.remove('sm:grid', 'grid');
+                filterInputsContainer.classList.add('hidden');
+                if (toggleFiltersBtn) toggleFiltersBtn.textContent = "Afficher les filtres & tri";
+            } else {
+                // Sur le catalogue normal, on remet le comportement par défaut (ouvert sur ordi, fermé sur mobile)
+                if (toggleWrapper) toggleWrapper.classList.add('sm:hidden');
+                filterInputsContainer.classList.remove('hidden', 'grid');
+                filterInputsContainer.classList.add('hidden', 'sm:grid'); 
+                if (toggleFiltersBtn) toggleFiltersBtn.textContent = "Afficher les filtres & tri";
+            }
         } else {
             controlsSection.classList.add('hidden');
         }
@@ -902,14 +1010,19 @@
                              (state.seen === 'seen' && isSeenInStorage) || 
                              (state.seen === 'not-seen' && !isSeenInStorage);
 
-            const notUpcoming = currentView === 'grid' || currentView === 'netflix' ? (!m.added || new Date(m.added) <= today) : true;
+            const isWishlistMovie = (m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'));
+            const isUpcomingMovie = m.added && new Date(m.added) > today;
 
-            const notWishlist = currentView === 'wishlist' ? true : !(
-                (m.tags && m.tags.includes('wishlist')) ||
-                (m.categories && m.categories.includes('wishlist'))
-            );
+            let scopeCheck = true;
+            if (currentView === 'wishlist') {
+                scopeCheck = isWishlistMovie; // Garde UNIQUEMENT les films wishlist
+            } else if (currentView === 'upcoming') {
+                scopeCheck = isUpcomingMovie && !isWishlistMovie;
+            } else if (currentView === 'grid' || currentView === 'netflix' || currentView === 'stats') {
+                scopeCheck = !isUpcomingMovie && !isWishlistMovie; // Exclut la wishlist des vues standards
+            }
 
-            return matchesG && matchesY && matchesR && matchesC && matchesP && matchesS && notUpcoming && notWishlist;
+            return matchesG && matchesY && matchesR && matchesC && matchesP && matchesS && scopeCheck;
         });
 
         list.sort((a, b) => {
@@ -1548,6 +1661,100 @@
      seasonCard.appendChild(seasonChart);
      detailsGrid.appendChild(seasonCard);
 
+     // --- DÉBUT : SYSTÈME DE BADGES / SUCCÈS ---
+     const badges = [
+         { 
+             id: 'collec_50', icon: '📼', name: 'Posséder 50 films',
+             check: (m) => m.length >= 50 
+         },
+         { 
+             id: 'collec_100', icon: '📼', name: 'Posséder 100 films',
+             check: (m) => m.length >= 100 
+         },
+         { 
+             id: 'collec_200', icon: '📼', name: 'Posséder 200 films',
+             check: (m) => m.length >= 200 
+         },
+         { 
+             id: 'seen_50', icon: '🍿', name: '50 films visionnés',
+             check: (m) => m.filter(x => localStorage.getItem('seen_' + x.id)).length >= 50 
+         },
+         { 
+             id: 'steel_10', icon: '🛡️', name: '10 Steelbooks',
+             check: (m) => m.filter(x => (x.tags||[]).some(t => t.toLowerCase().includes('steelbook'))).length >= 10 
+         },
+         { 
+             id: 'steel_50', icon: '🛡️', name: '50 Steelbooks',
+             check: (m) => m.filter(x => (x.tags||[]).some(t => t.toLowerCase().includes('steelbook'))).length >= 50 
+         },
+         { 
+             id: 'steel_100', icon: '🛡️', name: '100 Steelbooks',
+             check: (m) => m.filter(x => (x.tags||[]).some(t => t.toLowerCase().includes('steelbook'))).length >= 100
+         },
+         { 
+             id: 'uhd_50', icon: '✨', name: '50 films en 4K UHD', 
+             check: (m) => m.filter(x => (x.tags||[]).some(t => t.toLowerCase().includes('4k'))).length >= 50 
+         },
+         { 
+             id: 'uhd_100', icon: '✨', name: '100 films en 4K UHD', 
+             check: (m) => m.filter(x => (x.tags||[]).some(t => t.toLowerCase().includes('4k'))).length >= 100 
+         },
+         { 
+             id: 'horror_10', icon: '🦇', name: '10 films d\'Horreur',
+             check: (m) => m.filter(x => (x.genres||[]).some(g => g.toLowerCase().includes('horreur'))).length >= 10 
+         },
+         { 
+             id: 'scifi_25', icon: '🚀', name: '25 films de Sci-Fi',
+             check: (m) => m.filter(x => (x.genres||[]).some(g => g.toLowerCase().includes('science-fiction') || g.toLowerCase().includes('sci-fi'))).length >= 25
+         },
+         { 
+             id: 'scifi_50', icon: '🚀', name: '50 films de Sci-Fi',
+             check: (m) => m.filter(x => (x.genres||[]).some(g => g.toLowerCase().includes('science-fiction') || g.toLowerCase().includes('sci-fi'))).length >= 50
+         },
+         { 
+             id: 'old_10', icon: '🎞️', name: '10 films d\'avant 1980',
+             check: (m) => m.filter(x => x.year && x.year < 1980).length >= 10 
+         },
+         { 
+             id: 'collector_pro', icon: '👑', name: '100% de la collection vue',
+             check: (m) => m.length > 10 && m.every(x => localStorage.getItem('seen_' + x.id)) 
+         }
+     ];
+
+     const badgesSection = document.createElement('div');
+     badgesSection.className = 'mt-12 mb-8 animate-fade-in';
+     badgesSection.innerHTML = '<h3 class="text-xl font-bold mb-6 px-1 flex items-center gap-2">🏅 Vitrine des Trophées</h3>';
+     
+     const badgesGrid = document.createElement('div');
+     badgesGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4';
+
+     badges.forEach(b => {
+         // On passe le tableau 'movies' (déjà filtré en haut de renderStats pour exclure la wishlist)
+         const unlocked = b.check(movies); 
+         const card = document.createElement('div');
+         
+         if (unlocked) {
+             // Badge débloqué (doré, lumineux, animé)
+             card.className = "flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/10 border border-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.15)] hover:scale-105 transition transform text-center group cursor-default";
+             card.innerHTML = `
+                 <div class="text-4xl mb-2 drop-shadow-lg group-hover:scale-110 transition duration-300 group-hover:-translate-y-1">${b.icon}</div>
+                 <div class="font-black text-white text-sm tracking-wide">${b.name}</div>
+             `;
+         } else {
+             // Badge verrouillé (grisé, terne)
+             card.className = "flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 opacity-60 grayscale hover:opacity-100 transition text-center cursor-default";
+             card.innerHTML = `
+                 <div class="text-4xl mb-2 opacity-30">${b.icon}</div>
+                 <div class="font-bold text-slate-400 text-sm flex items-center gap-1.5 justify-center"><span>🔒</span> ${b.name}</div>
+             `;
+         }
+         badgesGrid.appendChild(card);
+     });
+     
+     badgesSection.appendChild(badgesGrid);
+     statsView.appendChild(badgesSection);
+     // --- FIN : SYSTÈME DE BADGES ---
+
      const validMovies = movies.filter(m => m.added);
 
      const moviesByDate = {};
@@ -1757,13 +1964,17 @@
      const container = document.getElementById('wishlistView');
      container.innerHTML = '';
 
-     const wishlistMovies = state.all.filter(m => 
-       (m.tags && m.tags.includes('wishlist')) || 
-       (m.categories && m.categories.includes('wishlist'))
-     ).sort((a, b) => a.title.localeCompare(b.title));
+     // On utilise désormais les films triés/filtrés !
+     const wishlistMovies = state.filtered;
+
+     // On ajoute le petit compteur de films comme dans le catalogue
+     const countDiv = document.createElement('div');
+     countDiv.className = 'mb-4 text-sm opacity-80';
+     countDiv.textContent = `${wishlistMovies.length} film${wishlistMovies.length > 1 ? 's' : ''}`;
+     container.appendChild(countDiv);
 
      if (wishlistMovies.length === 0) {
-       container.innerHTML = '<p class="text-slate-200">Aucun film dans la wishlist.</p>';
+       container.innerHTML += '<p class="text-slate-200">Aucun film dans la wishlist ne correspond à votre recherche.</p>';
        return;
      }
 
@@ -1781,6 +1992,49 @@
            ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
          </div>
          <div class="p-3 space-y-1">
+           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
+           <div class="text-xs opacity-80 flex items-center gap-2">
+             ${m.year ? `<span>${m.year}</span>` : ''}
+             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
+             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
+           </div>
+         </div>
+       `;
+       card.addEventListener('click', () => openModal(m));
+       grid.appendChild(card);
+     });
+
+     container.appendChild(grid);
+   }
+
+   function renderSteelbookView() {
+     const container = document.getElementById('steelbookView');
+     container.innerHTML = '';
+
+     // On filtre pour chercher "steelbook" dans les tags (insensible à la casse)
+     const steelbookMovies = state.all.filter(m => 
+       m.tags && m.tags.some(t => t.toLowerCase().includes('steelbook'))
+     ).sort((a, b) => a.title.localeCompare(b.title));
+
+     if (steelbookMovies.length === 0) {
+       container.innerHTML = '<p class="text-slate-200">Aucun Steelbook dans la collection.</p>';
+       return;
+     }
+
+     const grid = document.createElement('div');
+     grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+
+     steelbookMovies.forEach(m => {
+       const posterSrc = m.altPoster || m.poster || m.netflixPoster || 
+         `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+
+       const card = document.createElement('article');
+       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
+       
+       card.innerHTML = `
+         <div class="aspect-square bg-black/40 p-1 flex items-center justify-center overflow-hidden">
+    ${getImageHtml(posterSrc, m.title, "w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-xl")}        </div>
+         <div class="p-3 space-y-1 border-t border-white/5">
            <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
            <div class="text-xs opacity-80 flex items-center gap-2">
              ${m.year ? `<span>${m.year}</span>` : ''}
@@ -1867,8 +2121,8 @@
      let badgesHtml = '';
 
      const urlDolbyVision = "https://upload.wikimedia.org/wikipedia/commons/0/03/Dolby_Vision_2021_logo.svg";
-     const urlDolbyAtmos = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Logo_Dolby_Atmos.svg/2560px-Logo_Dolby_Atmos.svg.png";
-     const urlDtsHd = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/DTS-HD-MA.svg/2560px-DTS-HD-MA.svg.png";
+     const urlDolbyAtmos = "https://upload.wikimedia.org/wikipedia/commons/d/d2/Dolby_Atmos.png";
+     const urlDtsHd = "https://upload.wikimedia.org/wikipedia/commons/b/bd/DTS-HD-MA.svg";
      const urlDtsX = "https://leclaireur.fnac.com/wp-content/uploads/2022/12/dts-x-logo-1024x298.png";
      const urlHdr10 = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/HDR_10_logo_%28black%29.svg/1280px-HDR_10_logo_%28black%29.svg.png";
 
@@ -2188,6 +2442,7 @@
      document.getElementById('wishlistView').classList.add('hidden');
      document.getElementById('statsView').classList.add('hidden');
      document.getElementById('bingoView').classList.add('hidden');
+     document.getElementById('steelbookView').classList.add('hidden');
    }
 
    document.getElementById('tabUpcoming').addEventListener('click', () => {
@@ -2204,6 +2459,14 @@
      hideAllViews();
      document.getElementById('wishlistView').classList.remove('hidden');
      applyFilters();
+   });
+
+   document.getElementById('tabSteelbook').addEventListener('click', () => {
+     currentView = 'steelbook';
+     setActiveTab('steelbook');
+     hideAllViews();
+     document.getElementById('steelbookView').classList.remove('hidden');
+     renderSteelbookView();
    });
 
    tabStatsBtn.addEventListener('click', () => {
@@ -2393,12 +2656,16 @@
        "Ari Aster": ["Hérédité", "Midsommar", "Beau is Afraid", "Eddington"],
        "Robert Eggers": ["The Witch", "The Lighthouse", "The Northman", "Nosferatu"],
        "Alejandro G. Iñárritu": ["Amours chiennes", "21 grammes", "Babel", "Biutiful", "Birdman ou (La Surprenante vertu de l'ignorance)", "The Revenant", "Bardo, Fausse chronique de quelques vérités"],
-       "Alfonso Cuarón": ["La petite princesse", "De grandes espérances", "Et... ta mère aussi!", "Harry Potter et le Prisonnier d'Azkaban", "Les Fils de l'homme", "Gravity", "Roma"]
+       "Alfonso Cuarón": ["La petite princesse", "De grandes espérances", "Et... ta mère aussi!", "Harry Potter et le Prisonnier d'Azkaban", "Les Fils de l'homme", "Gravity", "Roma"],
+       "Bong Joon Ho": ["Memories of Murder", "The Host", "Mother", "Snowpiercer : Le Transperceneige", "Okja", "Parasite", "Mickey 17"],
+       "Edgar Wright": ["Shaun of the Dead", "Hot Fuzz", "Scott Pilgrim", "Le Dernier Pub avant la fin du monde", "Baby Driver", "Last Night in Soho", "Running Man"],
+       "Gareth Edwards": ["Monsters", "Godzilla", "Rogue One", "The Creator", "Jurassic World: Renaissance"],
+       "Wes Anderson": ["Rushmore", "La famille Tenenbaum", "La Vie aquatique", "À bord du Darjeeling Limited", "Fantastic Mr. Fox", "Moonrise Kingdom", "The Grand Budapest Hotel", "L'Île aux chiens", "The French Dispatch", "Asteroid City", "The Phoenician Scheme"]
    };
 
    const directorPhotos = {
        "Christopher Nolan": "https://media.themoviedb.org/t/p/w440_and_h660_face/62gmVhxnamAtZkhVWw1t2QHK9dL.jpg",
-       "Quentin Tarantino": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Quentin_Tarantino_by_Gage_Skidmore.jpg/440px-Quentin_Tarantino_by_Gage_Skidmore.jpg",
+       "Quentin Tarantino": "https://media.themoviedb.org/t/p/w600_and_h900_face/1gjcpAa99FAOWGnrUvHEXXsRs7o.jpg",
        "Denis Villeneuve": "https://media.themoviedb.org/t/p/w440_and_h660_face/c9vs3EJpx555US89I975csyf5js.jpg",
        "David Fincher": "https://media.themoviedb.org/t/p/w440_and_h660_face/xwGXpxDugyTVE422aDeIy9WzpXu.jpg",
        "Stanley Kubrick": "https://media.themoviedb.org/t/p/w440_and_h660_face/yFT0VyIelI9aegZrsAwOG5iVP4v.jpg",
@@ -2417,7 +2684,11 @@
        "Ari Aster": "https://media.themoviedb.org/t/p/w440_and_h660_face/vVQai1yKGStv4x7TZdZS4X8MEyP.jpg",
        "Robert Eggers": "https://media.themoviedb.org/t/p/w440_and_h660_face/mLszN6cra7KZomzZI3CU6k8X0Zl.jpg",
        "Alejandro G. Iñárritu": "https://media.themoviedb.org/t/p/w440_and_h660_face/5Mx0RilUcVjXzmeKYAZJJ0WXZMQ.jpg",
-       "Alfonso Cuarón": "https://media.themoviedb.org/t/p/w440_and_h660_face/eoCHiXaQzGgx9RiwXnt3k239FLc.jpg"
+       "Alfonso Cuarón": "https://media.themoviedb.org/t/p/w440_and_h660_face/eoCHiXaQzGgx9RiwXnt3k239FLc.jpg",
+       "Bong Joon Ho": "https://media.themoviedb.org/t/p/w600_and_h900_face/stwnTvZAoD8gEJEDHpDQyLCyDy5.jpg",
+       "Edgar Wright": "https://media.themoviedb.org/t/p/w440_and_h660_face/dQzv5Ml2SkelS33hgl7E2oh0a9S.jpg",
+       "Gareth Edwards": "https://media.themoviedb.org/t/p/w440_and_h660_face/dyJwZCdIOBqq80sB8pE0yZErGv7.jpg",
+       "Wes Anderson": "https://media.themoviedb.org/t/p/w440_and_h660_face/b1LH059EGnU01rsZwcqYzNjY7w9.jpg"
    };
 
    const referenceSagas = {
@@ -2425,7 +2696,7 @@
        "Terre du Milieu": ["Le Seigneur des anneaux : La Communauté de l'anneau", "Le Seigneur des anneaux : Les Deux Tours", "Le Seigneur des anneaux : Le Retour du roi", "Le Hobbit : Un voyage inattendu", "Le Hobbit : La Désolation de Smaug", "Le Hobbit : La Bataille des Cinq Armées"],
        "Harry Potter": ["Harry Potter à l'école des sorciers", "Harry Potter et la Chambre des secrets", "Harry Potter et le Prisonnier d'Azkaban", "Harry Potter et la Coupe de feu", "Harry Potter et l'Ordre du Phénix", "Harry Potter et le Prince de sang-mêlé", "Harry Potter et les Reliques de la Mort - 1ère partie", "Harry Potter et les Reliques de la Mort - 2ème partie"],
        "Dark Knight": ["Batman Begins", "The Dark Knight", "The Dark Knight Rises"],
-       "Dune": ["Dune : Première Partie", "Dune : Deuxième Partie"],
+       "Dune": ["Dune", "Dune : Première Partie", "Dune : Deuxième Partie"],
        "Jurassic Park": ["Jurassic Park", "Le Monde perdu : Jurassic Park", "Jurassic Park III", "Jurassic World", "Jurassic World: Fallen Kingdom", "Jurassic World : Le Monde d'après", "Jurassic World: Renaissance"],
        "Mission: Impossible": ["Mission: Impossible", "Mission: Impossible 2", "Mission: Impossible 3", "Mission: Impossible - Protocole Fantôme", "Mission: Impossible - Rogue Nation", "Mission: Impossible - Fallout", "Mission: Impossible - Dead Reckoning", "Mission: Impossible - The Final Reckoning"],
        "Retour vers le futur": ["Retour vers le futur", "Retour vers le futur II", "Retour vers le futur III"],
@@ -2437,7 +2708,9 @@
        "MCU": ["Iron Man", "L'Incroyable Hulk", "Iron Man 2", "Thor", "Captain America : First Avenger", "Avengers", "Iron Man 3", "Thor : Le Monde des ténèbres", "Captain America : Le Soldat de l'hiver", "Les Gardiens de la Galaxie", "Avengers : L'Ère d'Ultron", "Ant-Man", "Captain America : Civil War", "Doctor Strange", "Les Gardiens de la Galaxie Vol.2", "Spider-Man : Homecoming", "Thor : Ragnarok", "Black Panther", "Avengers : Infinity War", "Ant-Man et la Guêpe", "Captain Marvel", "Avengers : Endgame", "Spider-Man : Far From Home", "Black Widow", "Shang-Chi et la Légende des Dix Anneaux", "Les Éternels", "Spider-Man : No Way Home", "Doctor Strange in the Multiverse of Madness", "Thor : Love and Thunder", "Black Panther : Wakanda Forever", "Ant-Man et la Guêpe : Quantumania", "Les Gardiens de la Galaxie Vol.3", "The Marvels", "Deadpool et Wolverine", "Captain America : Brave New World", "Thunderbolts*", "Les Quatre Fantastiques : Premiers pas"],
        "Dragons": ["Dragons", "Dragons 2", "Dragons 3 : Le Monde caché", "Dragons (2025)"],
        "007 Daniel Craig": ["Casino Royale", "Quantum of Solace", "Skyfall", "Spectre", "Mourir peut attendre"],
-       "Pixar": ["Toy Story", "1001 pattes", "Toy Story 2", "Monstres & Cie", "Le Monde de Nemo", "Les Indestructibles", "Cars", "Ratatouille", "WALL·E", "Là-haut", "Toy Story 3", "Cars 2", "Rebelle", "Monstres Academy", "Vice-versa", "Le Voyage d'Arlo", "Le Monde de Dory", "Cars 3", "Coco", "Les Indestructibles 2", "Toy Story 4", "En avant", "Soul", "Luca", "Alerte Rouge", "Buzz l'Éclair", "Élémentaire", "Vice-versa 2", "Elio"]
+       "Pixar": ["Toy Story", "1001 pattes", "Toy Story 2", "Monstres & Cie", "Le Monde de Nemo", "Les Indestructibles", "Cars", "Ratatouille", "WALL·E", "Là-haut", "Toy Story 3", "Cars 2", "Rebelle", "Monstres Academy", "Vice-versa", "Le Voyage d'Arlo", "Le Monde de Dory", "Cars 3", "Coco", "Les Indestructibles 2", "Toy Story 4", "En avant", "Soul", "Luca", "Alerte Rouge", "Buzz l'Éclair", "Élémentaire", "Vice-versa 2", "Elio"],
+       "Mad Max": ["Mad Max", "Mad Max 2 : Le Défi", "Mad Max : Au-delà du dôme du tonnerre", "Mad Max: Fury Road", "Furiosa : Une saga Mad Max"]
+
    };
 
    const sagaPhotos = {
@@ -2457,7 +2730,8 @@
        "MCU": "https://thumbs.dreamstime.com/b/logo-merisier-conception-de-mervel-marvel-est-une-compagnie-am%C3%A9ricaine-divertissement-179548774.jpg",
        "Dragons": "https://comptoirdugeek.com/cdn/shop/files/Dragons_Dreamworks.png?v=1683806082&width=1500",
        "007 Daniel Craig": "https://i.pinimg.com/736x/40/96/0c/40960ca230dc29c2ca8c38c3ac7cf233.jpg",
-       "Pixar": "https://img.icons8.com/androidL/1200/pixar.jpg"
+       "Pixar": "https://img.icons8.com/androidL/1200/pixar.jpg",
+       "Mad Max": "https://i.pinimg.com/564x/20/c7/cc/20c7cc2d93399fc95f37bde1967682e2.jpg"
    };
 
    function getSagaAvatar(name, ownedMovies) {
@@ -2754,7 +3028,132 @@
    document.getElementById('closeBingo').onclick = closeBingoModal;
    document.getElementById('bingoBackdrop').onclick = closeBingoModal;
 
-   
+   // --- DÉBUT : LOGIQUE DU GÉNÉRATEUR JSON ---
+   const btnOpenAddModal = document.getElementById('btnOpenAddModal');
+
+   function openJsonGenerator(e) {
+       // Bloque tout comportement parasite au clic
+       if (e) {
+           e.preventDefault();
+           e.stopPropagation();
+       }
+       
+       const modal = document.getElementById('addJsonModal');
+       const content = document.getElementById('addJsonContent');
+       if (!modal || !content) return alert("Modale introuvable !");
+       
+       // 1. On rend la modale présente dans le DOM
+       modal.classList.remove('hidden');
+       
+       // 2. L'astuce magique : on force le navigateur à recalculer l'affichage (Reflow)
+       void modal.offsetWidth;
+       
+       // 3. On déclenche l'animation de manière fluide
+       requestAnimationFrame(() => {
+           content.classList.remove('scale-95', 'opacity-0');
+           content.classList.add('scale-100', 'opacity-100');
+       });
+   }
+
+   // On attache l'événement proprement au bouton du Header
+   if (btnOpenAddModal) {
+       btnOpenAddModal.addEventListener('click', openJsonGenerator);
+   }
+
+   function closeJsonGenerator() {
+       const modal = document.getElementById('addJsonModal');
+       const content = document.getElementById('addJsonContent');
+       content.classList.remove('scale-100', 'opacity-100');
+       content.classList.add('scale-95', 'opacity-0');
+       setTimeout(() => modal.classList.add('hidden'), 200);
+   }
+
+   document.getElementById('closeAddJsonModal').onclick = closeJsonGenerator;
+   document.getElementById('addJsonBackdrop').onclick = closeJsonGenerator;
+
+   // Génération du code JSON
+   document.getElementById('btnGenerateJson').onclick = function() {
+       const splitAndTrim = (str) => str ? str.split(',').map(s => s.trim()).filter(Boolean) : [];
+       const title = document.getElementById('fm_title').value;
+       
+       if (!title) {
+           alert("Le titre est obligatoire !");
+           return;
+       }
+
+       const yearVal = document.getElementById('fm_year').value;
+       const year = yearVal ? parseInt(yearVal) : null;
+       const generatedId = (title + (year ? year : "")).replace(/\s+/g, '_').toLowerCase().replace(/[^a-z0-9_]/g, '');
+
+       const techSpecs = {
+           resolution: document.getElementById('fm_tech_res').value,
+           hdr: document.getElementById('fm_tech_hdr').value,
+           audio: document.getElementById('fm_tech_audio').value,
+           diskType: document.getElementById('fm_tech_disk').value,
+       };
+
+       Object.keys(techSpecs).forEach(key => { if (!techSpecs[key]) delete techSpecs[key]; });
+
+       const movieObj = {
+           id: generatedId,
+           title: title,
+           ean: document.getElementById('fm_ean').value || "",
+           year: year,
+           runtime: parseInt(document.getElementById('fm_runtime').value) || null,
+           overview: document.getElementById('fm_overview').value || "",
+           genres: splitAndTrim(document.getElementById('fm_genres').value),
+           directors: splitAndTrim(document.getElementById('fm_directors').value),
+           tags: splitAndTrim(document.getElementById('fm_tags').value),
+           poster: document.getElementById('fm_poster').value || "",
+           netflixPoster: document.getElementById('fm_netflixPoster').value || "",
+           added: new Date().toISOString().slice(0, 10),
+           technicalSpecs: Object.keys(techSpecs).length > 0 ? techSpecs : null
+       };
+
+       document.getElementById('jsonOutput').value = JSON.stringify(movieObj, null, 4) + ",";
+   };
+
+   // Copie dans le presse-papier (avec solution de repli pour exécution locale file://)
+   document.getElementById('btnCopyJson').onclick = function(e) {
+       e.preventDefault();
+       const text = document.getElementById('jsonOutput').value;
+       if (!text) return;
+
+       const showSuccess = () => {
+           const btn = e.target;
+           const originalText = btn.textContent;
+           btn.textContent = "Copié ! ✅";
+           btn.classList.replace("bg-white/10", "bg-green-600");
+           setTimeout(() => {
+               btn.textContent = originalText;
+               btn.classList.replace("bg-green-600", "bg-white/10");
+           }, 2000);
+       };
+
+       // Utilisation de l'API moderne si dispo (HTTPS), sinon Fallback (Local)
+       if (navigator.clipboard && window.isSecureContext) {
+           navigator.clipboard.writeText(text).then(showSuccess).catch(() => fallbackCopy(text, showSuccess));
+       } else {
+           fallbackCopy(text, showSuccess);
+       }
+
+       function fallbackCopy(textToCopy, callback) {
+           const textArea = document.createElement("textarea");
+           textArea.value = textToCopy;
+           textArea.style.position = "fixed"; // Évite que la page scrolle tout en bas
+           document.body.appendChild(textArea);
+           textArea.focus();
+           textArea.select();
+           try {
+               document.execCommand('copy');
+               callback();
+           } catch (err) {
+               alert("Impossible de copier automatiquement, veuillez copier le texte à la main.");
+           }
+           document.body.removeChild(textArea);
+       }
+   };
+   // --- FIN : LOGIQUE DU GÉNÉRATEUR JSON ---
 
    loadInitial();
   </script>
