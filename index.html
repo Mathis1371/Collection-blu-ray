@@ -500,6 +500,15 @@
          <button id="sortDirBtn" class="px-4 py-3 rounded-xl bg-white/10 hover:bg-white/20">⬆︎</button>
        </div>
       </div>
+      <div class="md:col-span-2">
+       <label class="block text-xs uppercase tracking-wide text-slate-300 mb-1">Affichage</label>
+       <select id="groupBySelect" class="w-full px-4 py-3 rounded-2xl bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-500">
+         <option value="">Grille standard</option>
+         <option value="director">Par Réalisateur</option>
+         <option value="genre">Par Genre</option>
+         <option value="year">Par Année</option>
+       </select>
+      </div>
       <div class="md:col-span-12 mt-4 flex gap-3">
         <button id="resetBtn" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20">Réinitialiser</button>
         <button id="randomBtn" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700">Film aléatoire</button>
@@ -522,8 +531,9 @@
   <main id="wishlistView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="statsView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
   <main id="steelbookView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
-
   <main id="bingoView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
+  
+  <main id="personView" class="mx-auto max-w-7xl px-4 pb-24 mt-6 hidden"></main>
 
   <div id="bingoModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center">
       <div id="bingoBackdrop" class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"></div>
@@ -711,11 +721,12 @@
 
   <script>
 
-    let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: ""};
+    let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: "", groupBy: ""};
     const els = {
       grid: document.getElementById('grid'),
       search: document.getElementById('searchInput'),
       genre: document.getElementById('genreSelect'),
+      groupBy: document.getElementById('groupBySelect'),
       seen: document.getElementById('seenSelect'),
       yearExact: document.getElementById('yearExact'),
       runtime: document.getElementById('runtimeSelect'),
@@ -923,7 +934,8 @@
         tags: Array.isArray(m.tags)?m.tags:[],
         country: m.country || '',
         added: m.added||new Date().toISOString().slice(0,10),
-        technicalSpecs: m.technicalSpecs || null // AJOUT DU CHAMP TECHNIQUE
+        technicalSpecs: m.technicalSpecs || null, // N'oublie pas la virgule ici !
+        isSeen: !!localStorage.getItem('seen_' + (m.id ?? (String(m.title) + String(m.year)).replace(/\s+/g, '_').toLowerCase()))
       }));
     }
 
@@ -958,6 +970,7 @@
      state.country = "";
      state.period = "";
      state.seen = "";
+     state.groupBy = "";
 
      els.search.value = "";
      els.genre.value = "";
@@ -967,6 +980,7 @@
      els.country.value = "";
      els.period.value = "";
      els.seen.value = "";
+     els.groupBy.value = "";
 
      applyFilters();
     }
@@ -1005,7 +1019,7 @@
                 return m.year && m.year >= start && m.year <= end;
             })();
 
-            const isSeenInStorage = localStorage.getItem('seen_' + m.id);
+            const isSeenInStorage = m.isSeen;
             const matchesS = !state.seen || 
                              (state.seen === 'seen' && isSeenInStorage) || 
                              (state.seen === 'not-seen' && !isSeenInStorage);
@@ -1475,8 +1489,13 @@
      dirCard.innerHTML = `<div class="stat-title">Réalisateurs fréquents</div>`;
      const dirList = document.createElement('div');
      dirList.style.marginTop = '.5rem';
-     if (dirArr.length===0) dirList.innerHTML = '<div class="text-xs opacity-70">Aucun réalisateur.</div>';
-     else dirArr.forEach(([d,c])=> dirList.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${d} — <span style="color:#cbd5e1">${c}</span></div>`);
+     if (dirArr.length===0) {
+         dirList.innerHTML = '<div class="text-xs opacity-70">Aucun réalisateur.</div>';
+     } else {
+         let dirHtml = "";
+         dirArr.forEach(([d,c])=> dirHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${d} — <span style="color:#cbd5e1">${c}</span></div>`);
+         dirList.innerHTML = dirHtml;
+     }
      dirCard.appendChild(dirList);
      detailsGrid.appendChild(dirCard);
 
@@ -1488,12 +1507,11 @@
      if (actorArr.length === 0) {
         actorList.innerHTML = '<div class="text-xs opacity-70">Aucun acteur renseigné.</div>';
      } else {
+        let actorsHtml = "";
         actorArr.forEach(([actor, count]) => {
-            actorList.innerHTML += `
-            <div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">
-                ${actor} — <span style="color:#cbd5e1">${count}</span>
-            </div>`;
+            actorsHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${actor} — <span style="color:#cbd5e1">${count}</span></div>`;
         });
+        actorList.innerHTML = actorsHtml;
      }
      actorCard.appendChild(actorList);
      detailsGrid.appendChild(actorCard);
@@ -1503,8 +1521,13 @@
      countryCard.innerHTML = `<div class="stat-title">Pays d'origine</div>`;
      const countryListEl = document.createElement('div');
      countryListEl.style.marginTop = '.5rem';
-     if (countryArr.length===0) countryListEl.innerHTML = '<div class="text-xs opacity-70">Aucun pays renseigné.</div>';
-     else countryArr.forEach(([c,cnt]) => countryListEl.innerHTML += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${c} — <span style="color:#cbd5e1">${cnt}</span></div>`);
+     if (countryArr.length===0) {
+         countryListEl.innerHTML = '<div class="text-xs opacity-70">Aucun pays renseigné.</div>';
+     } else {
+         let countryHtml = "";
+         countryArr.forEach(([c,cnt]) => countryHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${c} — <span style="color:#cbd5e1">${cnt}</span></div>`);
+         countryListEl.innerHTML = countryHtml;
+     }
      countryCard.appendChild(countryListEl);
      detailsGrid.appendChild(countryCard);
 
@@ -1882,34 +1905,98 @@
         fuse = new Fuse(state.all, options);
     }
 
-    function renderGrid() {
-     els.grid.innerHTML = '';
-     let countText = `${state.filtered.length} film${state.filtered.length > 1 ? 's' : ''}`;
-     els.count.textContent = countText;
-
-     for (const m of state.filtered) {
-       const posterSrc = m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
-
-       const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
-       card.innerHTML = `
-         <div class="aspect-[2/3]">
-           ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
-         </div>
-         <div class="p-3 space-y-1">
-           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
-           <div class="text-xs opacity-80 flex items-center gap-2">
-             ${m.year ? `<span>${m.year}</span>` : ''}
-             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
-             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
-           </div>
-           <div class="flex flex-wrap gap-1 pt-1">
-             ${(m.genres||[]).slice(0,3).map(g => `<span class='text-[10px] px-1.5 py-0.5 rounded-full bg-white/10'>${escapeHtml(g)}</span>`).join('')}
-           </div>
+    // Fonction utilitaire pour créer une carte de film (évite de répéter le code)
+    function createMovieCard(m) {
+        const posterSrc = m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+        const card = document.createElement('article');
+        card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer flex flex-col h-full';
+        card.innerHTML = `
+          <div class="aspect-[2/3] bg-black/40 shrink-0">
+            ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
+          </div>
+          <div class="p-3 space-y-1 flex flex-col flex-1">
+            <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
+            <div class="text-xs opacity-80 flex items-center gap-2">
+              ${m.year ? `<span>${m.year}</span>` : ''}
+              ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
+              ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
+            </div>
+            ${m.genres && m.genres.length ? `
+            <div class="flex flex-wrap gap-1 pt-1 mt-auto">
+              ${m.genres.slice(0,3).map(g => `<span class='text-[10px] px-1.5 py-0.5 rounded-full bg-white/10'>${escapeHtml(g)}</span>`).join('')}
+            </div>` : ''}
           </div>
         `;
-       card.addEventListener('click', () => openModal(m));
-       els.grid.appendChild(card);
+        card.addEventListener('click', () => openModal(m));
+        return card;
+    }
+
+    // Génère l'affichage groupé
+    function renderGroupedContent(container, movies) {
+        const groups = {};
+        
+        // 1. Répartir les films dans les groupes
+        movies.forEach(m => {
+            let keys = [];
+            if (state.groupBy === 'director') {
+                keys = m.directors && m.directors.length > 0 ? m.directors : ['Inconnu'];
+            } else if (state.groupBy === 'genre') {
+                keys = m.genres && m.genres.length > 0 ? m.genres : ['Non classé'];
+            } else if (state.groupBy === 'year') {
+                keys = m.year ? [m.year.toString()] : ['Année Inconnue'];
+            }
+
+            keys.forEach(k => {
+                if (!groups[k]) groups[k] = [];
+                if (!groups[k].includes(m)) groups[k].push(m);
+            });
+        });
+
+        // 2. Trier alphabétiquement les groupes (ou par ordre décroissant pour les années)
+        let sortedKeys = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+        if (state.groupBy === 'year') {
+            sortedKeys = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+        }
+
+        // 3. Dessiner chaque groupe
+        sortedKeys.forEach(key => {
+            const groupMovies = groups[key];
+            
+            const section = document.createElement('div');
+            section.className = 'mb-10 animate-fade-in'; 
+            
+            const title = document.createElement('h2');
+            title.className = 'text-2xl md:text-3xl font-black text-white mb-4 border-b border-white/10 pb-2 flex items-baseline gap-3';
+            title.innerHTML = `${escapeHtml(key)} <span class="text-sm font-bold text-slate-500 bg-white/5 px-2 py-0.5 rounded-full">${groupMovies.length}</span>`;
+            section.appendChild(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+
+            groupMovies.forEach(m => {
+                grid.appendChild(createMovieCard(m));
+            });
+
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
+    }
+
+    function renderGrid() {
+      els.grid.innerHTML = '';
+      let countText = `${state.filtered.length} film${state.filtered.length > 1 ? 's' : ''}`;
+      els.count.textContent = countText;
+
+      if (state.groupBy) {
+          els.grid.className = '';
+          renderGroupedContent(els.grid, state.filtered);
+      } else {
+          els.grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+          const fragment = document.createDocumentFragment();
+          for (const m of state.filtered) {
+             fragment.appendChild(createMovieCard(m));
+          }
+          els.grid.appendChild(fragment);
       }
     }
 
@@ -1961,51 +2048,30 @@
    }
     
     function renderWishlistView() {
-     const container = document.getElementById('wishlistView');
-     container.innerHTML = '';
+       const container = document.getElementById('wishlistView');
+       container.innerHTML = '';
 
-     // On utilise désormais les films triés/filtrés !
-     const wishlistMovies = state.filtered;
+       const wishlistMovies = state.filtered;
 
-     // On ajoute le petit compteur de films comme dans le catalogue
-     const countDiv = document.createElement('div');
-     countDiv.className = 'mb-4 text-sm opacity-80';
-     countDiv.textContent = `${wishlistMovies.length} film${wishlistMovies.length > 1 ? 's' : ''}`;
-     container.appendChild(countDiv);
+       const countDiv = document.createElement('div');
+       countDiv.className = 'mb-4 text-sm opacity-80';
+       countDiv.textContent = `${wishlistMovies.length} film${wishlistMovies.length > 1 ? 's' : ''}`;
+       container.appendChild(countDiv);
 
-     if (wishlistMovies.length === 0) {
-       container.innerHTML += '<p class="text-slate-200">Aucun film dans la wishlist ne correspond à votre recherche.</p>';
-       return;
-     }
+       if (wishlistMovies.length === 0) {
+         container.innerHTML += '<p class="text-slate-200">Aucun film dans la wishlist ne correspond à votre recherche.</p>';
+         return;
+       }
 
-     const grid = document.createElement('div');
-     grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
-
-     wishlistMovies.forEach(m => {
-       const posterSrc = m.poster || m.netflixPoster || 
-         `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
-
-       const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
-       card.innerHTML = `
-         <div class="aspect-[2/3] bg-black/40">
-           ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300")}
-         </div>
-         <div class="p-3 space-y-1">
-           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
-           <div class="text-xs opacity-80 flex items-center gap-2">
-             ${m.year ? `<span>${m.year}</span>` : ''}
-             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
-             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
-           </div>
-         </div>
-       `;
-       card.addEventListener('click', () => openModal(m));
-       grid.appendChild(card);
-     });
-
-     container.appendChild(grid);
-   }
+       if (state.groupBy) {
+           renderGroupedContent(container, wishlistMovies);
+       } else {
+           const grid = document.createElement('div');
+           grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+           wishlistMovies.forEach(m => grid.appendChild(createMovieCard(m)));
+           container.appendChild(grid);
+       }
+    }
 
    function renderSteelbookView() {
      const container = document.getElementById('steelbookView');
@@ -2084,7 +2150,7 @@
                  alt="${escapeHtml(title)}" 
                  loading="lazy" 
                  class="${cssClass} relative z-10 opacity-0 transition-opacity duration-500"
-                 onload="this.classList.remove('opacity-0')"
+                 onload="this.previousElementSibling.remove(); this.classList.remove('opacity-0')"
                  onerror="this.parentElement.innerHTML='<div class=\'text-xs text-slate-500 p-2 text-center\'>Image non dispo</div>'"
             />
         </div>
@@ -2351,11 +2417,13 @@
      updateSeenBtn(isSeen); 
 
      seenBtnHtml.onclick = () => {
-         if (localStorage.getItem('seen_' + m.id)) {
+         if (m.isSeen) {
              localStorage.removeItem('seen_' + m.id);
+             m.isSeen = false;
              updateSeenBtn(false);
          } else {
              localStorage.setItem('seen_' + m.id, 'true');
+             m.isSeen = true;
              updateSeenBtn(true);
          }
          applyFilters(); 
@@ -2374,6 +2442,7 @@
          });
      }
 
+     // Fonction pour les tags (qui continuent d'utiliser la recherche normale)
      const navigateToSearch = (e) => {
          e.stopPropagation();
          state.query = e.target.textContent.trim();
@@ -2386,8 +2455,18 @@
          closeModal();
      };
 
-     els.modalDirectors.querySelectorAll('.director-link').forEach(el => el.addEventListener('click', navigateToSearch));
-     els.modalActors.querySelectorAll('.actor-link').forEach(el => el.addEventListener('click', navigateToSearch));
+     // NOUVELLE Fonction pour les personnes (Acteurs / Réalisateurs)
+     const navigateToPerson = (e) => {
+         e.stopPropagation();
+         const name = e.target.textContent.trim();
+         renderPersonView(name);
+     };
+
+     // On assigne la nouvelle fonction aux acteurs et réalisateurs
+     els.modalDirectors.querySelectorAll('.director-link').forEach(el => el.addEventListener('click', navigateToPerson));
+     els.modalActors.querySelectorAll('.actor-link').forEach(el => el.addEventListener('click', navigateToPerson));
+     
+     // Les tags restent sur l'ancienne fonction
      els.modalTags.querySelectorAll('.tag-link').forEach(el => el.addEventListener('click', navigateToSearch));
 
      const posterWrapper = els.modalPoster.parentElement; 
@@ -2435,6 +2514,84 @@
      }, 200);
     }
 
+   function renderPersonView(name) {
+       // 1. On ferme la modale du film actuel
+       closeModal();
+
+       const container = document.getElementById('personView');
+       container.innerHTML = '';
+
+       // 2. On cherche TOUS les films de la personne présents sur le site
+       const today = new Date();
+       const personMovies = state.all.filter(m => 
+           (m.directors && m.directors.includes(name)) || (m.people && m.people.includes(name))
+       );
+
+       // 3. On trie du plus récent au plus ancien
+       personMovies.sort((a, b) => (b.year || 0) - (a.year || 0));
+
+       // 4. On isole ceux qui sont VRAIMENT dans le catalogue (sans wishlist/upcoming) pour les stats
+       const catalogueMovies = personMovies.filter(m => {
+           const isWishlist = (m.tags && m.tags.includes('wishlist')) || (m.categories && m.categories.includes('wishlist'));
+           const isUpcoming = (m.added && new Date(m.added) > today);
+           return !isWishlist && !isUpcoming;
+       });
+
+       const catalogueCount = catalogueMovies.length;
+       const seenCount = catalogueMovies.filter(m => localStorage.getItem('seen_' + m.id)).length;
+       
+       let avgRating = 0;
+       // On utilise 'personMovies' au lieu de 'catalogueMovies' pour inclure tous les films
+       const ratedMovies = personMovies.filter(m => m.rating);
+       if (ratedMovies.length > 0) {
+           avgRating = ratedMovies.reduce((acc, m) => acc + m.rating, 0) / ratedMovies.length;
+       }
+
+       // 5. On génère l'avatar (utilise vos photos si elles existent, sinon un avatar aléatoire élégant)
+       let avatarSrc = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=256`;
+       if (typeof getDirectorAvatar === 'function') {
+           avatarSrc = getDirectorAvatar(name); 
+       }
+
+       // 6. On crée la bannière (Header)
+       const header = document.createElement('div');
+       header.className = "flex flex-col md:flex-row items-center md:items-center gap-6 mb-10 animate-fade-in bg-white/5 p-6 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden";
+       
+       // Petit effet visuel en fond
+       header.innerHTML = `
+           <div class="absolute inset-0 bg-gradient-to-r from-red-900/20 to-transparent pointer-events-none"></div>
+           <img src="${avatarSrc}" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-[#1a1a1a] shadow-xl shrink-0 bg-slate-700 relative z-10" />
+           <div class="flex-1 text-center md:text-left relative z-10">
+               <h2 class="text-4xl md:text-5xl font-black text-white drop-shadow-lg mb-3">${escapeHtml(name)}</h2>
+               <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-sm font-bold text-slate-300">
+                   <span class="bg-white/10 px-4 py-1.5 rounded-full flex items-center gap-2">🎬 ${personMovies.length} film${personMovies.length > 1 ? 's' : ''} au total (${catalogueCount} dans la collection)</span>
+                   <span class="bg-green-500/20 text-green-400 border border-green-500/30 px-4 py-1.5 rounded-full flex items-center gap-2">👁️ ${seenCount} vu${seenCount > 1 ? 's' : ''}</span>
+                   ${avgRating > 0 ? `<span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-4 py-1.5 rounded-full flex items-center gap-2">⭐ Note moy. ${avgRating.toFixed(1)}</span>` : ''}
+               </div>
+           </div>
+       `;
+       container.appendChild(header);
+
+       // 7. On crée la grille des films
+       const gridContainer = document.createElement('div');
+       gridContainer.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 animate-fade-in';
+       
+       const fragment = document.createDocumentFragment();
+       personMovies.forEach(m => fragment.appendChild(createMovieCard(m)));
+       gridContainer.appendChild(fragment);
+       
+       container.appendChild(gridContainer);
+
+       // 8. On masque les autres vues et on affiche celle-ci
+       currentView = 'person';
+       setActiveTab(''); // Retire la couleur rouge de tous les onglets du haut
+       hideAllViews();
+       container.classList.remove('hidden');
+       
+       // On remonte tout en haut de la page
+       window.scrollTo({ top: 0, behavior: 'smooth' });
+   }
+
    function hideAllViews() {
      document.getElementById('mainView').classList.add('hidden');
      document.getElementById('gridView').classList.add('hidden');
@@ -2443,6 +2600,7 @@
      document.getElementById('statsView').classList.add('hidden');
      document.getElementById('bingoView').classList.add('hidden');
      document.getElementById('steelbookView').classList.add('hidden');
+     document.getElementById('personView').classList.add('hidden');
    }
 
    document.getElementById('tabUpcoming').addEventListener('click', () => {
@@ -2477,7 +2635,14 @@
      renderStats();
    });
 
-    els.search.addEventListener('input', e=>{ state.query = e.target.value; applyFilters(); });
+    let searchTimeout;
+      els.search.addEventListener('input', e => { 
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+              state.query = e.target.value; 
+              applyFilters(); 
+          }, 300);
+      });
     els.genre.addEventListener('change', e=>{ state.genre = e.target.value; applyFilters(); });
     els.yearExact.addEventListener('input', e=>{ state.yearExact = e.target.value; applyFilters(); });
     els.runtime.addEventListener('change', e =>{ state.runtime = e.target.value; applyFilters(); });
@@ -2485,29 +2650,43 @@
     els.country.addEventListener('change', e => {state.country = e.target.value; applyFilters(); });
     els.period.addEventListener('change', e => {state.period = e.target.value; applyFilters(); });
     els.seen.addEventListener('change', e => { state.seen = e.target.value; applyFilters(); });
+    els.groupBy.addEventListener('change', e => { state.groupBy = e.target.value; applyFilters(); });
     
     els.reset.addEventListener('click', ()=>{
         resetFilters();
     });    
+
+    let isRouletteSpinning = false; // Le verrou anti-spam
 
     els.randomBtn.addEventListener('click', () => {
         if (state.filtered.length === 0) {
             alert("Aucun film trouvé dans la sélection actuelle !");
             return;
         }
+        
+        // 1. On vérifie le verrou
+        if (isRouletteSpinning) return;
+        isRouletteSpinning = true;
 
         const overlay = document.getElementById('randomRoulette');
         const rPoster = document.getElementById('roulettePoster');
         const rTitle = document.getElementById('rouletteTitle');
+        const wrapper = rPoster.parentElement;
         
+        // 2. Astuce absolue pour forcer l'animation fluide d'apparition
         overlay.classList.remove('hidden');
+        void overlay.offsetWidth; // Force le navigateur à rafraîchir l'affichage
         overlay.classList.remove('opacity-0');
-        rPoster.parentElement.classList.remove('shake-effect');
+        
+        // 3. Réinitialisation des styles avant de lancer
+        wrapper.classList.remove('shake-effect', 'ring-green-500');
+        wrapper.classList.add('ring-white/5');
+        rTitle.classList.add('animate-pulse');
+        rTitle.classList.remove('text-green-400');
 
         let duration = 0;
         let speed = 50; 
         let maxDuration = 2000; 
-        let shuffles = 0;
         let lastIndex = -1;
 
         const shuffle = () => {
@@ -2523,7 +2702,6 @@
             rTitle.textContent = movie.title;
             
             duration += speed;
-            shuffles++;
 
             if (duration < maxDuration) {
                 if (duration > maxDuration * 0.7) speed += 20; 
@@ -2538,26 +2716,22 @@
             rTitle.classList.remove('animate-pulse');
             rTitle.classList.add('text-green-400');
             
-            const wrapper = rPoster.parentElement;
-            
+            // Force l'animation de tremblement à se rejouer
             wrapper.classList.remove('shake-effect');
             void wrapper.offsetWidth; 
             wrapper.classList.add('shake-effect');
-
+            
             wrapper.classList.remove('ring-white/5');
             wrapper.classList.add('ring-green-500');
 
             setTimeout(() => {
-                overlay.classList.add('opacity-0');
+                overlay.classList.add('opacity-0'); 
                 
                 setTimeout(() => {
                     overlay.classList.add('hidden');
-                    rTitle.classList.add('animate-pulse');
-                    rTitle.classList.remove('text-green-400');
                     
-                    wrapper.classList.remove('shake-effect'); 
-                    wrapper.classList.remove('ring-green-500');
-                    wrapper.classList.add('ring-white/5');
+                    // 4. ON ROUVRE LE VERROU ICI !
+                    isRouletteSpinning = false; 
                     
                     openModal(movie);
                 }, 500); 
@@ -2660,7 +2834,15 @@
        "Bong Joon Ho": ["Memories of Murder", "The Host", "Mother", "Snowpiercer : Le Transperceneige", "Okja", "Parasite", "Mickey 17"],
        "Edgar Wright": ["Shaun of the Dead", "Hot Fuzz", "Scott Pilgrim", "Le Dernier Pub avant la fin du monde", "Baby Driver", "Last Night in Soho", "Running Man"],
        "Gareth Edwards": ["Monsters", "Godzilla", "Rogue One", "The Creator", "Jurassic World: Renaissance"],
-       "Wes Anderson": ["Rushmore", "La famille Tenenbaum", "La Vie aquatique", "À bord du Darjeeling Limited", "Fantastic Mr. Fox", "Moonrise Kingdom", "The Grand Budapest Hotel", "L'Île aux chiens", "The French Dispatch", "Asteroid City", "The Phoenician Scheme"]
+       "Wes Anderson": ["Rushmore", "La famille Tenenbaum", "La Vie aquatique", "À bord du Darjeeling Limited", "Fantastic Mr. Fox", "Moonrise Kingdom", "The Grand Budapest Hotel", "L'Île aux chiens", "The French Dispatch", "Asteroid City", "The Phoenician Scheme"],
+       "Joseph Kosinski": ["Tron : L'Héritage", "Oblivion", "Line of fire", "Top Gun: Maverick", "Spiderhead", "F1"],
+       "Danny Boyle": ["Petits meurtres entre amis", "Trainspotting", "Une vie moins ordinaire", "La Plage", "28 jours plus tard", "Millions", "Sunshine", "Slumdog Millionaire", "127 Heures", "Trance", "Steve Jobs", "T2 Trainspotting", "Yesterday", "28 ans plus tard"],
+       "Peter Weir": ["Pique-nique à Hanging Rock", "Gallipoli", "Witness", "Mosquito Coast", "Le Cercle des poètes disparus", "Green Card", "État second", "The Truman Show", "Master and Commander : De l'autre côté du monde", "Les chemins de la liberté"],
+       "Luc Besson": ["Le Dernier Combat", "Subway", "Le Grand Bleu", "Léon", "Le cinquième élément", "Jeanne d'Arc", "Angel-A", "Arthur et les Minimoys", "Arthur et la Vengeance de Maltazard", "Les Aventures extraordinaires d'Adèle Blanc-Sec", "Arthur 3 : La Guerre des deux mondes", "The Lady", "Malavita", "Lucy", "Valérian et la Cité des mille planètes", "Anna", "Dogman", "Dracula"],
+       "Alex Garland": ["Ex Machina", "Annihilation", "Men", "Civil War", "Warfare"],
+       "Richard Curtis": ["Love Actually", "Good Morning England", "Il était temps"],
+       "Jordan Peele": ["Get Out", "Us", "Nope"],
+       "James Mangold": ["Copland", "Une vie volée", "Kate et Léopold", "Identity", "Walk the Line", "3h10 pour Yuma", "Night and Day", "Wolverine : Le Combat de l'immortel", "Logan", "Le Mans '66", "Indiana Jones et le Cadran de la destinée", "Un parfait inconnu"]
    };
 
    const directorPhotos = {
@@ -2688,7 +2870,15 @@
        "Bong Joon Ho": "https://media.themoviedb.org/t/p/w600_and_h900_face/stwnTvZAoD8gEJEDHpDQyLCyDy5.jpg",
        "Edgar Wright": "https://media.themoviedb.org/t/p/w440_and_h660_face/dQzv5Ml2SkelS33hgl7E2oh0a9S.jpg",
        "Gareth Edwards": "https://media.themoviedb.org/t/p/w440_and_h660_face/dyJwZCdIOBqq80sB8pE0yZErGv7.jpg",
-       "Wes Anderson": "https://media.themoviedb.org/t/p/w440_and_h660_face/b1LH059EGnU01rsZwcqYzNjY7w9.jpg"
+       "Wes Anderson": "https://media.themoviedb.org/t/p/w440_and_h660_face/b1LH059EGnU01rsZwcqYzNjY7w9.jpg",
+       "Joseph Kosinski": "https://media.themoviedb.org/t/p/w440_and_h660_face/oWLUXWY0j8TYzwnf2wETYWO181S.jpg",
+       "Danny Boyle": "https://media.themoviedb.org/t/p/w440_and_h660_face/b5qQpFHmgNyvV1t81ou17Jt2fRj.jpg",
+       "Peter Weir": "https://media.themoviedb.org/t/p/w440_and_h660_face/4GxIZX5gtbMpW4ZgHwvGmLSIHOE.jpg",
+       "Luc Besson": "https://media.themoviedb.org/t/p/w440_and_h660_face/cb9Eiuj9S11HVF06rweRCHVlZB5.jpg",
+       "Alex Garland": "https://media.themoviedb.org/t/p/w440_and_h660_face/qSWzYnDw68xm4i5xprH9BwQ6q25.jpg",
+       "Richard Curtis": "https://media.themoviedb.org/t/p/w440_and_h660_face/dLhFfcHJvOLzzykO3LYkinXJUA1.jpg",
+       "Jordan Peele": "https://media.themoviedb.org/t/p/w440_and_h660_face/kFUKn5g3ebpyZ3CSZZZo2HFWRNQ.jpg",
+       "James Mangold": "https://media.themoviedb.org/t/p/w440_and_h660_face/pk0GDjn99crNwR4qgCCEokDYd71.jpg"
    };
 
    const referenceSagas = {
