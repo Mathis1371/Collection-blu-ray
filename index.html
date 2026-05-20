@@ -1099,6 +1099,20 @@
             banner.classList.add('hidden');
         }
 
+        // ---- CONFIGURATION ET ORDRE DES CATÉGORIES ----
+        const priorityOrder = ["Ajouts récents", "Top 10", "Nouveautés", "Récompensés aux Oscars", "Blockbusters", "Classiques", "Films français", "Animation"];
+        const rowsToRender = [];
+
+        // 1. Génération de la ligne "Ajouts récents" (15 derniers entrés)
+        const recentMovies = [...netflixMovies]
+            .sort((a, b) => new Date(b.added || 0) - new Date(a.added || 0))
+            .slice(0, 15);
+
+        if (recentMovies.length > 0) {
+            rowsToRender.push({ title: "Ajouts récents", movies: recentMovies, type: "standard" });
+        }
+
+        // 2. Cartographie des catégories du fichier JSON
         const categoriesMap = {};
         netflixMovies.forEach(movie => {
             (movie.categories || []).forEach(cat => {
@@ -1107,13 +1121,38 @@
             });
         });
 
-        for (const cat in categoriesMap) {
+        // Tri qualitatif automatique du Top 10 par note globale décroissante
+        if (categoriesMap["Top 10"]) {
+            categoriesMap["Top 10"].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        }
+
+        // 3. Insertion des catégories prioritaires définies
+        priorityOrder.forEach(cat => {
+            if (cat === "Ajouts récents") return; // Déjà fait au-dessus
+            if (categoriesMap[cat] && categoriesMap[cat].length > 0) {
+                rowsToRender.push({
+                    title: cat,
+                    movies: cat === "Top 10" ? categoriesMap[cat].slice(0, 10) : categoriesMap[cat],
+                    type: cat === "Top 10" ? "top10" : "standard"
+                });
+            }
+        });
+
+        // 4. Insertion automatique du reste des catégories non prioritaires
+        Object.keys(categoriesMap).forEach(cat => {
+            if (!priorityOrder.includes(cat) && categoriesMap[cat].length > 0) {
+                rowsToRender.push({ title: cat, movies: categoriesMap[cat], type: "standard" });
+            }
+        });
+
+        // ---- RENDU HTML DES CARROUSELS ----
+        rowsToRender.forEach(row => {
             const section = document.createElement('section');
-            section.className = "mb-7 group"; 
+            section.className = "mb-10 group"; 
 
             const title = document.createElement('h2');
-            title.textContent = cat;
-            title.className = "text-xl font-bold mb-3 px-1 flex items-baseline"; 
+            title.textContent = row.title;
+            title.className = "text-xl font-bold mb-4 px-1 flex items-baseline text-white"; 
             section.appendChild(title);
 
             const wrapper = document.createElement('div');
@@ -1130,16 +1169,33 @@
             btnRight.ariaLabel = "Suivant";
 
             const carousel = document.createElement('div');
-            carousel.className = "carousel flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-4 px-1";
+            carousel.className = "carousel flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-6 px-1";
 
-            const shuffled = [...categoriesMap[cat]].sort(() => 0.5 - Math.random());
-            shuffled.forEach(m => {
+            const finalMovies = (row.title === "Ajouts récents" || row.title === "Top 10") 
+                ? row.movies 
+                : [...row.movies].sort(() => 0.5 - Math.random());
+
+            finalMovies.forEach((m, index) => {
                 const posterSrc = m.netflixPoster || m.poster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
-                
                 const card = document.createElement('div');
-                card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
                 
-                card.innerHTML = getImageHtml(posterSrc, m.title, "w-full h-auto aspect-video object-cover rounded-md shadow-lg");
+                if (row.type === 'top10') {
+                    card.className = 'carousel-item flex-none group/card relative cursor-pointer z-10 hover:z-20 select-none';
+                    card.innerHTML = `
+                        <div class="flex items-end relative h-[160px] md:h-[200px] lg:h-[240px] w-[130px] md:w-[170px] lg:w-[200px] select-none pl-10 md:pl-14 overflow-visible">
+                            <span class="absolute left-0 bottom-[-12px] text-[90px] md:text-[130px] lg:text-[170px] font-black leading-none select-none z-0 tracking-tighter" 
+                                  style="font-family: 'Arial Black', sans-serif; -webkit-text-stroke: 2px rgba(255,255,255,0.4); text-stroke: 2px rgba(255,255,255,0.4); color: #111; drop-shadow: 0 4px 10px rgba(0,0,0,0.9);">
+                                ${index + 1}
+                            </span>
+                            <div class="relative z-10 w-full h-full rounded-lg overflow-hidden shadow-2xl transform transition-transform duration-300 group-hover/card:scale-105 border border-white/10">
+                                ${getImageHtml(m.poster || posterSrc, m.title, "w-full h-full object-cover")}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    card.className = 'carousel-item flex-none w-[160px] md:w-[195px] lg:w-[230px] group/card relative cursor-pointer transition-transform duration-300 hover:scale-105 z-10 hover:z-20';
+                    card.innerHTML = getImageHtml(posterSrc, m.title, "w-full h-auto aspect-video object-cover rounded-md shadow-lg");
+                }
 
                 card.addEventListener('click', () => openModal(m));
                 carousel.appendChild(card);
@@ -1147,13 +1203,13 @@
 
             btnLeft.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft -= carousel.clientWidth * 0.90; };
             btnRight.onclick = (e) => { e.stopPropagation(); carousel.scrollLeft += carousel.clientWidth * 0.90; };
+            
             const updateArrows = () => {
-                if (carousel.scrollLeft > 20) btnLeft.classList.remove('hidden'); else btnLeft.classList.add('hidden'); // petit fix display ici
                 if (carousel.scrollLeft > 20) btnLeft.style.display = 'flex'; else btnLeft.style.display = 'none';
-                
                 const maxScroll = carousel.scrollWidth - carousel.clientWidth;
                 if (carousel.scrollLeft >= maxScroll - 20) btnRight.style.display = 'none'; else btnRight.style.display = 'flex';
             };
+            
             carousel.addEventListener('scroll', updateArrows);
             setTimeout(updateArrows, 100); 
 
@@ -1162,8 +1218,9 @@
             wrapper.appendChild(btnRight);
             section.appendChild(wrapper);
             container.appendChild(section);
-        }
+        });
 
+        // ---- LOGIQUE DE LA BANNIÈRE ----
         if (bannerMovies.length === 0) {
             let candidates = netflixMovies.filter(m => m.netflixPoster || m.poster);
             candidates.sort(() => 0.5 - Math.random());
@@ -1318,7 +1375,7 @@
 
    function renderStats() {
      if (!statsView) return;
-     statsView.innerHTML = '<h2 class="text-2xl font-semibold mb-4">Stats</h2>';
+     statsView.innerHTML = '<h2 class="text-3xl font-black mb-6 flex items-center gap-3"><span>📊</span> Statistiques</h2>';
 
      const today = new Date();
      const movies = (state.all || []).filter(m => 
@@ -1331,25 +1388,37 @@
      const totalMarket = movies.reduce((acc, m) => acc + (m.marketValue || 0), 0);
      const seenCount = movies.filter(m => localStorage.getItem('seen_' + m.id)).length;
      
+     // Note moyenne globale
+     const validRatings = movies.filter(m => m.rating);
+     const avgRatingOverall = validRatings.length ? (validRatings.reduce((a, b) => a + b.rating, 0) / validRatings.length).toFixed(1) : 0;
+
      const genreCounts = {};
      movies.forEach(m => (m.genres||[]).forEach(g => { genreCounts[g] = (genreCounts[g]||0) + 1; }));
      const genresArr = Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]);
 
      const dirCounts = {};
      movies.forEach(m => (m.directors||[]).forEach(d => { dirCounts[d] = (dirCounts[d]||0) + 1; }));
-     const dirArr = Object.entries(dirCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+     const dirArr = Object.entries(dirCounts).sort((a,b)=>b[1]-a[1]).slice(0,5); // Top 5 suffisant pour un rendu propre
 
      const actorCounts = {};
      movies.forEach(m => (m.people || []).forEach(a => { actorCounts[a] = (actorCounts[a] || 0) + 1; }));
-     const actorArr = Object.entries(actorCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+     const actorArr = Object.entries(actorCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
      const countryCounts = {};
      movies.forEach(m => { if (m.country) countryCounts[m.country] = (countryCounts[m.country]||0) + 1; });
-     const countryArr = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+     const countryArr = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
 
      const durations = movies.map(m => m.runtime || 0).filter(v => v>0);
      const totalMinutes = durations.reduce((s,x)=>s+x,0);
      const avgMinutes = durations.length ? Math.round(totalMinutes/durations.length) : 0;
+     
+     // Formatage du temps total
+     let watchTimeStr = "";
+     const days = Math.floor(totalMinutes / 1440);
+     const hours = Math.floor((totalMinutes % 1440) / 60);
+     const mins = totalMinutes % 60;
+     if (days > 0) watchTimeStr = `<span class="text-3xl">${days}</span><span class="text-sm">j</span> <span class="text-3xl">${hours}</span><span class="text-sm">h</span>`;
+     else watchTimeStr = `<span class="text-3xl">${hours}</span><span class="text-sm">h</span> <span class="text-3xl">${mins.toString().padStart(2, '0')}</span><span class="text-sm">m</span>`;
 
      const yearCounts = {};
      const decadesCount = {};
@@ -1380,192 +1449,230 @@
          else longM++;
      });
 
+     // Records & Extrêmes
+     const validYears = movies.filter(m => m.year);
+     const oldest = validYears.length ? validYears.reduce((prev, curr) => (prev.year < curr.year ? prev : curr)) : null;
+     const newest = validYears.length ? validYears.reduce((prev, curr) => (prev.year > curr.year ? prev : curr)) : null;
+     const validRuntimes = movies.filter(m => m.runtime);
+     const longest = validRuntimes.length ? validRuntimes.reduce((prev, curr) => (prev.runtime > curr.runtime ? prev : curr)) : null;
+     const shortest = validRuntimes.length ? validRuntimes.reduce((prev, curr) => (prev.runtime < curr.runtime ? prev : curr)) : null;
+
+     // ---- EN-TÊTE DES STATISTIQUES ----
      const headerCards = document.createElement('div');
-     headerCards.className = 'stats-grid mb-6'; 
+     headerCards.className = 'stats-grid mb-8'; 
      headerCards.innerHTML = `
-       <div class="stat-card flex flex-col group hover:bg-white/10 transition-colors">
-         <div class="stat-title">Nombre de films dans ma collection</div>
-         
-         <div class="flex-1 flex items-center justify-center">
-            <div class="text-7xl font-black text-white leading-none drop-shadow-xl tracking-tighter">
+       <div class="stat-card flex flex-col justify-center bg-gradient-to-br from-red-600/20 to-black border-red-500/30 group">
+         <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-2">Collection</div>
+         <div class="flex items-baseline gap-2">
+            <div class="text-6xl font-black text-white leading-none drop-shadow-xl tracking-tighter transition-transform group-hover:scale-105 origin-left">
                 ${total}
             </div>
+            <div class="text-red-400 font-bold">films</div>
+         </div>
+         <div class="mt-4 flex items-center gap-2 text-sm text-yellow-400 font-bold bg-yellow-400/10 w-fit px-3 py-1 rounded-full border border-yellow-400/20">
+            ⭐ Note globale : ${avgRatingOverall} / 10
          </div>
        </div>
+
        <div class="stat-card flex flex-col justify-between">
          <div>
-            <div class="flex justify-between items-baseline">
-                <div class="stat-title">Valeur Achat</div>
-                <div class="text-xs text-green-400 bg-green-400/10 px-2 rounded">Payé</div>
+            <div class="flex justify-between items-baseline mb-1">
+                <div class="text-sm font-bold text-slate-300 uppercase tracking-widest">Valeur Achat</div>
+                <div class="text-[10px] uppercase font-bold text-green-400 bg-green-400/10 px-2 py-0.5 rounded border border-green-400/20">Payé</div>
             </div>
-            <div class="stat-value text-white">${totalPrice.toFixed(2)} €</div>
+            <div class="text-2xl font-black text-white">${totalPrice.toFixed(2)} €</div>
          </div>
 
-         <div class="mt-3 pt-3 border-t border-white/10">
-            <div class="flex justify-between items-baseline">
-                <div class="stat-title">Valeur Marché</div>
-                <div class="text-xs text-purple-400 bg-purple-400/10 px-2 rounded">Estimé</div>
+         <div class="mt-4 pt-4 border-t border-white/10">
+            <div class="flex justify-between items-baseline mb-1">
+                <div class="text-sm font-bold text-slate-300 uppercase tracking-widest">Valeur Marché</div>
+                <div class="text-[10px] uppercase font-bold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded border border-purple-400/20">Estimé</div>
             </div>
-            <div class="stat-value text-white">${totalMarket.toFixed(2)} €</div>
-         </div>
-         
-         <div class="mt-2 text-xs text-slate-400 flex justify-between">
-            <span>Moyenne (achat):</span>
-            <span class="text-slate-200">${total > 0 ? (totalPrice / total).toFixed(2) : 0} €</span>
+            <div class="text-2xl font-black text-white">${totalMarket.toFixed(2)} €</div>
          </div>
        </div>
 
-       <div class="stat-card">
-         <div class="stat-title">Films vus / non vus</div>
-         <div class="donut" id="seenDonut"></div>
-         <div class="donut-center" id="seenCenter">${seenCount}</div>
+       <div class="stat-card flex flex-col justify-between items-center text-center">
+         <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4 w-full text-left">Complétion</div>
+         <div class="relative w-28 h-28 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#ef4444 0 ${total ? Math.round((seenCount/total)*100) : 0}%, #1e293b ${total ? Math.round((seenCount/total)*100) : 0}% 100%)"></div>
+            <div class="absolute inset-2 bg-[#1a1a1a] rounded-full flex flex-col items-center justify-center border border-white/5">
+                <span class="text-xl font-black text-white">${total ? Math.round((seenCount/total)*100) : 0}%</span>
+            </div>
          </div>
-       <div class="stat-card">
-         <div class="stat-title">Temps de visionnage</div>
-         <div class="stat-value text-blue-400">
-            ${Math.floor(totalMinutes / 60)}h ${(totalMinutes % 60).toString().padStart(2, '0')}
+         <div class="mt-4 text-xs font-bold text-slate-400"><span class="text-white">${seenCount}</span> vus sur <span class="text-white">${total}</span></div>
+       </div>
+
+       <div class="stat-card flex flex-col justify-between">
+         <div>
+             <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-2">Durée totale de la collection</div>
+             <div class="font-black text-blue-400 flex items-baseline gap-1">
+                ${watchTimeStr}
+             </div>
          </div>
-         
-         <div class="stat-title" style="margin-top:.5rem; font-weight:600; font-size:.85rem">Moyenne / film</div>
-         <div class="stat-value" style="font-size:1rem">${avgMinutes} min</div>
+         <div class="mt-4 pt-4 border-t border-white/10">
+            <div class="text-xs font-bold text-slate-400 uppercase mb-1">Moyenne par film</div>
+            <div class="text-xl font-bold text-white">${avgMinutes} min</div>
+         </div>
        </div>
      `;
      statsView.appendChild(headerCards);
 
+     // ---- GRILLE DE DÉTAILS ----
      const detailsGrid = document.createElement('div');
      detailsGrid.className = 'stats-grid'; 
 
+     // Genres
      const genreCard = document.createElement('div');
-     genreCard.className = 'stat-card';
-     genreCard.innerHTML = `<div class="stat-title">Répartition par genre</div><div id="genreList" class="mt-3"></div>`;
+     genreCard.className = 'stat-card md:col-span-2';
+     genreCard.innerHTML = `<div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Répartition par genre</div><div id="genreList" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3"></div>`;
      const genreList = genreCard.querySelector('#genreList');
      
      if (genresArr.length === 0) {
-       genreList.innerHTML = '<div class="text-xs opacity-70">Aucun genre trouvé.</div>';
+       genreList.innerHTML = '<div class="text-xs opacity-70 col-span-2">Aucun genre trouvé.</div>';
      } else {
        const max = Math.max(...genresArr.map(([g,c])=>c));
-       genresArr.slice(0,8).forEach(([g,c])=>{
-         const row = document.createElement('div');
-         row.style.display = "flex";
-         row.style.alignItems = "center";
-         row.style.marginBottom = "6px";
-         
-         row.innerHTML = `
-           <div style="width:110px; min-width:110px; font-size:0.85rem; color:#e6eef8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${g}">
-             ${g}
+       genresArr.slice(0, 10).forEach(([g,c])=>{
+         genreList.innerHTML += `
+           <div class="flex items-center gap-3">
+             <div class="w-24 text-sm font-medium text-slate-200 truncate" title="${g}">${g}</div>
+             <div class="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-red-600 to-orange-500 rounded-full" style="width:${Math.round((c/max)*100)}%"></div>
+             </div>
+             <div class="w-8 text-right text-sm font-black text-slate-400">${c}</div>
            </div>
-           <div style="flex:1; margin: 0 8px; height:10px; background:rgba(255,255,255,0.1); border-radius:99px; overflow:hidden;">
-              <div class="bar-fill" style="width:${Math.round((c/max)*100)}%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius:99px;"></div>
-           </div>
-           <div style="min-width:25px; text-align:right; font-size:0.85rem; color:#cbd5e1; font-weight:bold;">${c}</div>
          `;
-         genreList.appendChild(row);
        });
      }
      detailsGrid.appendChild(genreCard);
 
+     // Extrêmes & Records
+     const extremesCard = document.createElement('div');
+     extremesCard.className = 'stat-card bg-gradient-to-b from-white/5 to-transparent';
+     extremesCard.innerHTML = `
+        <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-3">Records de la collection</div>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="bg-black/30 p-3 rounded-xl border border-white/5 flex flex-col justify-between group cursor-default">
+                <span class="text-[10px] text-slate-500 uppercase font-black mb-1">👴 Le + Ancien</span>
+                <span class="text-xs text-white font-bold line-clamp-2 leading-tight group-hover:text-red-400 transition">${oldest ? oldest.title : '-'}</span>
+                <span class="text-lg font-black text-slate-300 mt-1">${oldest ? oldest.year : '-'}</span>
+            </div>
+            <div class="bg-black/30 p-3 rounded-xl border border-white/5 flex flex-col justify-between group cursor-default">
+                <span class="text-[10px] text-slate-500 uppercase font-black mb-1">👶 Le + Récent</span>
+                <span class="text-xs text-white font-bold line-clamp-2 leading-tight group-hover:text-red-400 transition">${newest ? newest.title : '-'}</span>
+                <span class="text-lg font-black text-slate-300 mt-1">${newest ? newest.year : '-'}</span>
+            </div>
+            <div class="bg-black/30 p-3 rounded-xl border border-white/5 flex flex-col justify-between group cursor-default">
+                <span class="text-[10px] text-slate-500 uppercase font-black mb-1">⏱️ Le + Court</span>
+                <span class="text-xs text-white font-bold line-clamp-2 leading-tight group-hover:text-blue-400 transition">${shortest ? shortest.title : '-'}</span>
+                <span class="text-lg font-black text-slate-300 mt-1">${shortest ? shortest.runtime + ' min' : '-'}</span>
+            </div>
+            <div class="bg-black/30 p-3 rounded-xl border border-white/5 flex flex-col justify-between group cursor-default">
+                <span class="text-[10px] text-slate-500 uppercase font-black mb-1">⏳ Le + Long</span>
+                <span class="text-xs text-white font-bold line-clamp-2 leading-tight group-hover:text-blue-400 transition">${longest ? longest.title : '-'}</span>
+                <span class="text-lg font-black text-slate-300 mt-1">${longest ? longest.runtime + ' min' : '-'}</span>
+            </div>
+        </div>
+     `;
+     detailsGrid.appendChild(extremesCard);
+
+     // Notes (Étoiles)
      const ratingCard = document.createElement('div');
      ratingCard.className = 'stat-card';
-     ratingCard.innerHTML = `<div class="stat-title">Notes (Étoiles)</div><div id="ratingList" class="mt-3"></div>`;
+     ratingCard.innerHTML = `<div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Répartition des Notes</div><div id="ratingList" class="space-y-2"></div>`;
      const ratingList = ratingCard.querySelector('#ratingList');
      for(let r=10; r>=1; r--) {
          const count = ratingCounts[r];
          if (count > 0) {
              ratingList.innerHTML += `
-               <div class="genre-bar">
-                 <div class="genre-label" style="width:30px; text-align:center;">★ ${r}</div>
-                 <div class="bar">
-                    <div class="bar-fill" style="width:${Math.round((count / maxRatingCount) * 100)}%; background: linear-gradient(90deg, #3b82f6, #8b5cf6);"></div>
+               <div class="flex items-center gap-3">
+                 <div class="w-8 text-sm font-bold text-yellow-400 flex items-center gap-1"><span>${r}</span> <span class="text-[10px]">★</span></div>
+                 <div class="flex-1 h-2.5 bg-white/5 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" style="width:${Math.round((count / maxRatingCount) * 100)}%"></div>
                  </div>
-                 <div style="min-width:30px;text-align:right;font-size:.85rem;color:#cbd5e1">${count}</div>
+                 <div class="w-6 text-right text-sm font-black text-slate-400">${count}</div>
                </div>
              `;
          }
      }
      detailsGrid.appendChild(ratingCard);
 
-     const dirCard = document.createElement('div');
-     dirCard.className = 'stat-card';
-     dirCard.innerHTML = `<div class="stat-title">Réalisateurs fréquents</div>`;
-     const dirList = document.createElement('div');
-     dirList.style.marginTop = '.5rem';
-     if (dirArr.length===0) {
-         dirList.innerHTML = '<div class="text-xs opacity-70">Aucun réalisateur.</div>';
-     } else {
-         let dirHtml = "";
-         dirArr.forEach(([d,c])=> dirHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${d} — <span style="color:#cbd5e1">${c}</span></div>`);
-         dirList.innerHTML = dirHtml;
-     }
-     dirCard.appendChild(dirList);
-     detailsGrid.appendChild(dirCard);
+     // Fonction Helper pour créer les classements (Réalisateurs, Acteurs, Pays)
+     const createLeaderboard = (title, arrayData) => {
+         const card = document.createElement('div');
+         card.className = 'stat-card';
+         let html = `<div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">${title}</div>`;
+         
+         if (arrayData.length === 0) {
+             html += '<div class="text-xs opacity-70">Données insuffisantes.</div>';
+         } else {
+             html += '<div class="space-y-2">';
+             arrayData.forEach(([name, count], index) => {
+                 let rankColor = "text-slate-500";
+                 if (index === 0) rankColor = "text-yellow-400 drop-shadow-[0_0_5px_rgba(250,204,21,0.5)]";
+                 else if (index === 1) rankColor = "text-slate-300 drop-shadow-[0_0_5px_rgba(203,213,225,0.5)]";
+                 else if (index === 2) rankColor = "text-amber-600 drop-shadow-[0_0_5px_rgba(217,119,6,0.5)]";
 
-     const actorCard = document.createElement('div');
-     actorCard.className = 'stat-card';
-     actorCard.innerHTML = `<div class="stat-title">Acteurs fréquents</div>`;
-     const actorList = document.createElement('div');
-     actorList.style.marginTop = '.5rem';
-     if (actorArr.length === 0) {
-        actorList.innerHTML = '<div class="text-xs opacity-70">Aucun acteur renseigné.</div>';
-     } else {
-        let actorsHtml = "";
-        actorArr.forEach(([actor, count]) => {
-            actorsHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${actor} — <span style="color:#cbd5e1">${count}</span></div>`;
-        });
-        actorList.innerHTML = actorsHtml;
-     }
-     actorCard.appendChild(actorList);
-     detailsGrid.appendChild(actorCard);
+                 html += `
+                 <div class="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/5 hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3 truncate pr-2">
+                        <span class="font-black text-lg ${rankColor} w-4 text-center">${index + 1}</span>
+                        <span class="text-sm font-bold text-white truncate">${name}</span>
+                    </div>
+                    <span class="text-xs font-black bg-black/40 border border-white/10 px-2 py-1 rounded text-slate-300 shrink-0">${count}</span>
+                 </div>`;
+             });
+             html += '</div>';
+         }
+         card.innerHTML = html;
+         return card;
+     };
 
-     const countryCard = document.createElement('div');
-     countryCard.className = 'stat-card';
-     countryCard.innerHTML = `<div class="stat-title">Pays d'origine</div>`;
-     const countryListEl = document.createElement('div');
-     countryListEl.style.marginTop = '.5rem';
-     if (countryArr.length===0) {
-         countryListEl.innerHTML = '<div class="text-xs opacity-70">Aucun pays renseigné.</div>';
-     } else {
-         let countryHtml = "";
-         countryArr.forEach(([c,cnt]) => countryHtml += `<div style="font-size:.9rem;color:#e6eef8;margin-bottom:.35rem">${c} — <span style="color:#cbd5e1">${cnt}</span></div>`);
-         countryListEl.innerHTML = countryHtml;
-     }
-     countryCard.appendChild(countryListEl);
-     detailsGrid.appendChild(countryCard);
+     detailsGrid.appendChild(createLeaderboard("Top Réalisateurs", dirArr));
+     detailsGrid.appendChild(createLeaderboard("Top Acteurs", actorArr));
+     detailsGrid.appendChild(createLeaderboard("Top Pays", countryArr));
 
+     // Par Décennie
      const decadeCard = document.createElement('div');
-     decadeCard.className = 'stat-card';
-     decadeCard.innerHTML = `<div class="stat-title">Par décennie</div><div class="flex flex-wrap gap-2 mt-3"></div>`;
+     decadeCard.className = 'stat-card md:col-span-2 lg:col-span-1';
+     decadeCard.innerHTML = `<div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Chronologie des Œuvres</div><div class="flex flex-wrap gap-2 mt-3"></div>`;
      const decadeContainer = decadeCard.querySelector('div:last-child');
+     const maxDecadeCount = Math.max(...decadesArr.map(d => d[1]));
+     
      decadesArr.forEach(([dec, count]) => {
+         const opacity = 0.3 + (count / maxDecadeCount) * 0.7;
          decadeContainer.innerHTML += `
-            <div class="flex flex-col items-center justify-center bg-white/5 p-2 rounded-lg border border-white/5 min-w-[60px]">
-                <span class="text-red-400 font-bold text-xs tracking-wider">${dec}s</span>
-                <span class="text-white font-bold">${count}</span>
+            <div class="flex flex-col items-center justify-center bg-white/5 p-2 rounded-xl border border-white/10 flex-1 min-w-[60px] hover:bg-white/10 transition">
+                <span class="text-red-400 font-black text-xs tracking-wider mb-1">${dec}s</span>
+                <span class="text-white font-bold text-lg" style="opacity: ${opacity}">${count}</span>
             </div>
          `;
      });
      detailsGrid.appendChild(decadeCard);
 
+     // Formats (Durée)
      const runtimeDistCard = document.createElement('div');
      runtimeDistCard.className = 'stat-card';
      runtimeDistCard.innerHTML = `
-        <div class="stat-title">Format (Durée)</div>
+        <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Formats (Durée)</div>
         <div class="mt-4 space-y-3">
             <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                <span class="text-slate-400">Court (< 1h40)</span> 
-                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${shortM}</span>
+                <div class="flex items-center gap-2"><span class="text-lg">⚡</span> <span class="text-slate-200 font-medium">Court (< 1h40)</span></div>
+                <span class="text-white font-black bg-white/10 px-2.5 py-0.5 rounded-full">${shortM}</span>
             </div>
             <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
-                <span class="text-slate-400">Standard</span> 
-                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${mediumM}</span>
+                <div class="flex items-center gap-2"><span class="text-lg">🍿</span> <span class="text-slate-200 font-medium">Standard</span></div>
+                <span class="text-white font-black bg-white/10 px-2.5 py-0.5 rounded-full">${mediumM}</span>
             </div>
             <div class="flex justify-between items-center text-sm">
-                <span class="text-slate-400">Long (> 2h20)</span> 
-                <span class="text-white font-bold bg-white/10 px-2 py-0.5 rounded">${longM}</span>
+                <div class="flex items-center gap-2"><span class="text-lg">🏛️</span> <span class="text-slate-200 font-medium">Épique (> 2h20)</span></div>
+                <span class="text-white font-black bg-white/10 px-2.5 py-0.5 rounded-full">${longM}</span>
             </div>
         </div>
      `;
      detailsGrid.appendChild(runtimeDistCard);
 
+     // Formats Physiques
      let count4k = 0;
      let countBluray = 0;
      let countSteelbook = 0;
@@ -1580,28 +1687,28 @@
      });
 
      const formatCard = document.createElement('div');
-     formatCard.className = 'stat-card';
+     formatCard.className = 'stat-card md:col-span-2 lg:col-span-1';
      formatCard.innerHTML = `
-        <div class="stat-title">Formats & Éditions</div>
+        <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Éditions Physiques</div>
         <div class="grid grid-cols-2 gap-3 mt-3">
-            <div class="flex flex-col items-center justify-center bg-black/40 border border-yellow-500/30 p-2 rounded-lg">
-                <span class="text-yellow-500 font-bold text-xs uppercase tracking-wider">4K UHD</span>
-                <span class="text-white text-xl font-bold">${count4k}</span>
+            <div class="flex flex-col items-center justify-center bg-black/40 border border-yellow-500/30 p-3 rounded-xl shadow-inner">
+                <span class="text-yellow-500 font-bold text-[10px] uppercase tracking-widest mb-1">4K UHD</span>
+                <span class="text-white text-2xl font-black">${count4k}</span>
             </div>
-            <div class="flex flex-col items-center justify-center bg-blue-900/20 border border-blue-500/30 p-2 rounded-lg">
-                <span class="text-blue-400 font-bold text-xs uppercase tracking-wider">Blu-ray</span>
-                <span class="text-white text-xl font-bold">${countBluray}</span>
+            <div class="flex flex-col items-center justify-center bg-blue-900/20 border border-blue-500/30 p-3 rounded-xl shadow-inner">
+                <span class="text-blue-400 font-bold text-[10px] uppercase tracking-widest mb-1">Blu-ray</span>
+                <span class="text-white text-2xl font-black">${countBluray}</span>
             </div>
             <div class="col-span-2 flex justify-center py-1">
-                <div class="h-px bg-white/10 w-3/4 rounded-full"></div>
+                <div class="h-px bg-white/10 w-1/2 rounded-full"></div>
             </div>
-            <div class="flex flex-col items-center justify-center bg-slate-700/40 border border-slate-500/50 p-2 rounded-lg">
-                <span class="text-slate-300 font-bold text-xs uppercase tracking-wider">Steelbook</span>
-                <span class="text-white text-xl font-bold">${countSteelbook}</span>
+            <div class="flex flex-col items-center justify-center bg-slate-700/40 border border-slate-500/50 p-3 rounded-xl shadow-inner">
+                <span class="text-slate-300 font-bold text-[10px] uppercase tracking-widest mb-1">Steelbook</span>
+                <span class="text-white text-2xl font-black">${countSteelbook}</span>
             </div>
-            <div class="flex flex-col items-center justify-center bg-white/5 border border-white/10 p-2 rounded-lg">
-                <span class="text-slate-400 font-bold text-xs uppercase tracking-wider">Amaray</span>
-                <span class="text-white text-xl font-bold">${countAmaray}</span>
+            <div class="flex flex-col items-center justify-center bg-white/5 border border-white/10 p-3 rounded-xl shadow-inner">
+                <span class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mb-1">Amaray</span>
+                <span class="text-white text-2xl font-black">${countAmaray}</span>
             </div>
         </div>
      `;
@@ -1609,14 +1716,7 @@
 
      statsView.appendChild(detailsGrid);
 
-     const donut = statsView.querySelector('#seenDonut');
-     const seenCenterEl = statsView.querySelector('#seenCenter');
-     if (donut) {
-       const pct = total ? Math.round((seenCount/total)*100) : 0;
-       donut.style.background = `conic-gradient(#f97316 0 ${pct}%, #334155 ${pct}% 100%)`;
-       if (seenCenterEl) seenCenterEl.textContent = `${pct}%`;
-     }
-
+     // Croissance et Périodes d'ajout
      const currentYear = new Date().getFullYear();
      let addedThisYear = 0;
      let addedLast30Days = 0;
@@ -1631,28 +1731,31 @@
          }
      });
 
+     const evolutionGrid = document.createElement('div');
+     evolutionGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 mb-8';
+
      const growthCard = document.createElement('div');
      growthCard.className = 'stat-card';
      growthCard.innerHTML = `
-        <div class="stat-title">Croissance</div>
-        <div class="grid grid-cols-2 gap-4 mt-4 text-center">
-            <div class="bg-white/5 rounded-lg p-2 border border-white/5">
-                <div class="text-2xl font-bold text-green-400">+${addedLast30Days}</div>
-                <div class="text-xs text-slate-400 mt-1">30 jours</div>
+        <div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Rythme d'acquisition</div>
+        <div class="grid grid-cols-2 gap-4 text-center">
+            <div class="bg-gradient-to-b from-green-500/10 to-transparent rounded-xl p-4 border border-green-500/20">
+                <div class="text-3xl font-black text-green-400">+${addedLast30Days}</div>
+                <div class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide">Derniers 30 J</div>
             </div>
-            <div class="bg-white/5 rounded-lg p-2 border border-white/5">
-                <div class="text-2xl font-bold text-blue-400">+${addedThisYear}</div>
-                <div class="text-xs text-slate-400 mt-1">En ${currentYear}</div>
+            <div class="bg-gradient-to-b from-blue-500/10 to-transparent rounded-xl p-4 border border-blue-500/20">
+                <div class="text-3xl font-black text-blue-400">+${addedThisYear}</div>
+                <div class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide">En ${currentYear}</div>
             </div>
         </div>
-        <div class="mt-4 text-xs text-center text-slate-500">
-            Dernier ajout : <span class="text-slate-300">${movies.length ? movies.sort((a,b)=> new Date(b.added)-new Date(a.added))[0].title : 'Aucun'}</span>
+        <div class="mt-4 text-xs text-center font-medium text-slate-500 bg-black/40 py-2 rounded-lg border border-white/5">
+            Dernière entrée : <span class="text-white font-bold ml-1">${movies.length ? movies.sort((a,b)=> new Date(b.added)-new Date(a.added))[0].title : 'Aucun'}</span>
         </div>
      `;
-     detailsGrid.appendChild(growthCard);
+     evolutionGrid.appendChild(growthCard);
 
      const monthCounts = Array(12).fill(0);
-     const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"];
+     const monthNames = ["Jan", "Fév", "Mar", "Avr", "Mai", "Jui", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"];
      
      movies.forEach(m => {
          if (m.added) {
@@ -1660,29 +1763,36 @@
              monthCounts[d.getMonth()]++;
          }
      });
-     
      const maxMonth = Math.max(...monthCounts) || 1;
 
      const seasonCard = document.createElement('div');
      seasonCard.className = 'stat-card';
-     seasonCard.innerHTML = `<div class="stat-title">Périodes d'ajout</div>`;
+     seasonCard.innerHTML = `<div class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-4">Achats par mois (Général)</div>`;
      
      const seasonChart = document.createElement('div');
-     seasonChart.className = "mt-3 grid grid-cols-6 gap-2"; 
+     // On ajoute un peu plus de hauteur et une marge pour le tooltip
+     seasonChart.className = "flex items-end justify-between h-36 gap-1 mt-6"; 
      
      monthNames.forEach((name, index) => {
          const count = monthCounts[index];
-         const opacity = 0.2 + (count / maxMonth) * 0.8; 
+         const heightPct = Math.max((count / maxMonth) * 100, 5); // 5% minimum pour afficher une barre
+         
          seasonChart.innerHTML += `
-            <div class="flex flex-col items-center bg-white/5 rounded p-1 border border-white/5">
-                <div class="text-[10px] text-slate-400 uppercase">${name}</div>
-                <div class="text-sm font-bold text-green-400" style="opacity:${opacity}">${count}</div>
+            <div class="flex flex-col items-center flex-1 h-full group">
+                <div class="relative w-full flex-1 flex items-end justify-center">
+                    <div class="absolute -top-6 text-[10px] text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-1.5 py-0.5 rounded pointer-events-none z-10">
+                        ${count}
+                    </div>
+                    <div class="w-full bg-red-600/80 rounded-t-sm transition-all group-hover:bg-red-500" style="height: ${heightPct}%;"></div>
+                </div>
+                <div class="text-[9px] text-slate-400 uppercase font-bold tracking-tighter mt-2">${name}</div>
             </div>
          `;
      });
      
      seasonCard.appendChild(seasonChart);
-     detailsGrid.appendChild(seasonCard);
+     evolutionGrid.appendChild(seasonCard);
+     statsView.appendChild(evolutionGrid);
 
      // --- DÉBUT : SYSTÈME DE BADGES / SUCCÈS ---
      const badges = [
@@ -1746,29 +1856,26 @@
 
      const badgesSection = document.createElement('div');
      badgesSection.className = 'mt-12 mb-8 animate-fade-in';
-     badgesSection.innerHTML = '<h3 class="text-xl font-bold mb-6 px-1 flex items-center gap-2">🏅 Vitrine des Trophées</h3>';
+     badgesSection.innerHTML = '<h3 class="text-2xl font-black mb-6 px-1 flex items-center gap-3"><span>🏅</span> Vitrine des Trophées</h3>';
      
      const badgesGrid = document.createElement('div');
      badgesGrid.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4';
 
      badges.forEach(b => {
-         // On passe le tableau 'movies' (déjà filtré en haut de renderStats pour exclure la wishlist)
          const unlocked = b.check(movies); 
          const card = document.createElement('div');
          
          if (unlocked) {
-             // Badge débloqué (doré, lumineux, animé)
              card.className = "flex flex-col items-center justify-center p-4 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/10 border border-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.15)] hover:scale-105 transition transform text-center group cursor-default";
              card.innerHTML = `
                  <div class="text-4xl mb-2 drop-shadow-lg group-hover:scale-110 transition duration-300 group-hover:-translate-y-1">${b.icon}</div>
                  <div class="font-black text-white text-sm tracking-wide">${b.name}</div>
              `;
          } else {
-             // Badge verrouillé (grisé, terne)
              card.className = "flex flex-col items-center justify-center p-4 rounded-2xl bg-white/5 border border-white/5 opacity-60 grayscale hover:opacity-100 transition text-center cursor-default";
              card.innerHTML = `
                  <div class="text-4xl mb-2 opacity-30">${b.icon}</div>
-                 <div class="font-bold text-slate-400 text-sm flex items-center gap-1.5 justify-center"><span>🔒</span> ${b.name}</div>
+                 <div class="font-bold text-slate-400 text-xs flex items-center gap-1.5 justify-center uppercase tracking-wide"><span>🔒</span> ${b.name}</div>
              `;
          }
          badgesGrid.appendChild(card);
@@ -1776,8 +1883,7 @@
      
      badgesSection.appendChild(badgesGrid);
      statsView.appendChild(badgesSection);
-     // --- FIN : SYSTÈME DE BADGES ---
-
+     
      const validMovies = movies.filter(m => m.added);
 
      const moviesByDate = {};
