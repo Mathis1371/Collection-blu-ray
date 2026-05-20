@@ -937,7 +937,7 @@
       "bitrate": "67 Mbps"
   },
       "tags": ["4K", "steelbook"],
-      "country": "Royaume-Uni",
+      "country": "États-Unis",
       "added": "2024-11-15"
     },
     {
@@ -1455,7 +1455,7 @@
       "audio": "Dolby Atmos"
   },
       "tags": ["4K", "steelbook"],
-      "country": ["Royaume-Uni", "États-Unis"],
+      "country": "Royaume-Uni",
       "added": "2025-10-22"
     },
     {
@@ -1499,7 +1499,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/sSQDxwm4r28YpJSQVyVOtpYVs0E.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dwFgqr0Qfa8KhV2UyrA8YS7khTS.jpg",
       "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/cd/93/26/19305421/1507-1/tsp20250904085043/Le-Silence-des-agneaux-Edition-Collector-Limitee-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
-      "categories": ["Classiques", "Nouveautés", "Années 90", "Top 10", "Récompensés aux Oscars"],
+      "categories": ["Classiques", "Années 90", "Top 10", "Récompensés aux Oscars"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1722,7 +1722,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/wuRf6gkX0JUJsu1MeECPubhMRdd.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sSzu6tDRN7ZxPqXYLZkpDiVC8H1.jpg",
       "altPoster": "https://edition-collector-production.s3.amazonaws.com/uploads/image/file/73234/steelbook-%C3%A9dition-sp%C3%A9ciale-_Fnac-pour-le-50%C3%A8me-anniversaire-du-film-_Les-Dents-de-la-mer-_1975_.jpg",
-      "categories": ["Nouveautés", "Classiques"],
+      "categories": ["Classiques"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -1857,7 +1857,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/8omcdpprMWRhWHjfEU2SMnjb8O7.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/wxHmPHDfKSpOxC7Lia5duYGdkov.jpg",
       "altPoster": "https://steelbookpro.fr/wp-content/uploads/2025/03/Tu-ne-Tueras-Point-steelbook-4K-1.jpeg",
-      "categories": ["Guerre", "Nouveautés", "Récompensés aux Oscars"],
+      "categories": ["Guerre", "Récompensés aux Oscars"],
 
       "technicalSpecs": {
       "resolution": "2K",
@@ -1901,7 +1901,6 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/v7TaX8kXMXs5yFFGR41guUDNcnB.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/byGvsjXuTXk0jAm7OxJiCqeRa91.jpg",
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol1-Steelbook-4.webp?v=1739382450&width=3840",
-      "categories": ["Nouveautés"],
 
       "technicalSpecs": {
       "resolution": "2K",
@@ -1928,7 +1927,6 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/2yhg0mZQMhDyvUQ4rG1IZ4oIA8L.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zNg1WpW0XZLyYZPiv4ehOMm7XZM.jpg",
       "altPoster": "https://lionsgatelimited.com/cdn/shop/files/Kill-Bill-Vol2-Steelbook-5.webp?v=1740096809&width=1800",
-      "categories": ["Nouveautés"],
 
       "technicalSpecs": {
       "resolution": "2K",
@@ -1980,7 +1978,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/qcxjjjtIg6fY9eInmYisSFX1dtx.jpg",
       "altPoster": "https://media.s-bol.com/YAr68GVX9L9p/qxqP16r/550x744.jpg",
       "tags": ["4K", "steelbook"],
-      "country": "États-Unis",
+      "country": "France",
       "added": "2026-06-01"
     },
     {
@@ -2393,7 +2391,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/91dfWOkpjlqPkbZDjAjrReFqXQP.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/msCp5ueA6jITbJmctTAToHLyPUd.jpg",
       "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzReWJ3OLJ3hfY0gW0t46mtFU_ICidwouK6w&s",
-      "categories": ["Nouveautés", "Science-fiction"],
+      "categories": ["Science-fiction"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -2618,7 +2616,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/aHvilwk70Hv2zDxYXcf651Ur1ab.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/ovtIuyrlPMIgmt09ChIqMJRpxkB.jpg",
       "altPoster": "https://www.son-video.com/images/article/universal-pictures/ESC3701432036397/apollo-13-edition-limitee-steelbook-the-film-vault-6661ce64d4c940.81818400.jpg?p=1200",
-      "categories": ["Récompensés aux Oscars", "Années 90", "Nouveautés"],
+      "categories": ["Récompensés aux Oscars", "Années 90"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -2717,7 +2715,7 @@
       "altPoster": "https://m.media-amazon.com/images/I/61BZFSG2qaL._AC_UF894,1000_QL80_.jpg",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
-      "country": "États-Unis",
+      "country": "Royaume-Uni",
       "added": "2026-11-11"
     },
     {
@@ -2867,7 +2865,7 @@
       "audio": "DTS-HD MA 5.1",
       "bitrate": "55 Mbps"
   },
-      "categories": ["Nouveautés", "Classiques"],
+      "categories": ["Classiques"],
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2025-12-26"
@@ -2923,7 +2921,7 @@
       "altPoster": "https://universeofentertainment.es/cdn/shop/files/lanaranjamecanica.jpg?v=1742301284&width=1024",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
-      "country": "États-Unis",
+      "country": "Royaume-Uni",
       "added": "2026-11-11"
     },
     {
@@ -3103,7 +3101,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/r5b2ub7GMawCWDP5vHR1MXpV7vU.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kqn0dUo1vNgZiQjIy3ejL8aSpkB.jpg",
       "altPoster": "https://chocobonplan.com/wp-content/uploads/2025/07/Vol-au-dessus-d%E2%80%99un-nid-de-coucou-4K-Steelbook-definitif-produit-300x300.png",
-      "categories": ["Nouveautés", "Classiques", "Top 10", "Récompensés aux Oscars"],
+      "categories": ["Classiques", "Top 10", "Récompensés aux Oscars"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -3688,7 +3686,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/sVy9ti5AnS3aNvpkAKr8umUB9NU.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17691297-3975304890180775.png",
       "tags": ["4K", "steelbook"],
-      "country": ["États-Unis", "Royaume-Uni"],
+      "country": "Royaume-Uni",
       "added": "2026-05-21"
     },
     {
@@ -3778,7 +3776,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/9pJJXtw7j0nSs1TvBGPKYwQuId0.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gN83NdMguoz7Lhlx0jaX4XouhAf.jpg",
       "altPoster": "https://collectors-junkies.com/wp-content/uploads/2025/11/The-Prestige-Limited-Edition-4K-UHD-Steelbook.jpg",
-      "categories": ["Nouveautés", "Science-fiction"],
+      "categories": ["Science-fiction"],
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -3887,7 +3885,7 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hA2ple9q4qnwxp3hKVNhroipsir.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kHOOnAj1X5lTfpsuBT3B5VjkpFL.jpg",
       "altPoster": "https://www.son-video.com/images/article/warner-bros-pictures/WAR5051888271032/mad-max-fury-road-edition-steelbook-66460656c505c1.90532435.jpg?p=1200",
-      "categories": ["Films d'action", "Blockbusters", "Nouveautés", "Récompensés aux Oscars"],
+      "categories": ["Films d'action", "Blockbusters", "Récompensés aux Oscars"],
 
       "technicalSpecs": {
       "resolution": "2K",
@@ -4054,7 +4052,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zF378TXYDETapzeDrJVif7kkpIv.jpg",
       "altPoster": "https://www.esc-distribution.com/16321/28-jours-plus-tard-uhd-4k-steelbook-edition-limitee.jpg",
       "tags": ["4K", "steelbook"],
-      "country": "États-Unis",
+      "country": "Royaume-Uni",
       "added": "2026-09-02"
     },
     {
@@ -4593,7 +4591,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/syVS2kbOSZzrDHWoEAPq2Fb7EW3.jpg",
       "tags": ["4K"],
       "categories": ["wishlist"],
-      "country": "États-Unis",
+      "country": "Royaume-Uni",
       "added": "2026-12-31"
     },
     {
@@ -4610,7 +4608,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/qqNJnuUmidIg2oGJshqxgLWpd7y.jpg",
       "tags": ["4K"],
       "categories": ["wishlist"],
-      "country": "États-Unis",
+      "country": "Irlande",
       "added": "2026-12-31"
     },
     {
@@ -4644,6 +4642,23 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/hSWPlFRfC9ckomLQufZpqDzrR8V.jpg",
       "altPoster": "https://chocobonplan.com/wp-content/uploads/2026/05/barbare-blu-ray-4k-steelbook-visuel-produit_20260513233559-300x300.png",
       "tags": ["4K", "steelbook"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt1119646",
+      "title": "Very Bad Trip",
+      "year": 2009,
+      "rating": 7.7,
+      "genres": ["Comédie"],
+      "people": ["Bradley Cooper", "Zach Galifianakis", "Ed Helms", "Ken Jeong", "Justin Bartha", "Heather Graham", "Sasha Barrese", "Jeffrey Tambor", "Mike Tyson"],
+      "directors": ["Todd Phillips"],
+      "runtime": 100,
+      "overview": "Trois copains se réveillent d'un enterrement de vie de garçon à Las Vegas, sans aucun souvenir de la nuit précédente et du futur marié disparu. Ils font le tour de la ville pour retrouver leur ami avant le mariage.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/dGOwVbGN5eJlgAnFwGRaANnyZMF.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zU938ecCLT6yiFn7psX4BKJTNuD.jpg",
+      "tags": ["4K"],
+      "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-12-31"
     }
