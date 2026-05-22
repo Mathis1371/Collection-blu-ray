@@ -381,6 +381,28 @@
         margin-top: 1rem !important;
      }
    }
+   /* --- Effet Métallique Steelbook --- */
+   .steelbook-shine {
+     position: absolute;
+     top: 0; 
+     left: -150%;
+     width: 50%; 
+     height: 100%;
+     background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+     transform: skewX(-25deg);
+     transition: all 0.75s ease;
+     z-index: 20;
+     pointer-events: none;
+   }
+   
+   .group\/steel:hover .steelbook-shine {
+     left: 200%;
+   }
+
+   .steel-border {
+     background: linear-gradient(135deg, #94a3b8 0%, #334155 50%, #0f172a 100%);
+     padding: 2px;
+   }
 </style>
 </head>
 <body class="min-h-screen text-slate-100">
@@ -2182,37 +2204,135 @@
    function renderSteelbookView() {
      const container = document.getElementById('steelbookView');
      container.innerHTML = '';
+     container.className = "mx-auto max-w-7xl px-4 pb-24 mt-6 animate-fade-in";
 
-     // On filtre pour chercher "steelbook" dans les tags (insensible à la casse)
+     // Filtre pour les Steelbooks
      const steelbookMovies = state.all.filter(m => 
        m.tags && m.tags.some(t => t.toLowerCase().includes('steelbook'))
      ).sort((a, b) => a.title.localeCompare(b.title));
 
      if (steelbookMovies.length === 0) {
-       container.innerHTML = '<p class="text-slate-200">Aucun Steelbook dans la collection.</p>';
+       container.innerHTML = `
+         <div class="flex flex-col items-center justify-center h-[50vh] text-center text-slate-400">
+             <div class="text-6xl mb-4 opacity-30">🛡️</div>
+             <h2 class="text-2xl font-bold text-slate-200 mb-2">Aucun Steelbook trouvé</h2>
+             <p>Ajoutez le tag "Steelbook" à vos films pour les voir apparaître ici.</p>
+         </div>`;
        return;
      }
 
+     const today = new Date();
+     
+     // Variables pour nos compteurs personnalisés
+     let countCollection = 0;
+     let countUpcoming = 0;
+     let countWishlist = 0;
+
+     // Calcul de la valeur financière
+     const totalValue = steelbookMovies.reduce((acc, m) => acc + (m.marketValue || m.price || 0), 0);
+
+     // --- 1. CALCUL DES STATUTS POUR LE HEADER ---
+     steelbookMovies.forEach(m => {
+       const isWishlist = (m.tags && m.tags.some(t => t.toLowerCase().includes('wishlist'))) || 
+                          (m.categories && m.categories.some(c => c.toLowerCase().includes('wishlist')));
+       const isUpcoming = m.added && new Date(m.added) > today && !isWishlist;
+
+       if (isWishlist) {
+           countWishlist++;
+       } else if (isUpcoming) {
+           countUpcoming++;
+       } else {
+           countCollection++;
+       }
+     });
+
+     // --- 2. CRÉATION DU HEADER PREMIUM ---
+     const header = document.createElement('div');
+     header.className = "mb-10 bg-gradient-to-br from-slate-800 to-[#1a1a1a] rounded-3xl p-6 border border-slate-600 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden";
+     header.innerHTML = `
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/brushed-alum.png')] opacity-10 pointer-events-none"></div>
+        
+        <div class="relative z-10 flex items-center gap-4 text-center md:text-left w-full md:w-auto justify-center md:justify-start">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-slate-400 to-slate-200 flex items-center justify-center shadow-lg border-2 border-slate-500 shrink-0">
+                <span class="text-3xl">🛡️</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">Steelbooks</h2>
+            </div>
+        </div>
+
+        <div class="relative z-10 flex flex-wrap justify-center md:justify-end gap-3 w-full md:w-auto">
+            <div class="bg-black/40 border border-white/10 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-center backdrop-blur-sm">
+                <div class="text-xl sm:text-2xl font-black text-white">${steelbookMovies.length}</div>
+                <div class="text-[9px] sm:text-[10px] text-slate-400 uppercase font-bold tracking-widest">Total</div>
+            </div>
+            
+            <div class="bg-black/40 border border-green-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-center backdrop-blur-sm">
+                <div class="text-xl sm:text-2xl font-black text-green-400">${countCollection}</div>
+                <div class="text-[9px] sm:text-[10px] text-green-400/70 uppercase font-bold tracking-widest">Possédés</div>
+            </div>
+
+            <div class="bg-black/40 border border-blue-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-center backdrop-blur-sm">
+                <div class="text-xl sm:text-2xl font-black text-blue-400">${countUpcoming}</div>
+                <div class="text-[9px] sm:text-[10px] text-blue-400/70 uppercase font-bold tracking-widest">À venir</div>
+            </div>
+
+            <div class="bg-black/40 border border-purple-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-center backdrop-blur-sm">
+                <div class="text-xl sm:text-2xl font-black text-purple-400">${countWishlist}</div>
+                <div class="text-[9px] sm:text-[10px] text-purple-400/70 uppercase font-bold tracking-widest">Wishlist</div>
+            </div>
+
+            ${totalValue > 0 ? `
+            <div class="bg-black/40 border border-emerald-500/20 px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-center backdrop-blur-sm">
+                <div class="text-xl sm:text-2xl font-black text-emerald-400">${totalValue.toFixed(0)} €</div>
+                <div class="text-[9px] sm:text-[10px] text-emerald-400/70 uppercase font-bold tracking-widest">Valeur</div>
+            </div>` : ''}
+        </div>
+     `;
+     container.appendChild(header);
+
+     // --- 3. CRÉATION DE LA GRILLE DE STEELBOOKS ---
      const grid = document.createElement('div');
-     grid.className = 'grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6';
+     grid.className = 'grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5';
 
      steelbookMovies.forEach(m => {
-       const posterSrc = m.altPoster || m.poster || m.netflixPoster || 
-         `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+       const posterSrc = m.altPoster || m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+
+       // Logique pour déterminer le statut
+       const isWishlist = (m.tags && m.tags.some(t => t.toLowerCase().includes('wishlist'))) || (m.categories && m.categories.some(c => c.toLowerCase().includes('wishlist')));
+       const isUpcoming = m.added && new Date(m.added) > today && !isWishlist;
+
+       // Création du badge approprié
+       let statusBadge = '';
+       if (isWishlist) {
+           statusBadge = `<div class="text-purple-400 bg-purple-400/10 border border-purple-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">🎁 Wishlist</div>`;
+       } else if (isUpcoming) {
+           statusBadge = `<div class="text-blue-400 bg-blue-400/10 border border-blue-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">📅 Prochainement</div>`;
+       } else {
+           statusBadge = `<div class="text-green-400 bg-green-400/10 border border-green-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">✓ Collection</div>`;
+       }
 
        const card = document.createElement('article');
-       card.className = 'group relative rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition shadow cursor-pointer';
+       card.className = 'group/steel relative rounded-xl overflow-hidden steel-border shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(148,163,184,0.3)]';
        
        card.innerHTML = `
-         <div class="aspect-square bg-black/40 p-1 flex items-center justify-center overflow-hidden">
-    ${getImageHtml(posterSrc, m.title, "w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-xl")}        </div>
-         <div class="p-3 space-y-1 border-t border-white/5">
-           <h3 class="font-medium leading-tight line-clamp-2">${escapeHtml(m.title)}</h3>
-           <div class="text-xs opacity-80 flex items-center gap-2">
-             ${m.year ? `<span>${m.year}</span>` : ''}
-             ${m.runtime ? `<span>• ${formatRuntime(m.runtime)}</span>` : ''}
-             ${m.rating ? `<span class="px-1.5 py-0.5 rounded bg-white/10">★ ${m.rating}</span>` : ''}
-           </div>
+         <div class="relative rounded-lg overflow-hidden h-full flex flex-col bg-black">
+             <div class="steelbook-shine"></div>
+             
+             <div class="aspect-[2/3] w-full bg-black/40 relative z-10">
+                ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover transition-transform duration-700 group-hover/steel:scale-105")}
+             </div>
+             
+             <div class="p-3 bg-gradient-to-t from-slate-900 to-[#1a1a1a] flex-1 flex flex-col border-t border-slate-700 relative z-10">
+               <h3 class="font-bold text-slate-200 leading-tight line-clamp-2 text-sm mb-2">${escapeHtml(m.title)}</h3>
+               
+               ${statusBadge}
+
+               <div class="mt-auto pt-1 text-[10px] text-slate-400 font-medium flex justify-between items-center">
+                 <span>${m.year || ''}</span>
+                 ${m.marketValue ? `<span class="text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">${m.marketValue} €</span>` : ''}
+               </div>
+             </div>
          </div>
        `;
        card.addEventListener('click', () => openModal(m));
