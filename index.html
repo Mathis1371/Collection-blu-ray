@@ -2417,6 +2417,7 @@
      const urlDtsHd = "https://upload.wikimedia.org/wikipedia/commons/b/bd/DTS-HD-MA.svg";
      const urlDtsX = "https://leclaireur.fnac.com/wp-content/uploads/2022/12/dts-x-logo-1024x298.png";
      const urlHdr10 = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/HDR_10_logo_%28black%29.svg/1280px-HDR_10_logo_%28black%29.svg.png";
+     const urlImax = "https://upload.wikimedia.org/wikipedia/commons/2/22/IMAX.svg";
 
      if (hdrStr.includes('vision') || hdrStr.includes('dv')) {
          badgesHtml += `
@@ -2459,6 +2460,16 @@
                 alt="DTS-HD Master Audio" 
                 class="h-5 w-auto object-contain invert opacity-90 select-none" 
                 title="DTS-HD Master Audio" />
+         `;
+     }
+
+     const movieTagsForBadges = (m.tags || []).map(t => t.toLowerCase());
+     if (movieTagsForBadges.some(t => t.includes('imax'))) {
+         badgesHtml += `
+           <img src="${urlImax}" 
+                alt="IMAX" 
+                class="h-4 w-auto object-contain invert opacity-90 select-none" 
+                title="IMAX" />
          `;
      }
 
@@ -3041,7 +3052,7 @@
        "Denis Villeneuve": ["Polytechnique", "Incendies", "Prisoners", "Enemy", "Sicario", "Premier Contact", "Blade Runner 2049", "Dune : Première Partie", "Dune : Deuxième Partie"],
        "David Fincher": ["Alien 3", "Seven", "The Game", "Fight Club", "Panic Room", "Zodiac", "L'Étrange Histoire de Benjamin Button", "The Social Network", "Millénium : Les Hommes qui n'aimaient pas les femmes", "Gone Girl", "Mank", "The Killer"],
        "Stanley Kubrick": ["L'Ultime Razzia", "Les Sentiers de la gloire", "Spartacus", "Lolita", "Dr. Folamour", "2001 : L'Odyssée de l'espace", "Orange mécanique", "Barry Lyndon", "Shining", "Full Metal Jacket", "Eyes Wide Shut"],
-       "Steven Spielberg": ["Les Dents de la mer", "Rencontres du troisième type", "Les Aventuriers de l'arche perdue", "E.T., l'extra-terrestre", "Indiana Jones et le Temple maudit", "La Couleur pourpre", "Empire du soleil", "Indiana Jones et la Dernière Croisade", "Hook ou la Revanche du capitaine Crochet", "Jurassic Park", "La Liste de Schindler", "Le Monde perdu : Jurassic Park", "Amistad", "Il faut sauver le soldat Ryan", "A.I. Intelligence artificielle", "Minority Report", "Arrête-moi si tu peux", "Le Terminal", "La Guerre des mondes", "Munich", "Indiana Jones et le Royaume du crâne de cristal", "Les Aventures de Tintin : Le Secret de la Licorne", "Cheval de guerre", "Lincoln", "Le Pont des espions", "Le BGG : Le Bon Gros Géant", "Pentagon Papers", "Ready Player One", "West Side Story", "The Fabelmans"],
+       "Steven Spielberg": ["Les Dents de la mer", "Rencontres du troisième type", "Les Aventuriers de l'arche perdue", "E.T., l'extra-terrestre", "Indiana Jones et le Temple maudit", "La Couleur pourpre", "Empire du soleil", "Indiana Jones et la Dernière Croisade", "Hook ou la Revanche du capitaine Crochet", "Jurassic Park", "La Liste de Schindler", "Le Monde perdu : Jurassic Park", "Amistad", "Il faut sauver le soldat Ryan", "A.I. Intelligence artificielle", "Minority Report", "Arrête-moi si tu peux", "Le Terminal", "La Guerre des mondes", "Munich", "Indiana Jones et le Royaume du crâne de cristal", "Les Aventures de Tintin : Le Secret de la Licorne", "Cheval de guerre", "Lincoln", "Le Pont des espions", "Le BGG : Le Bon Gros Géant", "Pentagon Papers", "Ready Player One", "West Side Story", "The Fabelmans", "Disclosure Day"],
        "James Cameron": ["Terminator", "Aliens, le retour", "Abyss", "Terminator 2 : Le Jugement dernier", "True Lies", "Titanic", "Avatar", "Avatar : La Voie de l'eau", "Avatar: De feu et de cendres"],
        "Martin Scorsese": ["Mean Streets", "Taxi Driver", "Raging Bull", "After Hours: Quelle nuit de galère", "La Couleur de l'argent", "La Dernière Tentation du Christ", "Les Affranchis", "Les Nerfs à Vif", "Le Temps de l'innocence", "Casino", "À tombeau ouvert", "Gangs of New York", "Aviator", "Les Infiltrés", "Shutter Island", "Hugo Cabret", "Le Loup de Wall Street", "Silence", "The Irishman", "Killers of the Flower Moon"],
        "Paul Thomas Anderson": ["Double Mise", "Boogie Nights", "Magnolia", "Punch-Drunk Love", "There Will Be Blood", "The Master", "Inherent Vice", "Phantom Thread", "Licorice Pizza", "Une bataille après l'autre"],
@@ -3121,7 +3132,8 @@
        "DCU": ["Superman", "Supergirl"],
        "Alien": ["Alien", "Aliens, Le Retour", "Alien 3", "Alien : La Résurrection", "Prometheus", "Alien : Covenant", "Alien : Romulus"],
        "Spider-Man": ["Spider-Man", "Spider-Man 2", "Spider-Man 3", "The Amazing Spider-Man", "The Amazing Spider-Man : Le Destin d'un héros", "Spider-Man: Homecoming", "Spider-Man: New Generation", "Spider-Man: Far From Home", "Spider-Man: No Way Home", "Spider-Man: Across the Spider-Verse"],
-       "MCU": ["Iron Man", "L'Incroyable Hulk", "Iron Man 2", "Thor", "Captain America : First Avenger", "Avengers", "Iron Man 3", "Thor : Le Monde des ténèbres", "Captain America : Le Soldat de l'hiver", "Les Gardiens de la Galaxie", "Avengers : L'Ère d'Ultron", "Ant-Man", "Captain America : Civil War", "Doctor Strange", "Les Gardiens de la Galaxie Vol.2", "Spider-Man : Homecoming", "Thor : Ragnarok", "Black Panther", "Avengers : Infinity War", "Ant-Man et la Guêpe", "Captain Marvel", "Avengers : Endgame", "Spider-Man : Far From Home", "Black Widow", "Shang-Chi et la Légende des Dix Anneaux", "Les Éternels", "Spider-Man : No Way Home", "Doctor Strange in the Multiverse of Madness", "Thor : Love and Thunder", "Black Panther : Wakanda Forever", "Ant-Man et la Guêpe : Quantumania", "Les Gardiens de la Galaxie Vol.3", "The Marvels", "Deadpool et Wolverine", "Captain America : Brave New World", "Thunderbolts*", "Les Quatre Fantastiques : Premiers pas"],
+       "MCU": ["Iron Man", "L'Incroyable Hulk", "Iron Man 2", "Thor", "Captain America : First Avenger", "Avengers", "Iron Man 3", "Thor : Le Monde des ténèbres", "Captain America : Le Soldat de l'hiver", "Les Gardiens de la Galaxie", "Avengers : L'Ère d'Ultron", "Ant-Man", "Captain America : Civil War", "Doctor Strange", "Les Gardiens de la Galaxie Vol.2", "Spider-Man : Homecoming", "Thor : Ragnarok", "Black Panther", 
+       "Avengers : Infinity War", "Ant-Man et la Guêpe", "Captain Marvel", "Avengers : Endgame", "Spider-Man : Far From Home", "Black Widow", "Shang-Chi et la Légende des Dix Anneaux", "Les Éternels", "Spider-Man : No Way Home", "Doctor Strange in the Multiverse of Madness", "Thor : Love and Thunder", "Black Panther : Wakanda Forever", "Ant-Man et la Guêpe : Quantumania", "Les Gardiens de la Galaxie Vol.3", "The Marvels", "Deadpool et Wolverine", "Captain America : Brave New World", "Thunderbolts*", "Les Quatre Fantastiques : Premiers pas"],
        "Dragons": ["Dragons", "Dragons 2", "Dragons 3 : Le Monde caché", "Dragons (2025)"],
        "007 Daniel Craig": ["Casino Royale", "Quantum of Solace", "Skyfall", "Spectre", "Mourir peut attendre"],
        "Pixar": ["Toy Story", "1001 pattes", "Toy Story 2", "Monstres & Cie", "Le Monde de Nemo", "Les Indestructibles", "Cars", "Ratatouille", "WALL·E", "Là-haut", "Toy Story 3", "Cars 2", "Rebelle", "Monstres Academy", "Vice-versa", "Le Voyage d'Arlo", "Le Monde de Dory", "Cars 3", "Coco", "Les Indestructibles 2", "Toy Story 4", "En avant", "Soul", "Luca", "Alerte Rouge", "Buzz l'Éclair", "Élémentaire", "Vice-versa 2", "Elio"],
@@ -3149,6 +3161,49 @@
        "Pixar": "https://img.icons8.com/androidL/1200/pixar.jpg",
        "Mad Max": "https://i.pinimg.com/564x/20/c7/cc/20c7cc2d93399fc95f37bde1967682e2.jpg"
    };
+
+   const referenceActors = {
+       "Leonardo DiCaprio": ["Blessures secrètes", "Gilbert Grape", "Basketball Diaries", "Roméo + Juliette", "Titanic", "Gangs of New York", "Arrête-moi si tu peux", "Aviator", "Les Infiltrés", "Blood Diamond", "Mensonges d'état", "Les noces rebelles", "Shutter Island", "Inception", "J. Edgar", "Django Unchained", "Gatsby le Magnifique", "Le Loup de Wall Street", "The Revenant", "Once Upon a Time in... Hollywood", "Don't Look Up", "Killers of the Flower Moon", "Une bataille après l'autre"],
+       "Tom Cruise": ["Top Gun", "Rain Man", "Né un 4 juillet", "Jours de tonnerre", "Des hommes d'honneur", "La firme", "Entretien avec un vampire", "Mission: Impossible", "Jerry Maguire", "Eyes Wide Shut", "Magnolia", "Mission: Impossible 2", "Vanilla Sky", "Minority Report", "Le Dernier Samouraï", "Collatéral", "La Guerre des mondes", "Mission: Impossible III", "Tonnerre sous les tropiques", "Walkyrie", "Mission: Impossible - Protocole fantôme", "Jack Reacher", "Oblivion", "Edge of Tomorrow", "Mission: Impossible - Rogue Nation", "Jack Reacher: Never Go Back", "La Momie", "Barry Seal: American Traffic", "Mission: Impossible - Fallout", "Top Gun: Maverick", "Mission: Impossible - Dead Reckoning", "Mission: Impossible - The Final Reckoning"],
+       "Brad Pitt": ["Thelma & Louise", "Et au milieu coule une rivière", "Entretien avec un vampire", "Légendes d'automne", "Seven", "L'armée des 12 singes", "Sleepers", "Sept ans au Tibet", "Rencontre avec Joe Black", "Fight Club", "Snatch", "Spy game - Jeu d'espions", "Ocean's Eleven", "Troie", "Ocean's Twelve", "Mr. & Mrs. Smith", "Babel", "Ocean's 13", "L'Assassinat de Jesse James par le lâche Robert Ford", "Burn After Reading", "L'Étrange Histoire de Benjamin Button", "Inglourious Basterds", "The Tree of Life", "Le Stratège", "World War Z", "12 Years a Slave", "Cartel", "Fury", "The Big Short", "Once Upon a Time in... Hollywood", "Ad Astra", "Bullet Train", "Babylon", "F1"],
+       "Harrison Ford": ["Conversation secrète", "Star Wars, épisode IV : Un nouvel espoir", "Star Wars, épisode V : L'Empire contre-attaque", "Les Aventuriers de l'arche perdue", "Blade Runner", "Star Wars, épisode VI : Le Retour du Jedi", "Indiana Jones et le Temple maudit", "Witness", "Indiana Jones et la Dernière Croisade", "Jeux de guerre", "Le Fugitif", "Danger immédiat", "Air Force One", "K-19 : Le Piège des profondeurs", "Indiana Jones et le Royaume du crâne de cristal", "Morning Glory", "42", "La Stratégie Ender", "Expendables 3", "Adaline", "Star Wars : Épisode VII - Le Réveil de la Force", "Blade Runner 2049", "Star Wars : Épisode IX - L'Ascension de Skywalker", "L'Appel de la forêt", "Indiana Jones et le Cadran de la destinée", "Captain America: Brave New World"],
+       "Tom Hanks": ["Big", "Une équipe hors du commun", "Nuits blanches à Seattle", "Philadelphia", "Forrest Gump", "Apollo 13", "Il faut sauver le soldat Ryan", "La Ligne verte", "Seul au monde", "Les sentiers de la perdition", "Arrête-moi si tu peux", "Le Terminal", "Le Pôle Express", "Da Vinci Code", "La Guerre selon Charlie Wilson", "Anges & Démons", "Extrêmement fort & incroyablement près", "Cloud Atlas", "Capitaine Phillips", "Dans l'ombre de Mary : La Promesse de Walt Disney", "Le Pont des espions", "Sully", "Inferno", "Pentagon Papers", "USS Greyhound : La Bataille de l'Atlantique", "La Mission", "Elvis", "Le Pire voisin au monde", "Asteroid City", "Here", "The Phoenician Scheme"],
+       "Christian Bale": ["Empire du soleil", "American Psycho", "Equilibrium", "The Machinist", "Batman Begins", "Rescue Dawn", "Le Prestige", "3h10 pour Yuma", "The Dark Knight", "Terminator Renaissance", "Fighter", "Sacrifices of War", "The Dark Knight Rises", "American Bluff", "The Big Short", "Vice", "Le Mans '66", "Thor: Love and Thunder", "Amsterdam", "The Bride!"],
+       "Cillian Murphy": ["28 jours plus tard", "Retour à Cold Mountain", "Batman Begins", "Breakfast on Pluto", "Le vent se lève", "Sunshine", "The Dark Knight", "Inception", "Tron : L'Héritage", "Broken", "The Dark Knight Rises", "Au cœur de l'océan", "Opération Anthropoid", "Dunkerque", "Anna", "Sans un bruit 2", "Oppenheimer", "28 ans plus tard: Le temple des morts"],
+       "Ryan Gosling": ["N'oublie jamais", "Stay", "Half Nelson", "La Faille", "Une fiancée pas comme les autres", "Blue Valentine", "Drive", "Crazy, Stupid, Love.", "Les marches du pouvoir", "The Place Beyond the Pines", "Gangster Squad", "Only God Forgives", "The Big Short", "The Nice Guys", "La La Land", "Song to Song", "Blade Runner 2049", "First Man", "Barbie", "The Fall Guy", "Projet Dernière Chance"],
+       "Denzel Washington": ["Glory", "Malcolm X", "Philadelphia", "USS Alabama", "Training Day", "Man on Fire", "Inside Man", "American Gangster", "Flight", "Equalizer", "Fences", "Macbeth", "Gladiator II"],
+       "Matthew McConaughey": ["Génération rebelle", "Contact", "La Défense Lincoln", "Magic Mike", "Mud", "Le Loup de Wall Street", "Dallas Buyers Club", "Interstellar", "The Gentlemen"],
+       "Al Pacino": ["Le Parrain", "Serpico", "Le Parrain, 2ème partie", "Un après-midi de chien", "Scarface", "L'Impasse", "Heat", "L'Associé du diable", "Révélations", "Insomnia", "The Irishman"],
+       "Robert De Niro": ["Mean Streets", "Le Parrain, 2ème partie", "Taxi Driver", "Voyage au bout de l'enfer", "Raging Bull", "Il était une fois en Amérique", "Les Incorruptibles", "Les Affranchis", "Les Nerfs à vif", "Casino", "Heat", "Jackie Brown", "Mon beau-père et moi", "Silver Linings Playbook", "The Irishman", "Killers of the Flower Moon"],
+       "Joaquin Phoenix": ["Gladiator", "Signes", "Le Village", "Hôtel Rwanda", "Walk the Line", "La nuit nous appartient", "Two Lovers", "The Master", "Her", "Inherent Vice", "L'homme irrationnel", "A Beautiful Day", "Les Frères Sisters", "Joker", "Beau Is Afraid", "Napoléon", "Joker: Folie à Deux", "Eddington"],
+       "Jake Gyllenhaal": ["Ciel d'octobre", "Donnie Darko", "Le Jour d'après", "Le secret de Brokeback Mountain", "Jarhead : La Fin de l'innocence", "Zodiac", "Détention secrète", "Brothers", "Love, et autres drogues", "Source Code", "End of Watch", "Prisoners", "Enemy", "Night Call", "La rage au ventre", "Everest", "Demolition", "Nocturnal Animals", "Life : Origine inconnue", "Okja", "Stronger", "Wildlife: Une saison ardente", "Les Frères Sisters", "Spider-Man: Far From Home", "The Guilty", "Ambulance", "The Covenant", "Road House", "The Bride!", "In the Grey"],
+       "Ralph Fiennes": ["La Liste de Schindler", "Quiz Show", "Le patient anglais", "Dragon rouge", "The Constant Gardener", "Harry Potter et la Coupe de feu", "Harry Potter et l'Ordre du Phénix", "Bons Baisers de Bruges", "The Duchess", "Démineurs", "The Reader", "Le Choc des Titans", "Harry Potter et les Reliques de la Mort : partie 1", "Harry Potter et les Reliques de la Mort : partie 2", "La Colère des Titans", "Skyfall", "The Grand Budapest Hotel", "A Bigger Splash", "Spectre", "Ave, César !", "Official Secrets", "The Dig", "Mourir peut attendre", "The King's Man : Première Mission", "Le Menu", "Conclave", "28 ans plus tard", "28 ans plus tard: Le temple des morts"]
+   };
+
+   const actorPhotos = {
+       "Leonardo DiCaprio": "https://media.themoviedb.org/t/p/w440_and_h660_face/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+       "Tom Cruise": "https://media.themoviedb.org/t/p/w600_and_h900_face/p17SLq4wabXwIYyjXF1Wf5cNnAm.jpg",
+       "Brad Pitt": "https://media.themoviedb.org/t/p/w600_and_h900_face/m09Y1YfPPeNYYUSHnnVqahkrC1o.jpg",
+       "Harrison Ford": "https://media.themoviedb.org/t/p/w600_and_h900_face/pjBMJVPpcZK23Vt1nzr1zEBTWrP.jpg",
+       "Tom Hanks": "https://media.themoviedb.org/t/p/w600_and_h900_face/oFvZoKI6lvU03n4YoNGAll9rkas.jpg",
+       "Christian Bale": "https://media.themoviedb.org/t/p/w440_and_h660_face/AcfW3p5D6ov573fABLyGqwYdolD.jpg",
+       "Cillian Murphy": "https://media.themoviedb.org/t/p/w600_and_h900_face/2lKs67r7FI4bPu0AXxMUJZxmUXn.jpg",
+       "Ryan Gosling": "https://media.themoviedb.org/t/p/w600_and_h900_face/lyUyVARQKhGxaxy0FbPJCQRpiaW.jpg",
+       "Denzel Washington": "https://media.themoviedb.org/t/p/w600_and_h900_face/jj2Gcobpopokal0YstuCQW0ldJ4.jpg",
+       "Matthew McConaughey": "https://media.themoviedb.org/t/p/w600_and_h900_face/lCySuYjhXix3FzQdS4oceDDrXKI.jpg",
+       "Al Pacino": "https://media.themoviedb.org/t/p/w440_and_h660_face/m8HAAjq1T75JypKk0v1FFQn4ysZ.jpg",
+       "Robert De Niro": "https://media.themoviedb.org/t/p/w600_and_h900_face/cT8htcckIuyI1Lqwt1CvD02ynTh.jpg",
+       "Joaquin Phoenix": "https://media.themoviedb.org/t/p/w600_and_h900_face/u38k3hQBDwNX0VA22aQceDp9Iyv.jpg",
+       "Jake Gyllenhaal": "https://media.themoviedb.org/t/p/w600_and_h900_face/rJdYHYNhlcOBwbPvDZVvt1xw7bi.jpg",
+       "Ralph Fiennes": "https://media.themoviedb.org/t/p/w440_and_h660_face/tJr9GcmGNHhLVVEH3i7QYbj6hBi.jpg"
+   };
+
+   function getActorAvatar(name) {
+       if (actorPhotos[name]) {
+           return actorPhotos[name];
+       }
+       return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=256&font-size=0.4`;
+   }
 
    function getSagaAvatar(name, ownedMovies) {
        if (sagaPhotos[name] && sagaPhotos[name].length > 0) {
@@ -3189,14 +3244,15 @@
                 <p class="text-slate-400 text-lg">Choisissez votre défi de collectionneur</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl px-4">
+                
                 <div id="btnBingoDirectors" class="group relative h-64 bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-white/30 transition-all hover:scale-[1.02] shadow-2xl">
                     <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:opacity-60 transition duration-500 group-hover:scale-110"></div>
                     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
                         <div class="text-6xl mb-4 group-hover:-translate-y-2 transition duration-300">🎬</div>
                         <h3 class="text-3xl font-black text-white uppercase tracking-wider">Réalisateurs</h3>
-                        <p class="text-slate-300 mt-2 text-sm font-medium">Complétez les filmographies des maîtres du cinéma.</p>
+                        <p class="text-slate-300 mt-2 text-sm font-medium">Complétez les filmographies.</p>
                     </div>
                 </div>
 
@@ -3206,22 +3262,47 @@
                     <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
                         <div class="text-6xl mb-4 group-hover:-translate-y-2 transition duration-300">🍿</div>
                         <h3 class="text-3xl font-black text-white uppercase tracking-wider">Sagas</h3>
-                        <p class="text-slate-300 mt-2 text-sm font-medium">Rassemblez les franchises légendaires.</p>
+                        <p class="text-slate-300 mt-2 text-sm font-medium">Rassemblez les franchises.</p>
                     </div>
                 </div>
+                
+                <div id="btnBingoActors" class="group relative h-64 bg-gradient-to-br from-emerald-900/40 to-teal-900/40 border border-white/10 rounded-3xl overflow-hidden cursor-pointer hover:border-white/30 transition-all hover:scale-[1.02] shadow-2xl">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-40 group-hover:opacity-60 transition duration-500 group-hover:scale-110"></div>
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                        <div class="text-6xl mb-4 group-hover:-translate-y-2 transition duration-300">⭐</div>
+                        <h3 class="text-3xl font-black text-white uppercase tracking-wider">Acteurs</h3>
+                        <p class="text-slate-300 mt-2 text-sm font-medium">Réunissez les stars incontournables.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
        `;
 
        document.getElementById('btnBingoDirectors').onclick = () => renderBingoList('directors');
        document.getElementById('btnBingoSagas').onclick = () => renderBingoList('sagas');
+       document.getElementById('btnBingoActors').onclick = () => renderBingoList('actors');
    }
 
    function renderBingoList(type) {
        const isSaga = type === 'sagas';
-       const title = isSaga ? "🍿 Bingo Sagas" : "🎬 Bingo Réalisateurs";
-       const subTitle = isSaga ? "Complétez les grandes franchises" : "Complétez les filmographies cultes";
-       const dataObj = isSaga ? referenceSagas : referenceFilmographies;
+       const isActor = type === 'actors';
+       
+       let title, subTitle, dataObj;
+       if (isSaga) {
+           title = "🍿 Bingo Sagas";
+           subTitle = "Complétez les grandes franchises";
+           dataObj = referenceSagas;
+       } else if (isActor) {
+           title = "⭐ Bingo Acteurs";
+           subTitle = "Collectionnez les films des plus grandes stars";
+           dataObj = referenceActors;
+       } else {
+           title = "🎬 Bingo Réalisateurs";
+           subTitle = "Complétez les filmographies cultes";
+           dataObj = referenceFilmographies;
+       }
        
        bingoView.innerHTML = `
         <div class="animate-fade-in">
@@ -3248,7 +3329,8 @@
            const refList = dataObj[keyName];
            
            const ownedMovies = state.all.filter(m => {
-               const matchContext = isSaga ? true : (m.directors && m.directors.includes(keyName));
+               // Choix du tableau dans lequel chercher :
+               const matchContext = isSaga ? true : (isActor ? (m.people && m.people.includes(keyName)) : (m.directors && m.directors.includes(keyName)));
                
                const matchTitle = refList.some(refTitle => refTitle.toLowerCase() === m.title.toLowerCase());
                
@@ -3270,7 +3352,9 @@
            else if(progress >= 25) barColor = "bg-orange-500";
 
            let avatarHtml = '';
-           if (!isSaga) {
+           if (isActor) {
+                avatarHtml = `<img src="${getActorAvatar(keyName)}" class="w-16 h-16 rounded-full object-cover object-top border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />`;
+           } else if (!isSaga) {
                 avatarHtml = `<img src="${getDirectorAvatar(keyName)}" class="w-16 h-16 rounded-full object-cover object-top border-2 border-white/10 shadow-lg group-hover:scale-110 transition-transform" />`;
            } else {
                 const sagaIconSrc = getSagaAvatar(keyName, ownedMovies);
@@ -3295,16 +3379,19 @@
                 <div class="text-right text-xs font-bold mt-1 ${progress === 100 ? 'text-yellow-500' : 'text-slate-500'}">${progress}%</div>
 
                 <div class="absolute -bottom-6 -right-6 text-[120px] opacity-[0.03] rotate-12 pointer-events-none select-none grayscale">
-                    ${isSaga ? '🍿' : '🎬'}
+                    ${isSaga ? '🍿' : (isActor ? '⭐' : '🎬')}
                 </div>
            `;
 
-           card.addEventListener('click', () => openBingoCard(keyName, refList, isSaga));
+           card.addEventListener('click', () => openBingoCard(keyName, refList, type));
            grid.appendChild(card);
        });
    }
 
-   function openBingoCard(name, refList, isSaga = false) {
+   function openBingoCard(name, refList, type = 'directors') {
+        const isSaga = type === 'sagas';
+        const isActor = type === 'actors';
+        
         const modal = document.getElementById('bingoModal');
         const content = document.getElementById('bingoContent');
         const grid = document.getElementById('bingoGrid');
@@ -3312,8 +3399,13 @@
         document.getElementById('bingoDirectorName').textContent = name;
         
         const headerAvatar = document.getElementById('bingoAvatar');
-        if(!isSaga) {
-             headerAvatar.className = "w-full h-full object-cover";
+        
+        if(isActor) {
+             headerAvatar.className = "w-full h-full object-cover object-top";
+             headerAvatar.parentElement.className = "w-24 h-24 rounded-full border-4 border-[#1a1a1a] overflow-hidden shadow-xl shrink-0 bg-slate-700";
+             headerAvatar.src = getActorAvatar(name);
+        } else if(!isSaga) {
+             headerAvatar.className = "w-full h-full object-cover object-top";
              headerAvatar.parentElement.className = "w-24 h-24 rounded-full border-4 border-[#1a1a1a] overflow-hidden shadow-xl shrink-0 bg-slate-700";
              headerAvatar.src = getDirectorAvatar(name);
         } else {
@@ -3330,12 +3422,16 @@
                                (m.categories && m.categories.includes('wishlist'));
             const isUpcoming = (m.added && new Date(m.added) > today);
 
-            const matchContext = isSaga ? true : (m.directors && m.directors.includes(name));
+            // C'est ici que l'on vérifie si c'est un acteur, un réal ou une saga !
+            const matchContext = isSaga ? true : (isActor ? (m.people && m.people.includes(name)) : (m.directors && m.directors.includes(name)));
 
             if (matchContext && !isWishlist && !isUpcoming) {
                 ownedMap.set(m.title.toLowerCase(), m);
             }
         });
+
+        // La suite de ta fonction (let ownedCount = 0; ...) reste exactement la même !
+        // ... (Tu peux conserver le reste du code tel quel jusqu'à la fin de la fonction)
 
         let ownedCount = 0;
         refList.forEach(refTitle => {
