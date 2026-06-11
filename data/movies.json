@@ -23,7 +23,7 @@
       "audio": "Dolby Atmos",
       "bitrate": "61 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2023-12-25"
     },
@@ -401,7 +401,7 @@
       "audio": "DTS-HD MA",
       "bitrate": "52 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2025-12-01"
     },
@@ -428,7 +428,7 @@
       "audio": "Dolby Atmos",
       "bitrate": "67 Mbps"
   },
-      "tags": ["4K", "amaray"],
+      "tags": ["4K", "amaray", "IMAX"],
       "country": "États-Unis",
       "added": "2024-03-11"
     },
@@ -801,7 +801,7 @@
       "audio": "DTS-HD MA 5.1",
       "bitrate": "47 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2024-03-12"
     },
@@ -828,7 +828,7 @@
       "audio": "DTS-HD MA 5.1",
       "bitrate": "56 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2024-10-19"
     },
@@ -990,7 +990,7 @@
       "audio": "Dolby Atmos",
       "bitrate": "68 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2025-05-21"
     },
@@ -1098,7 +1098,7 @@
       "audio": "Dolby Atmos",
       "bitrate": "54 Mbps"
   },
-      "tags": ["4K", "steelbook"],
+      "tags": ["4K", "steelbook", "IMAX"],
       "country": "États-Unis",
       "added": "2025-08-02"
     },
@@ -1553,7 +1553,7 @@
       "altPoster": "https://steelbookpro.fr/wp-content/uploads/2025/09/One-Battle-After-Another-steelbook-4K-2.jpg",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-03"
+      "added": "2026-06-17"
     },
     {
       "id": "tt26581740",
@@ -2769,6 +2769,8 @@
       "id": "tt1631867",
       "title": "Edge of Tomorrow",
       "year": 2014,
+      "price": 29.99,
+      "marketValue": 35.00,
       "genres": ["Science-fiction", "Action", "Aventure"],
       "people": ["Tom Cruise", "Emily Blunt", "Bill Paxton", "Brendan Gleeson", "Charlotte Riley", "Tony Way", "Dragomir Mrsic", "Lara Pulver", "Beth Goddard", "Kick Gurry", "Noah Taylor", "Jonas Armstrong"],
       "directors": ["Doug Liman"],
@@ -2778,6 +2780,14 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/c4BEWLbXyPiXNFaDt57HAgekCqw.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/2CjKjAz26M40IJUwfvQV16qgCCk.jpg",
       "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/14000949-5704994887379541.jpg",
+      "categories": ["Blockbusters", "Science-fiction", "Films d'action"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "HDR 10",
+      "audio": "Dolby Atmos",
+      "bitrate": "77 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-06-03"
@@ -2868,7 +2878,7 @@
       "overview": "En Angleterre au dix-huitième siècle, un Irlandais malhonnête gagne le coeur d'une veuve riche et assume la position aristocratique de son mari décédé.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/3YJEv83HWWgCKezTiQ9LhdR7cFU.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/cL7yffog268FC1OWzCAHgMGJPSg.jpg",
-      "altPoster": "https://static.thcdn.com/images/large/original//productimg/1600/1600/17158279-2025275927989093.png",
+      "altPoster": "https://static.thcdn.com/productimg/original/17158279-2025275927989093.png",
 
       "technicalSpecs": {
       "resolution": "4K",
@@ -3044,6 +3054,8 @@
       "overview": "Bill et Alice formaient le couple parfait jusqu'au jour où elle lui avoua son fantasme inassouvi. Troublé, imaginant cette aventure extraconjugale, il déambule seul dans les rues de New York, attiré par de nouvelles expériences charnelles.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/knEIz1eNGl5MQDbrEAVWA7iRqF9.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/eAuS9UpWi44tyI7PdOLrcgLpZuV.jpg",
+      "altPoster": "https://edition-collector-production.s3.amazonaws.com/uploads/collector/image/32184/nouvelle-vingnette-Eyes-Wide-Shut-steelbook-4K.jpg",
+      "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-11-11"
     },
@@ -3076,6 +3088,7 @@
       "overview": "Deux astronautes s'unissent pour survivre après un accident les laissant perds dans l'espace.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/kZ2nZw8D681aphje8NJi8EfbL1U.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/nXO8VtAuzfm6lpoR2mhzLnlv4g4.jpg",
+      "categories": ["wishlist"],
       "tags": ["4K"],
       "country": "États-Unis",
       "added": "2027-01-01"
@@ -3993,6 +4006,8 @@
       "title": "La Liste de Schindler",
       "year": 1993,
       "rating": 9,
+      "price": 29.99,
+      "marketValue": 30.00,
       "genres": ["Drame", "Biopic"],
       "people": ["Liam Neeson", "Ralph Fiennes", "Ben Kingsley", "Embeth Davidtz", "Caroline Goodhall", "Jonathan Sagall", "Beatrice Macola", "Mark Ivanir", "Malgorzata", "Shmuel Levy", "Branko Lusting", "Elina Löwensohn"],
       "directors": ["Steven Spielberg"],
@@ -4002,9 +4017,16 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/wH7ZxjF1yU3azuj3pgXVcgrCTUk.jpg",
       "altPoster": "https://static.blog4ever.com/2018/09/848202/big_hf2eg73aeaa2te9_10657332.jpg",
       "tags": ["4K", "steelbook"],
-      "categories": ["wishlist"],
+      "categories": ["Récompensés aux Oscars", "Classiques", "Années 90", "Top 10"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "52 Mbps"
+  },
       "country": "États-Unis",
-      "added": "2026-07-15"
+      "added": "2026-06-11"
     },
     {
       "id": "tt0120815",
@@ -4716,6 +4738,23 @@
       "tags": ["4K", "Steelbook"],
       "categories": ["wishlist"],
       "country": "Italie",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt0075860",
+      "title": "Rencontres du troisième type",
+      "year": 1977,
+      "rating": 7.6,
+      "genres": ["Science-fiction", "Drame"],
+      "people": ["Richard Dreyfuss", "Melinda Dillon", "François Truffaut", "Cary Guffey", "Teri Garr", "Justin Dreyfuss", "Bob Balaban"],
+      "directors": ["Steven Spielberg"],
+      "runtime": 138,
+      "overview": "Roy Neary, monteur de lignes électrique, observe comment sa vie quotidienne calme et ordinaire se trouve bouleversée après une rencontre rapprochée avec un OVNI.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/jznNbJ80WvvlbLdGEjNsvwycDZC.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/yw9RtfaCwdLexdcEGFcf5bllUKb.jpg",
+      "tags": ["4K"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
       "added": "2026-12-31"
     }
   ]
