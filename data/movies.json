@@ -3084,7 +3084,7 @@
       "altPoster": "https://images.static-bluray.com/movies/covers/410336_front.jpg?t=1775578209",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-06-24"
+      "added": "2026-06-22"
     },
     {
       "id": "tt1454468",
@@ -3879,6 +3879,8 @@
       "title": "Marty Supreme",
       "year": 2026,
       "rating": 7.6,
+      "price": 24.98,
+      "marketValue": 35.00,
       "genres": ["Drame", "Sport"],
       "people": ["Timothée Chalamet", "Odessa A'zion", "Gwyneth Paltrow", "Fran Drescher", "Luke Manley", "Tyler the Creator", "Ralph Colucci", "Kevin O'Leary", "Abel Ferrara", "Koto Kawaguchi"],
       "directors": ["Josh Safdie"],
@@ -3887,6 +3889,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/n0fnflUWcwzbQ5x32G8zx0INs3G.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gZRVtEWGdBSa1Sx9yH2OXXX6pyp.jpg",
       "altPoster": "https://steelbookpro.fr/wp-content/uploads/2026/02/Marty-Supreme-Edition-Limitee-SteelBook-Blu-ray-4K-Ultra-HD-2.jpg",
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "60 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
       "added": "2026-06-19"
