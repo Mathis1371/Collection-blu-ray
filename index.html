@@ -741,6 +741,10 @@
     </div>
   </div>
 
+  <button id="backToTopBtn" class="fixed bottom-6 right-6 z-[100] p-3 rounded-full bg-red-600 text-white shadow-lg shadow-red-600/30 border border-white/20 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 hover:bg-red-700 hover:scale-110 group flex items-center justify-center">
+      <svg class="w-6 h-6 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+  </button>
+
   <script>
 
     let state = { all: [], filtered: [], query: "", genre: "", yearExact: "", runtime: "", sort: "title", sortDir: "asc", country: "", period: "", seen: "", groupBy: ""};
@@ -1366,7 +1370,7 @@
           function touchMove(event) {
             if (isDragging) {
               const currentPosition = getPositionX(event); const diff = currentPosition - startPos;
-              if (Math.abs(diff) > 5) didMove = true;
+              if (Math.abs(diff) > 15) didMove = true;
               currentTranslate = prevTranslate + diff; setSliderPosition();
             }
           }
@@ -3171,7 +3175,7 @@
        "Christian Bale": ["Empire du soleil", "American Psycho", "Equilibrium", "The Machinist", "Batman Begins", "Rescue Dawn", "Le Prestige", "3h10 pour Yuma", "The Dark Knight", "Terminator Renaissance", "Fighter", "Sacrifices of War", "The Dark Knight Rises", "American Bluff", "The Big Short", "Vice", "Le Mans '66", "Thor: Love and Thunder", "Amsterdam", "The Bride!"],
        "Cillian Murphy": ["28 jours plus tard", "Retour à Cold Mountain", "Batman Begins", "Breakfast on Pluto", "Le vent se lève", "Sunshine", "The Dark Knight", "Inception", "Tron : L'Héritage", "Broken", "The Dark Knight Rises", "Au cœur de l'océan", "Opération Anthropoid", "Dunkerque", "Anna", "Sans un bruit 2", "Oppenheimer", "28 ans plus tard: Le temple des morts"],
        "Ryan Gosling": ["N'oublie jamais", "Stay", "Half Nelson", "La Faille", "Une fiancée pas comme les autres", "Blue Valentine", "Drive", "Crazy, Stupid, Love.", "Les marches du pouvoir", "The Place Beyond the Pines", "Gangster Squad", "Only God Forgives", "The Big Short", "The Nice Guys", "La La Land", "Song to Song", "Blade Runner 2049", "First Man", "Barbie", "The Fall Guy", "Projet Dernière Chance"],
-       "Denzel Washington": ["Glory", "Malcolm X", "Philadelphia", "USS Alabama", "Training Day", "Man on Fire", "Inside Man", "American Gangster", "Flight", "Equalizer", "Fences", "Macbeth", "Gladiator II"],
+       "Denzel Washington": ["Glory", "Malcolm X", "L'affaire Pélican", "Philadelphia", "USS Alabama", "À l'épreuve du feu", "Le Témoin du mal", "He Got Game", "Bone Collector", "Hurricane Carter", "Le plus beau des combats", "Training Day", "John Q.", "Out of Time", "Man on Fire", "Un crime dans la tête", "Inside Man", "Déjà vu", "American Gangster", "The Great Debaters", "L'attaque du métro 123", "Le Livre d'Eli", "Unstoppable", "Sécurité rapprochée", "Flight", "2 Guns", "Equalizer", "Les Sept Mercenaires", "Fences", "Equalizer 2", "Une affaire de détails", "The Tragedy of Macbeth", "Equalizer 3", "Gladiator II"],
        "Matthew McConaughey": ["Génération rebelle", "Le Droit de tuer ?", "Contact", "Amistad", "U-571", "Emprise", "Le Règne du feu", "Comment se faire larguer en 10 leçons", "Sahara", "Two for the Money", "We Are Marshall", "Tonnerre sous les tropiques", "La Défense Lincoln", "Mud", "Dallas Buyers Club", "Le Loup de Wall Street", "Interstellar", "Free State of Jones", "Gold", "The Gentlemen"],
        "Al Pacino": ["Le Parrain", "Serpico", "Le Parrain, 2ème partie", "Un après-midi de chien", "Scarface", "Dick Tracy", "Le Parrain, 3e partie", "Glengarry", "Le Temps d'un week-end", "L'Impasse", "Heat", "Donnie Brasco", "L'Associé du diable", "Révélations", "L'Enfer du dimanche", "Insomnia", "La recrue", "Two for the Money", "Ocean's 13", "La loi et l'ordre", "Les Derniers Affranchis", "Once Upon a Time in... Hollywood", "The Irishman", "House of Gucci"],
        "Robert De Niro": ["Mean Streets", "Le Parrain, 2ème partie", "Taxi Driver", "Voyage au bout de l'enfer", "Raging Bull", "La valse des pantins", "Il était une fois en Amérique", "Brazil", "Angel Heart : Aux portes de l'enfer", "Les Incorruptibles", "Midnight Run", "Les Affranchis", "L'éveil", "Backdraft", "Les Nerfs à vif", "Blessures secrètes", "Il était une fois le Bronx", "Frankenstein", "Casino", "Heat", "Sleepers", "Copland", "Jackie Brown", "Des hommes d'influence", "De grandes espérances", "Ronin", "Mafia Blues", "Les chemins de la dignité", "Mon beau-père et moi", "The Score", "Mon beau-père, mes parents et moi", "Trouble jeu", "Raisons d'état", "Stardust, le mystère de l'étoile", "La loi et l'ordre", "Machete", "Limitless", "Killer Elite", "Red Lights", "Happiness Therapy", "Malavita", "Last Vegas", "Le Nouveau Stagiaire", "Joy", "Joker", "The Irishman", "Killers of the Flower Moon"],
@@ -3183,7 +3187,8 @@
        "Gary Oldman": ["JFK", "Dracula", "True Romance", "Léon", "Le cinquième élément", "Air Force One", "Hannibal", "Harry Potter et le Prisonnier d'Azkaban", "Batman Begins", "Harry Potter et la Coupe de feu", "Harry Potter et l'Ordre du Phénix", "The Dark Knight", "Le drôle de Noël de Scrooge", "Le Livre d'Eli", "Harry Potter et les Reliques de la Mort : partie 2", "La taupe", "Des hommes sans loi", "The Dark Knight Rises", "RoboCop", "La planète des singes : L'affrontement", "Enfant 44", "Criminal: Un espion dans la tête", "Un Monde entre nous", "Hitman & Bodyguard", "Les Heures sombres", "Hunter Killer", "The Laundromat : L'Affaire des Panama Papers", "Mank", "La Femme à la fenêtre", "Hitman & Bodyguard 2", "Oppenheimer", "Parthenope"],
        "Jack Nicholson": ["Easy Rider", "Chinatown", "Vol au-dessus d'un nid de coucouc", "Shining", "Tendres passions", "Les Sorcières d'Eastwick", "Batman", "Des hommes d'honneur", "Wolf", "Mars Attacks!", "Pour le pire et pour le meilleur", "The Pledge", "Monsieur Schmidt", "Self Control", "Tout peut arriver", "Les Infiltrés", "Sans plus attendre", "Comment savoir"],
        "Timothée Chalamet": ["Interstellar", "Call Me by Your Name", "Lady Bird", "Hostiles", "My Beautiful Boy", "Un jour de pluie à New York", "Le Roi", "Les Filles du docteur March", "The French Dispatch", "Dune : Première Partie", "Don't Look Up", "Bones and All", "Wonka", "Dune : Deuxième Partie", "Un parfait inconnu", "Marty Supreme"],
-       "Josh Brolin": ["Les Goonies", "Mimic", "Planète terreur", "No Country for Old Men", "Dans la vallée d'Elah", "American Gangster", "W., l'improbable président", "Harvey Milk", "Vous allez rencontrer un bel et sombre inconnu", "True Grit", "Men in Black 3", "Gangster Squad", "Last Days of Summer", "Sin City : J'ai tué pour elle", "Inherent Vice", "Sicario", "Everest", "Ave, César !", "Line of fire", "Avengers: Infinity War", "Deadpool 2", "Sicario : La Guerre des cartels", "Avengers: Endgame", "Dune : Première Partie", "Dune : Deuxième Partie", "Évanouis", "Wake up dead man: Une histoire à couteaux tirés", "Running Man"]
+       "Josh Brolin": ["Les Goonies", "Mimic", "Planète terreur", "No Country for Old Men", "Dans la vallée d'Elah", "American Gangster", "W., l'improbable président", "Harvey Milk", "Vous allez rencontrer un bel et sombre inconnu", "True Grit", "Men in Black 3", "Gangster Squad", "Last Days of Summer", "Sin City : J'ai tué pour elle", "Inherent Vice", "Sicario", "Everest", "Ave, César !", "Line of fire", "Avengers: Infinity War", "Deadpool 2", "Sicario : La Guerre des cartels", "Avengers: Endgame", "Dune : Première Partie", "Dune : Deuxième Partie", "Évanouis", "Wake up dead man: Une histoire à couteaux tirés", "Running Man"],
+       "Scarlett Johansson": ["The Barber: L'Homme qui n'était pas là;", "Ghost World", "Lost in Translation", "La jeune fille à la perle", "Match Point", "The Island", "Scoop", "Le Prestige", "Le journal d'une baby-sitter", "Deux Sœurs pour un roi", "Vicky Cristina Barcelona", "Ce que pensent les hommes", "Iron Man 2", "Nouveau départ", "Avengers", "Hitchcock", "Don Jon", "Under the Skin", "Her", "Chef", "Captain America : Le Soldat de l'hiver", "Lucy", "Avengers : L'Ère d'Ultron", "Ave, César !", "Le Livre de la jungle", "Captain America : Civil War", "Ghost in the Shell", "Avengers : Infinity War", "Avengers : Endgame", "Marriage Story", "Jojo Rabbit", "Black Widow", "Asteroid City", "To the Moon", "The Phoenician Scheme", "Jurassic World: Renaissance", "Paper Tiger"]
    };
 
    const actorPhotos = {
@@ -3207,7 +3212,8 @@
        "Gary Oldman": "https://media.themoviedb.org/t/p/w440_and_h660_face/peKJ7hFHE0Z7YaO9dUmCChI2iHA.jpg",
        "Jack Nicholson": "https://media.themoviedb.org/t/p/w440_and_h660_face/sX2eryfpUdlGsZOzoDlszmQYyPP.jpg",
        "Timothée Chalamet": "https://media.themoviedb.org/t/p/w440_and_h660_face/axENiFIrSz5B7UuWkMT7PDe7CaO.jpg",
-       "Josh Brolin": "https://media.themoviedb.org/t/p/w440_and_h660_face/jz8gDYozhRC2Ymd38ydPsW7wm49.jpg"
+       "Josh Brolin": "https://media.themoviedb.org/t/p/w440_and_h660_face/jz8gDYozhRC2Ymd38ydPsW7wm49.jpg",
+       "Scarlett Johansson": "https://media.themoviedb.org/t/p/w440_and_h660_face/9cFuXISrk0jRfPCUCD4qOJGwYpV.jpg"
    };
 
    function getActorAvatar(name) {
@@ -3679,6 +3685,7 @@
    };
    // --- FIN : LOGIQUE DU GÉNÉRATEUR JSON ---
 
+
    loadInitial();
   </script>
 
@@ -3710,6 +3717,37 @@
     if(btn) {
         btn.href = `https://github.com/${GITHUB_USERNAME}/${GITHUB_REPO}/issues/new?title=${title}&body=${body}`;
     }
+
+    // --- BOUTON RETOUR EN HAUT ---
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                // On affiche le bouton
+                backToTopBtn.style.opacity = '1';
+                backToTopBtn.style.transform = 'translateY(0)';
+                backToTopBtn.style.pointerEvents = 'auto';
+            } else {
+                // On cache le bouton
+                backToTopBtn.style.opacity = '0';
+                backToTopBtn.style.transform = 'translateY(2.5rem)';
+                backToTopBtn.style.pointerEvents = 'none';
+            }
+        });
+
+        // Au clic, on remonte en haut
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
   </script>
+
+  <button id="backToTopBtn" class="fixed bottom-6 right-6 z-[100] p-3 rounded-full bg-red-600 text-white shadow-lg shadow-red-600/30 border border-white/20 transition-all duration-300 hover:bg-red-700 hover:scale-110 flex items-center justify-center opacity-0 pointer-events-none" style="transform: translateY(2.5rem);">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+  </button>
 </body>
 </html>
