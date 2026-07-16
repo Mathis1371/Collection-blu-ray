@@ -792,7 +792,7 @@
       "overview": "Lorsqu'une menace mieux connue sous le nom du Joker émerge de son passé mystérieux et déclenche le chaos sur la ville de Gotham, Batman doit faire face au plus grand des défis psychologique et physique afin de combattre l'injustice.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/xynOH3rrt2X4hSe1YQgYAkBXfy.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dJD4i4xYkUP5ELuGGzc4B6Fermn.jpg",
-      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/f0/24/e9/15279344/1507-1/tsp20230425134157/The-Dark-Knight-Steelbook-Blu-ray-4K-Ultra-HD.jpg",
+      "altPoster": "https://bluraymania.com/cdn/shop/products/temnyy-rytsar-4k-uhd-blu-ray-steelbook-376761.jpg?v=1720681537&width=1500",
       "categories": ["Récompensés aux Oscars", "Univers DC Comics", "Films d'action", "Blockbusters", "Top 10"],
 
       "technicalSpecs": {
@@ -1839,6 +1839,8 @@
       "id": "tt17279496",
       "title": "Civil War",
       "year": 2024,
+      "price": 16.99,
+      "marketValue": 25.00,
       "genres": ["Action", "Thriller"],
       "people": ["Nick Offerman", "Kirsten Dunst", "Wagner Moura", "Jefferson White", "Cailee Spaeny", "Stephen McKinley Henderson", "Nelson Lee", "Evan Lai", "Jesse Plemons"],
       "directors": ["Alex Garland"],
@@ -1848,10 +1850,16 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/zMDHZyVygRjiz7HioRRlHAJtk8o.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/hzGbV0yVJOnu8pgQOYWqdLNtvxS.jpg",
       "altPoster": "https://static.blog4ever.com/2018/09/848202/35123940089391_10045815.jpg",
-      "categories": ["wishlist"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "89 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2025-12-31"
+      "added": "2026-07-01"
     },
     {
       "id": "tt2119532",
@@ -2616,11 +2624,11 @@
       "overview": "Une linguiste est recrutée par l'armée pour communiquer avec une forme de vie extra-terrestre après que douze vaisseaux spatiaux mystérieux se soient posés aux quatre coins du monde.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/phTu4qzjs0WHoeiLHurG70d29NB.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zjHm3vcSlTCvfQoa9XVPN0d234X.jpg",
-      "altPoster": "https://www.esc-distribution.com/11142/premier-contact-uhd-4k-bd.jpg",
+      "altPoster": "https://steelbookpro.fr/wp-content/uploads/2026/06/71FN2AL3CzL._AC_SL1500_.jpg",
       "categories": ["wishlist"],
-      "tags": ["4K"],
+      "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-09-08"
+      "added": "2026-09-09"
     },
     {
       "id": "tt0112384",
@@ -2868,7 +2876,7 @@
       "overview": "Un chauffeur de taxi se retrouve pris en otage par un tueur à gages qui va de cible en cible au fil de la nuit à Los Angeles.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/x6OIJWkwe6Kj4pQXTkhhBb7gluA.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/iSMLVrFaKODhexmIoP8PjvoQCLm.jpg",
-      "altPoster": "https://www.hidefninja.com/community/attachments/img_0655-jpeg.599738/",
+      "altPoster": "https://m.media-amazon.com/images/I/71PogfCVIRL.jpg",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
@@ -2994,7 +3002,7 @@
       "overview": "Deux jeunes hommes obsédés par la conspiration kidnappent la PDG d'une grande entreprise, convaincus qu'elle est un extraterrestre qui a l'intention de détruire la planète Terre.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/oxgsAQDAAxA92mFGYCZllgWkH9J.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/f5stYb742P3BuBB8kPOaQgrsTZH.jpg",
-      "altPoster": "https://chocobonplan.com/wp-content/uploads/2025/11/bugonia-blu-ray-4k-steelbook-visuel-produit-300x300.png",
+      "altPoster": "https://cobra.fr/cdn/shop/files/bugonia-br-4k.jpg?v=1780056729&width=1200",
       "categories": ["wishlist"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
@@ -3914,7 +3922,7 @@
       "id": "tt12042730",
       "title": "Projet dernière chance",
       "year": 2026,
-      "rating": 8.3,
+      "rating": 8.2,
       "genres": ["Drame", "Science-fiction", "Thriller"],
       "people": ["Ryan Gosling", "Sandra Hüller", "Milana Vayntrub", "James Ortiz", "Liz Kingsman", "Lionel Boyce"],
       "directors": ["Phil Lord", "Christopher Miller"],
@@ -3931,6 +3939,8 @@
       "title": "Super 8",
       "year": 2011,
       "rating": 7,
+      "price": 29.99,
+      "marketValue": 35.00,
       "genres": ["Thriller", "Science-fiction", "Action"],
       "people": ["Elle Fanning", "Joel Courtney", "Riley Griffiths", "Ryan Lee", "Gabriel Basso", "Zach Mills", "Kyle Chandler", "Ron Eldard", "Noah Emmerich", "Amanda Michalka"],
       "directors": ["J.J. Abrams"],
@@ -3939,9 +3949,17 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/pUWIjaMMYJjeBm5bJyE3mIXdQ62.jpgf",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/mQR7lG4Xf1fPyKlI3XHhKbVUybV.jpg",
       "altPoster": "https://image.son-video.com/images/article/paramount/PARA3701432003610/super-8-edition-10eme-anniversaire-steelbook_630635390073d_1200.jpg?p=600",
+      "categories": ["Films d'action", "Science-fiction"],
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "69 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-07-15"
+      "added": "2026-07-16"
     },
     {
       "id": "tt1392190",
@@ -4723,10 +4741,10 @@
       "overview": "Une femme séjournant dans un Airbnb découvre que la maison qu'elle a louée n'est pas ce qu'elle semble être.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/2VQq17K9eZwPzXnRCtr6tN95iUD.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/hSWPlFRfC9ckomLQufZpqDzrR8V.jpg",
-      "altPoster": "https://chocobonplan.com/wp-content/uploads/2026/05/barbare-blu-ray-4k-steelbook-visuel-produit_20260513233559-300x300.png",
+      "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnOlTkAQcgNz8wloyQK6GP7L28Bta7Cj57ByNexojB2w&s",
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-08-11"
+      "added": "2026-09-09"
     },
     {
       "id": "tt1119646",
@@ -4800,7 +4818,7 @@
       "id": "tt15047880",
       "title": "Disclosure Day",
       "year": 2026,
-      "rating": 6.9,
+      "rating": 6.7,
       "genres": ["Science-fiction", "Thriller", "Action", "Drame"],
       "people": ["Emily Blunt", "Josh O'Connor", "Colman Domingo", "Colin Firth", "Wyatt Russell", "Eve Hewson", "Henry Lloyd-Hughes"],
       "directors": ["Steven Spielberg"],
@@ -5029,9 +5047,10 @@
       "overview": "Un biologiste s'inscrit pour une expédition secrète et dangereuse dans une zone mystérieuse où les lois naturelles ne s'appliquent pas.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/4YRplSk6BhH6PRuE9gfyw9byUJ6.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kOIR6Qqys9C6rRmOlM3n3WPusFS.jpg",
-      "tags": ["4K"],
+      "altPoster": "https://static.fnac-static.com/multimedia/Images/FR/NR/a5/15/39/20518309/1507-1/tsp20260629144044/Annihilation-Edition-Limitee-SteelBook-Blu-ray-4K-Ultra-HD.jpg",
+      "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-09-08"
+      "added": "2026-10-14"
     },
     {
       "id": "tt1045658",
@@ -5065,6 +5084,109 @@
       "tags": ["4K"],
       "categories": ["wishlist"],
       "country": "Danemark",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt4925292",
+      "title": "Lady Bird",
+      "year": 2017,
+      "rating": 7.4,
+      "genres": ["Drame", "Comédie"],
+      "people": ["Saoirse Ronan", "Lucas Hedges", "Timothée Chalamet", "Laurie Metcalf", "Beanie Feldstein", "Tracy Letts", "Odeya Rush", "Lois Smith", "Jordan Rodrigues", "Stephen McKinley Henderson"],
+      "directors": ["Greta Gerwig"],
+      "runtime": 94,
+      "overview": "Portrait d'une jeune femme de 17 ans, rebelle et artiste dans l'âme, pendant sa dernière année de lycée en 2002 à Sacramento.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/gl66K7zRdtNYGrxyS2YDUP5ASZd.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/dzcX39FGS5Vj47JfcU3mOrl0Y7Z.jpg",
+      "tags": ["4K"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt1232829",
+      "title": "21 Jump Street",
+      "year": 2012,
+      "rating": 7.2,
+      "genres": ["Crime", "Comédie", "Action"],
+      "people": ["Jonah Hill", "Channing Tatum", "Brie Larson", "Dave Franco", "Ice Cube", "Holly Robinson Peete", "Ellie Kemper", "Dakota Johnson", "Rob Riggle"],
+      "directors": ["Phil Lord", "Christopher Miller"],
+      "runtime": 109,
+      "overview": "Deux policiers peu efficaces sont envoyés dans un lycée de la région pour s'intégrer et faire tomber un réseau de drogue.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/8v3Sqv9UcIUC4ebmpKWROqPBINZ.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/uJIn0Xzu0D5cF8C6oVOevNiYxfg.jpg",
+      "tags": ["4K"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt26657236",
+      "title": "Backrooms",
+      "year": 2026,
+      "rating": 7.1,
+      "genres": ["Thriller", "Science-fiction", "Horreur"],
+      "people": ["Chiwetel Ejiofor", "Renate Reinsve", "Avan Jogia", "Lucite Maxwell", "Mark Duplass", "Katharine Isabelle", "Robert Bobroczkyi", "Krista Kosonen"],
+      "directors": ["Kane Parsons"],
+      "runtime": 110,
+      "overview": "Une étrange porte apparaît dans le sous-sol d'un magasin de meubles.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/9VxQpK4qaK96iALwEoX3LoSadMj.jpg",
+      "tags": ["4K"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt0105236",
+      "title": "Reservoir Dogs",
+      "year": 1992,
+      "rating": 8.3,
+      "genres": ["Thriller", "Crime"],
+      "people": ["Harvey Keitel", "Quentin Tarantino", "Michael Madsen", "Tim Roth", "Steve Buscemi", "Chris Penn", "Lawrence Tierney", "Edward Bunker", "Kirk Baltz", "Randy Brooks"],
+      "directors": ["Quentin Tarantino"],
+      "runtime": 99,
+      "overview": "Un chef de la mafia réunit une équipe de six criminels expérimentés dans le but de réaliser un grand braquage de bijouterie.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/xi8Iu6qyTfyZVDVy60raIOYJJmk.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kCZLO9MWCuugfmqNxaFVoLXO5Rs.jpg",
+      "altPoster": "https://static.blog4ever.com/2018/09/848202/big_61gjducf7pl_10598824.jpg",
+      "tags": ["4K", "Steelbook"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt0074119",
+      "title": "Les Hommes du président",
+      "year": 1976,
+      "rating": 7.9,
+      "genres": ["Thriller", "Histoire", "Drame"],
+      "people": ["Robert Redford", "Dustin Hoffman", "Jason Robards", "Hal Holbrook", "Jack Warden", "Jane Alexander", "Meredith Baxter", "Martin Balsam", "Stephen Collins"],
+      "directors": ["Alan J. Pakula"],
+      "runtime": 138,
+      "overview": "Les journalistes du Washington Post Bob Woodward et Carl Bernstein mettent à jour les détails du scandale du Watergate, qui conduira le président Richard Nixon à sa démission.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/oTmgVuywId1bgRv1QTYRcA9Jz2g.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/v2GitQLT5Xgw6EK75l8BG4qTRoo.jpg",
+      "altPoster": "https://m.media-amazon.com/images/I/81g-88lj-4L._AC_UF894,1000_QL80_.jpg",
+      "tags": ["4K", "Steelbook"],
+      "categories": ["wishlist"],
+      "country": "États-Unis",
+      "added": "2026-12-31"
+    },
+    {
+      "id": "tt33764258",
+      "title": "L'Odyssée",
+      "year": 2026,
+      "rating": 8.5,
+      "genres": ["Aventure", "Drame", "Peplum", "Romance", "Fantastique"],
+      "people": ["Matt Damon", "Tom Holland", "Anne Hathaway", "Robert Pattinson", "Zendaya", "Charlize Theron", "Elliot Page", "Jon Bernthal", "Ben Safdie", "Mia Goth", "Himesh Patel", "Lupita Nyong'o", "John Leguizamo"],
+      "directors": ["Christopher Nolan"],
+      "runtime": 172,
+      "overview": "Après la guerre de Troie, Ulysse affronte un voyage périlleux pour retourner à Ithaque, rencontrant en chemin des créatures comme le Cyclope Polyphème, les Sirènes et Calypso.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/6dfr9o52w9AVYJSlSA1IBUlLCyU.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/qaWgqQdJwohmc4XK4iXAiZiPOKH.jpg",
+      "tags": ["4K"],
+      "country": "États-Unis",
       "added": "2026-12-31"
     }
   ]
