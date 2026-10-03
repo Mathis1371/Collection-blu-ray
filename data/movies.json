@@ -2769,6 +2769,8 @@
       "id": "tt0088763",
       "title": "Retour vers le futur",
       "year": 1985,
+      "price": 37.69,
+      "marketValue": 40.00,
       "genres": ["Science-fiction", "Comédie", "Aventure"],
       "people": ["Michael J. Fox", "Christopher Lloyd", "Lea Thompson", "Crispin Glover", "Thomas F. Wilson", "Claudia Wells", "Eric Stoltz", "James Tolkan", "Wendie Jo Sperber"],
       "directors": ["Robert Zemeckis"],
@@ -2778,10 +2780,17 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/iCgFtDUZxN8iUzNBCisjUrBmg2q.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/4rPDCsbZBGD8l9rBflmJt42NleV.jpg",
       "altPoster": "https://m.media-amazon.com/images/I/71IV7O3PULL._AC_UF894,1000_QL80_.jpg",
-      "categories": ["wishlist"],
+      "categories": ["Récompensés aux Oscars", "Classiques", "Science-fiction"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "73 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-11-11"
+      "added": "2026-09-29"
     },
     {
       "id": "tt1631867",
@@ -3939,7 +3948,7 @@
       "overview": "Un astronaute tente de sauver la Terre alors qu'il est seul dans l'espace.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/qmPD9lbtgvsXPJXduqARccjUwCZ.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/RQqSXCtSxP1tUH9plhW06gNdHy.jpg",
-      "altPoster": "https://www.cinewa.fr/assets/fcbabf40-9fe9-4abe-85bd-32a20dd73ad0/projet-derniere-chance-edition-limitee-steelbook-blu-ray-4k-ultra-hd.jpg?width=480&quality=70&format=webp",
+      "altPoster": "https://cdn.chocobonplan.com/medias/120913/projet-derniere-chance-4k-steelbook-visuel-produit_20260701084610.png",
       "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
       "added": "2026-11-25"
@@ -4153,6 +4162,8 @@
       "title": "28 jours plus tard",
       "year": 2002,
       "rating": 7.5,
+      "price": 29.99,
+      "marketValue": 35.00,
       "genres": ["Thriller", "Science-fiction", "Horreur", "Zombies", "Catastrophe"],
       "people": ["Cillian Murphy", "Brendan Gleeson", "Naomie Harris", "Christopher Eccleston", "Kim McGarrity", "Noah Huntley", "Sanjay Rambaruth", "Luke Mably"],
       "directors": ["Danny Boyle"],
@@ -4161,6 +4172,13 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/y0u77LC6C0UvhiWe4LiI2KulHN9.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/zF378TXYDETapzeDrJVif7kkpIv.jpg",
       "altPoster": "https://main.thgimages.com/?url=https://static.thcdn.com/productimg/original/16583121-1905236204481685.png&format=webp&width=1500&height=1500&fit=cover",
+
+      "technicalSpecs": {
+      "resolution": "2K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "65 Mbps"
+  },
       "tags": ["4K", "steelbook"],
       "country": "Royaume-Uni",
       "added": "2026-09-02"
@@ -4537,6 +4555,8 @@
       "title": "Mars Attacks!",
       "year": 1996,
       "rating": 6.3,
+      "price": 29.99,
+      "marketValue": 30.00,
       "genres": ["Science-fiction", "Comédie", "Satire"],
       "people": ["Jack Nicholson", "Annette Bening", "Jack Black", "Danny DeVito", "Lisa Marie", "Glenn Close", "Pierce Brosnan", "Michael J. Fox", "Sarah Jessica Parker", "Lukas Haas", "Natalie Portman"],
       "directors": ["Tim Burton"],
@@ -4545,9 +4565,17 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hll4O5vSAfnZDb6JbnP06GPtz7b.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/4qFcUKlkcUj9V9Cbh1tyyLmg2rE.jpg",
       "altPoster": "https://i.imgur.com/V0RLj9R.jpeg",
+      "categories": ["Science-fiction", "Années 90"],
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "Dolby Atmos",
+      "bitrate": "84 Mbps"
+  },
       "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-08-19"
+      "added": "2026-08-17"
     },
     {
       "id": "tt1560747",
@@ -4682,10 +4710,10 @@
       "overview": "Le professeur d'anglais John Keating incite ses étudiants à regarder la poésie avec une perspective différente de connaissances et de sentiments authentiques.",
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/oHBdsvdlPhzkJZOfax7Oy3X5mm7.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/5x7DkcREMYqN3OuRxuZvVYefXaT.jpg",
-      "tags": ["4K"],
-      "categories": ["wishlist"],
+      "altPoster": "https://cdn.myshoptet.com/usr/www.blu-shop.cz/user/shop/big/21639_spolecnost-mrtvych-basniku--4k-ultra-hd-blu-ray--steelbook-.png?ff=1&x=1024&y=768&q=85&ts=6a882cba&sg=161563f2",
+      "tags": ["4K", "Steelbook"],
       "country": "États-Unis",
-      "added": "2026-12-31"
+      "added": "2026-11-11"
     },
     {
       "id": "tt0448134",
@@ -4743,6 +4771,8 @@
       "title": "Barbare",
       "year": 2022,
       "rating": 7,
+      "price": 29.99,
+      "marketValue": 40.00,
       "genres": ["Mystère", "Horreur", "Thriller", "Action"],
       "people": ["Georgina Campbell", "Bill Skarsgard", "Justin Long", "Matthew Patrick Davis", "Sara Paxton", "Richard Brake", "Kate Bosworth", "Brooke Dillman"],
       "directors": ["Zach Cregger"],
@@ -4751,9 +4781,16 @@
       "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/2VQq17K9eZwPzXnRCtr6tN95iUD.jpg",
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/hSWPlFRfC9ckomLQufZpqDzrR8V.jpg",
       "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnOlTkAQcgNz8wloyQK6GP7L28Bta7Cj57ByNexojB2w&s",
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "Dolby Vision",
+      "audio": "DTS-HD MA 5.1"
+  },
+      "categories": ["Horreur"],
       "tags": ["4K", "steelbook"],
       "country": "États-Unis",
-      "added": "2026-09-09"
+      "added": "2026-09-12"
     },
     {
       "id": "tt1119646",
@@ -4786,6 +4823,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/iTsdOfH1h4Nq2pcv6AJjPVFCiV2.jpg",
       "altPoster": "https://static.thcdn.com/productimg/original/17898059-1495356526200095.jpg",
       "tags": ["4K", "Steelbook"],
+      "categories": ["wishlist"],
       "country": "États-Unis",
       "added": "2026-09-23"
     },
@@ -4828,7 +4866,7 @@
       "id": "tt15047880",
       "title": "Disclosure Day",
       "year": 2026,
-      "rating": 6.7,
+      "rating": 6.4,
       "genres": ["Science-fiction", "Thriller", "Action", "Drame"],
       "people": ["Emily Blunt", "Josh O'Connor", "Colman Domingo", "Colin Firth", "Wyatt Russell", "Eve Hewson", "Henry Lloyd-Hughes"],
       "directors": ["Steven Spielberg"],
@@ -5204,7 +5242,7 @@
       "id": "tt33764258",
       "title": "L'Odyssée",
       "year": 2026,
-      "rating": 8.5,
+      "rating": 8.4,
       "genres": ["Aventure", "Drame", "Peplum", "Romance", "Fantastique"],
       "people": ["Matt Damon", "Tom Holland", "Anne Hathaway", "Robert Pattinson", "Zendaya", "Charlize Theron", "Elliot Page", "Jon Bernthal", "Ben Safdie", "Mia Goth", "Himesh Patel", "Lupita Nyong'o", "John Leguizamo"],
       "directors": ["Christopher Nolan"],
@@ -5214,7 +5252,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/qaWgqQdJwohmc4XK4iXAiZiPOKH.jpg",
       "tags": ["4K"],
       "country": "États-Unis",
-      "added": "2026-11-25"
+      "added": "2026-11-18"
     },
     {
       "id": "tt0212720",
@@ -5308,7 +5346,7 @@
       "id": "tt22084616",
       "title": "Spider-Man: Brand New Day",
       "year": 2026,
-      "rating": 8.1,
+      "rating": 8.0,
       "genres": ["Science-fiction", "Action", "Aventure", "Super-héros"],
       "people": ["Tom Holland", "Sadie Sink", "Zendaya", "Jacob Batalon", "Jon Bernthal", "Krondon", "Michael Mando", "Luke Gross", "Mark Ruffalo", "Florence Pugh", "Angourie Rice"],
       "directors": ["Destin Daniel Cretton"],
@@ -5318,7 +5356,7 @@
       "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/f9mM7tDrZ3LlHPQu9I5A6TTxTb9.jpg",
       "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1ptew9sZv_nQp4jZ3ZzSnVKGVBgb6vBqiznSl0pAu35iRo6Pm1uMK7-Cm&s=10",
       "tags": ["4K", "Steelbook"],
-      "country": "Royaume-Uni",
+      "country": "États-Unis",
       "added": "2026-12-02"
     },
     {
@@ -5336,7 +5374,7 @@
       "altPoster": "https://static.thcdn.com/productimg/1600/1600/12346340-2674725061028286.jpg",
       "tags": ["4K", "Steelbook"],
       "categories": ["wishlist"],
-      "country": "Royaume-Uni",
+      "country": "États-Unis",
       "added": "2026-12-02"
     },
     {
@@ -5354,7 +5392,7 @@
       "altPoster": "https://www.zavvi.com/images?url=https://static.thcdn.com/productimg/1600/1600/12738146-1144833150890583.jpg&format=webp&auto=avif&width=1000&height=1000&fit=cover&v=2",
       "tags": ["4K", "Steelbook"],
       "categories": ["wishlist"],
-      "country": "Royaume-Uni",
+      "country": "États-Unis",
       "added": "2026-12-02"
     },
     {
@@ -5372,8 +5410,137 @@
       "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSw_liCwX7rhCQDwglGzlFsDxTjnf5EtLvhe2ImkDzJAw&s=10",
       "tags": ["4K", "Steelbook"],
       "categories": ["wishlist"],
-      "country": "Royaume-Uni",
+      "country": "États-Unis",
       "added": "2026-12-02"
+    },
+    {
+      "id": "tt28553375",
+      "title": "La bataille de Gaulle: L'âge de fer",
+      "year": 2026,
+      "rating": 7.8,
+      "genres": ["Histoire", "Guerre", "Drame", "Biopic"],
+      "people": ["Simon Abkarian", "Simon Russell Beale", "Florian Lesieur", "Benoit Magimel", "Loïc Corbery", "Anamaria Vartolomei", "Niels Schneider", "Karim Leklou", "Mathieu Kassovitz", "Félix Kysyl"],
+      "directors": ["Antonin Baudry"],
+      "runtime": 160,
+      "overview": "Juin 1940. Durant la Seconde Guerre mondiale, Charles de Gaulle, alors peu connu, décide d'organiser la Résistance extérieure depuis Londres et ainsi de lutter contre l'Allemagne nazie. Sans avoir ni réels appuis ni troupes à l'origine, il va tenter de créer une organisation politique et militaire, la France libre.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/wRvwPOxWXkeBhPFwpuE8v9tmsY9.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/8atC3ghkXK0cr3HutnzsffKWCbR.jpg",
+      "altPoster": "https://static-pepper.dealabs.com/threads/raw/vzhBa/3391277_1/re/768x768/qt/60/3391277_1.jpg",
+      "tags": ["4K", "Steelbook"],
+      "country": "France",
+      "added": "2026-11-04"
+    },
+    {
+      "id": "tt35856133",
+      "title": "La bataille de Gaulle: J'écris ton nom",
+      "year": 2026,
+      "rating": 8.0,
+      "genres": ["Histoire", "Guerre", "Drame", "Biopic"],
+      "people": ["Simon Abkarian", "Niels Schneider", "Anamaria Vartolomei", "Félix Kysyl", "Thierry Lhermitte", "Karim Leklou", "Loïc Corbery", "Campbell Scott", "Simon Russell Beale", "Daniel Betts", "Pip Torrens", "Stephen Campbell Moore"],
+      "directors": ["Antonin Baudry"],
+      "runtime": 157,
+      "overview": "Le film poursuit chronologiquement le récit entamé dans le premier volet. On y suit le parcours du général de Gaulle pendant la Seconde Guerre mondiale pour se faire reconnaître comme le représentant de la France libre, et notamment sa lutte politique avec le général Giraud en Afrique française ainsi que ses relations tendues avec le président américain Franklin Delano Roosevelt.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/sfnKVuXQq2wHuAlOqs60FrtJmiz.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/wHdq0odV5ppfXvCYQQ8vlzBpmDH.jpg",
+      "altPoster": "https://static-pepper.dealabs.com/threads/raw/vzhBa/3391277_1/re/768x768/qt/60/3391277_1.jpg",
+      "tags": ["4K", "Steelbook"],
+      "country": "France",
+      "added": "2026-11-04"
+    },
+    {
+      "id": "tt0102685",
+      "title": "Point Break",
+      "year": 1991,
+      "rating": 7.3,
+      "price": 16,
+      "marketValue": 40.00,
+      "genres": ["Thriller", "Crime", "Action", "Biopic"],
+      "people": ["Simon Abkarian", "Niels Schneider", "Anamaria Vartolomei", "Félix Kysyl", "Thierry Lhermitte", "Karim Leklou", "Loïc Corbery", "Campbell Scott", "Simon Russell Beale", "Daniel Betts", "Pip Torrens", "Stephen Campbell Moore"],
+      "directors": ["Kathryn Bigelow"],
+      "runtime": 122,
+      "overview": "Un agent du FBI infiltré tente d'attraper un gang de surfeurs qui sont peut-être braqueurs de banque.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/eGSfqknufcsXmM2Rb59H9SiNd4T.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/5jgOeolIAHBUy3g5RcYiaGjTaoH.jpg",
+      "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2024/04/point-break-stl-p3.jpg",
+
+      "technicalSpecs": {
+      "resolution": "4K",
+      "hdr": "HDR 10",
+      "audio": "DTS-HD MA 5.1",
+      "bitrate": "56 Mbps"
+  },
+      "tags": ["4K", "Steelbook"],
+      "categories": ["Années 90", "Films d'action"],
+      "country": "États-Unis",
+      "added": "2026-08-25"
+    },
+    {
+      "id": "tt35856133",
+      "title": "Shrek",
+      "year": 2001,
+      "rating": 7.9,
+      "genres": ["Comédie", "Animation"],
+      "people": ["Mike Myers", "Eddie Murphy", "Conrad Vernon", "Chris Miller", "John Lithgow", "Christopher Knights", "Cody Cameron", "Aron Warner", "Vincent Cassel"],
+      "directors": ["Andrew Adamson", "Vicky Jenson"],
+      "runtime": 90,
+      "overview": "Quand son marais se retrouve rempli de créatures magiques, Shrek accepte de sauver la princesse Fiona pour un seigneur malfaiteur afin de récupérer ses terres.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/iB64vpL3dIObOtMZgX3RqdVdQDc.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/kZy4ApKnFhOekGmOlYtauF2xLWq.jpg",
+      "altPoster": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGLUzuP3Tb3xU72I366htWCH6nA0MB9ywyGyakvZDEuw&s",
+      "tags": ["4K", "Steelbook"],
+      "country": "États-Unis",
+      "added": "2026-12-02"
+    },
+    {
+      "id": "tt35538033",
+      "title": "Resident Evil",
+      "year": 2026,
+      "rating": 7.7,
+      "genres": ["Science-fiction", "Horreur", "Action", "Zombies", "Survie"],
+      "people": ["Austin Abrams", "Zach Cherry", "Kali Reis", "Paul Walter Hauser", "Will Merick", "Karel Dobry"],
+      "directors": ["Zach Cregger"],
+      "runtime": 95,
+      "overview": "Un coursier livrant un colis à un hôpital isolé se retrouve piégé dans une épidémie et combat des créatures mutantes pour survivre.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/qe7ip5bsuGGdrEfkKuXpZoJ0beK.jpg",
+      "altPoster": "https://bluraymania.com/cdn/shop/files/obitel-zla-2026-angl-yazyk-4k-uhd-blu-ray-steelbook-348203.jpg?v=1789746638",
+      "tags": ["4K", "Steelbook"],
+      "country": "États-Unis",
+      "added": "2027-01-22"
+    },
+    {
+      "id": "tt0117951",
+      "title": "Trainspotting",
+      "year": 1996,
+      "rating": 8.1,
+      "genres": ["Drame", "Crime"],
+      "people": ["Ewan McGregor", "Jonny Lee Miller", "Ewen Bremner", "Robert Carlyle", "Kelly Macdonald", "Kevin McKidd", "Irvine Welsh", "Shirley Henderson", "James Cosmo", "Peter Mullan"],
+      "directors": ["Danny Boyle"],
+      "runtime": 93,
+      "overview": "Renton, profondément immergé dans le monde de la drogue d'Édimbourg, essaie de se désintoxiquer et de s'en sortir, malgré l'attrait de la drogue et la mauvaise influence de ses amis.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/wJZPzTWIqw4nNW6IpiGdokG1gxH.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/gKkW9PIJSuyaTWI8wE3BZfjDaTi.jpg",
+      "altPoster": "https://4k-ultra-hd.fr/wp-content/uploads/2026/09/trainspotting-4k-steelbook-1.jpg.webp",
+      "tags": ["4K", "Steelbook"],
+      "country": "Royaume-Uni",
+      "added": "2026-12-09"
+    },
+    {
+      "id": "tt31450459",
+      "title": "Digger",
+      "year": 2026,
+      "rating": 0.0,
+      "genres": ["Drame", "Comédie", "Satire"],
+      "people": ["Tom Cruise", "Sandra Hüller", "Riz Ahmed", "John Goodman", "Emma D'Arcy", "Jesse Plemons", "Sophie Wilde", "Burn Gorman"],
+      "directors": ["Alejandro G. Iñarritu"],
+      "runtime": 129,
+      "overview": "L'homme le plus puissant du monde se lance dans une mission frénétique pour prouver qu'il est le sauveur de l'humanité avant que le désastre qu'il a déclenché ne détruise tout.",
+      "poster": "https://media.themoviedb.org/t/p/w440_and_h660_face/hw3MKgKWk9ZtpsyI3yX8qALXvF.jpg",
+      "netflixPoster": "https://media.themoviedb.org/t/p/w1000_and_h563_face/oFPWLrz8WK896SvZoY7dfgFeCTU.jpg",
+      "altPoster": "https://collectors-junkies.com/wp-content/uploads/2026/09/Digger.jpg",
+      "tags": ["4K", "Steelbook"],
+      "country": "États-Unis",
+      "added": "2027-02-10"
     }
   ]
 }
