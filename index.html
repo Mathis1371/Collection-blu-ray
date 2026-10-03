@@ -2326,18 +2326,40 @@
         if (displayedMovies.length === 0) {
             grid.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10">Aucun film dans cette catégorie.</div>`;
         } else {
+            // NOUVEAU : Regroupement des films par l'URL de leur image
+            const groupedSteelbooks = {};
+            
             displayedMovies.forEach(m => {
+                // On détermine l'image principale utilisée pour le Steelbook
                 const posterSrc = m.altPoster || m.poster || m.netflixPoster || `data:image/svg+xml;utf8,${encodeURIComponent(placeholderSVG(m.title))}`;
+                
+                if (!groupedSteelbooks[posterSrc]) {
+                    // Première fois qu'on voit cette image : on crée l'entrée du groupe
+                    groupedSteelbooks[posterSrc] = {
+                        movieRef: m, // On garde la référence du premier film pour la modale
+                        posterSrc: posterSrc,
+                        combinedTitle: m.title,
+                        isWishlist: (m.tags && m.tags.some(t => t.toLowerCase().includes('wishlist'))) || (m.categories && m.categories.some(c => c.toLowerCase().includes('wishlist'))),
+                        isUpcoming: m.added && new Date(m.added) > today,
+                        year: m.year,
+                        marketValue: m.marketValue || 0
+                    };
+                } else {
+                    // L'image existe déjà : on ajoute le titre du second film à la suite
+                    groupedSteelbooks[posterSrc].combinedTitle += " / " + m.title;
+                    // On additionne les valeurs si elles existent
+                    if (m.marketValue) groupedSteelbooks[posterSrc].marketValue += m.marketValue; 
+                }
+            });
 
-                // Logique pour déterminer le statut
-                const isWishlist = (m.tags && m.tags.some(t => t.toLowerCase().includes('wishlist'))) || (m.categories && m.categories.some(c => c.toLowerCase().includes('wishlist')));
-                const isUpcoming = m.added && new Date(m.added) > today && !isWishlist;
-
-                // Création du badge approprié
+            // On boucle désormais sur les groupes créés et non plus sur les films individuels
+            Object.values(groupedSteelbooks).forEach(group => {
+                
+                // Création du badge approprié basé sur le groupe
                 let statusBadge = '';
-                if (isWishlist) {
+                if (group.isWishlist) {
                     statusBadge = `<div class="text-purple-400 bg-purple-400/10 border border-purple-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">🎁 Wishlist</div>`;
-                } else if (isUpcoming) {
+                } else if (group.isUpcoming && !group.isWishlist) {
                     statusBadge = `<div class="text-blue-400 bg-blue-400/10 border border-blue-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">📅 Prochainement</div>`;
                 } else {
                     statusBadge = `<div class="text-green-400 bg-green-400/10 border border-green-500/20 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest w-max mb-1.5">✓ Collection</div>`;
@@ -2351,28 +2373,30 @@
                     <div class="steelbook-shine"></div>
                     
                     <div class="aspect-[2/3] w-full bg-black/40 relative z-10">
-                        ${getImageHtml(posterSrc, m.title, "w-full h-full object-cover transition-transform duration-700 group-hover/steel:scale-105")}
+                        ${getImageHtml(group.posterSrc, group.combinedTitle, "w-full h-full object-cover transition-transform duration-700 group-hover/steel:scale-105")}
                     </div>
                     
                     <div class="p-3 bg-gradient-to-t from-slate-900 to-[#1a1a1a] flex-1 flex flex-col border-t border-slate-700 relative z-10">
-                        <h3 class="font-bold text-slate-200 leading-tight line-clamp-2 text-sm mb-2">${escapeHtml(m.title)}</h3>
+                        <h3 class="font-bold text-slate-200 leading-tight line-clamp-2 text-sm mb-2">${escapeHtml(group.combinedTitle)}</h3>
                         
                         ${statusBadge}
 
                         <div class="mt-auto pt-1 text-[10px] text-slate-400 font-medium flex justify-between items-center">
-                        <span>${m.year || ''}</span>
-                        ${m.marketValue ? `<span class="text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">${m.marketValue} €</span>` : ''}
+                        <span>${group.year || ''}</span>
+                        ${group.marketValue ? `<span class="text-green-400 bg-green-400/10 px-1.5 py-0.5 rounded">${group.marketValue.toFixed(2)} €</span>` : ''}
                         </div>
                     </div>
                 </div>
                 `;
-                card.addEventListener('click', () => openModal(m));
+                
+                // Au clic, on ouvre la modale en utilisant la référence du premier film du coffret
+                card.addEventListener('click', () => openModal(group.movieRef));
                 grid.appendChild(card);
             });
         }
 
         container.appendChild(grid);
-        }
+    }
 
     function formatRuntime(minutes) {
      if (!minutes) return "Durée inconnue";
@@ -3098,7 +3122,7 @@
        "Francis Ford Coppola": ["Le Parrain", "Conversation Secrète", "Le Parrain, 2ème partie", "Apocalypse Now", "Outsiders", "Le Parrain, 3ème partie", "Dracula", "Jack", "L'Idéaliste", "Megalopolis"],
        "Ari Aster": ["Hérédité", "Midsommar", "Beau is Afraid", "Eddington"],
        "Robert Eggers": ["The Witch", "The Lighthouse", "The Northman", "Nosferatu"],
-       "Alejandro G. Iñárritu": ["Amours chiennes", "21 grammes", "Babel", "Biutiful", "Birdman ou (La Surprenante vertu de l'ignorance)", "The Revenant", "Bardo, Fausse chronique de quelques vérités"],
+       "Alejandro G. Iñárritu": ["Amours chiennes", "21 grammes", "Babel", "Biutiful", "Birdman ou (La Surprenante vertu de l'ignorance)", "The Revenant", "Bardo, Fausse chronique de quelques vérités", "Digger"],
        "Alfonso Cuarón": ["La petite princesse", "De grandes espérances", "Et... ta mère aussi!", "Harry Potter et le Prisonnier d'Azkaban", "Les Fils de l'homme", "Gravity", "Roma"],
        "Bong Joon Ho": ["Memories of Murder", "The Host", "Mother", "Snowpiercer : Le Transperceneige", "Okja", "Parasite", "Mickey 17"],
        "Edgar Wright": ["Shaun of the Dead", "Hot Fuzz", "Scott Pilgrim", "Le Dernier Pub avant la fin du monde", "Baby Driver", "Last Night in Soho", "Running Man"],
@@ -3111,7 +3135,8 @@
        "Alex Garland": ["Ex Machina", "Annihilation", "Men", "Civil War", "Warfare"],
        "Richard Curtis": ["Love Actually", "Good Morning England", "Il était temps"],
        "Jordan Peele": ["Get Out", "Us", "Nope"],
-       "James Mangold": ["Copland", "Une vie volée", "Kate et Léopold", "Identity", "Walk the Line", "3h10 pour Yuma", "Night and Day", "Wolverine : Le Combat de l'immortel", "Logan", "Le Mans '66", "Indiana Jones et le Cadran de la destinée", "Un parfait inconnu"]
+       "James Mangold": ["Copland", "Une vie volée", "Kate et Léopold", "Identity", "Walk the Line", "3h10 pour Yuma", "Night and Day", "Wolverine : Le Combat de l'immortel", "Logan", "Le Mans '66", "Indiana Jones et le Cadran de la destinée", "Un parfait inconnu"],
+       "Zach Cregger": ["Barbare", "Évanouis", "Resident Evil"]
    };
 
    const directorPhotos = {
@@ -3147,7 +3172,8 @@
        "Alex Garland": "https://media.themoviedb.org/t/p/w440_and_h660_face/qSWzYnDw68xm4i5xprH9BwQ6q25.jpg",
        "Richard Curtis": "https://media.themoviedb.org/t/p/w440_and_h660_face/dLhFfcHJvOLzzykO3LYkinXJUA1.jpg",
        "Jordan Peele": "https://media.themoviedb.org/t/p/w440_and_h660_face/kFUKn5g3ebpyZ3CSZZZo2HFWRNQ.jpg",
-       "James Mangold": "https://media.themoviedb.org/t/p/w440_and_h660_face/pk0GDjn99crNwR4qgCCEokDYd71.jpg"
+       "James Mangold": "https://media.themoviedb.org/t/p/w440_and_h660_face/pk0GDjn99crNwR4qgCCEokDYd71.jpg",
+       "Zach Cregger": "https://media.themoviedb.org/t/p/w600_and_h900_face/bpFGFfWYIrZVK7WjwkVLwIoMKEb.jpg"
    };
 
    const referenceSagas = {
